@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 import telegram
 
 # 핫딜봇 - t.me/khs7515_hotdeal_bot
