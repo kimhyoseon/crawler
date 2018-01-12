@@ -14,6 +14,4 @@
 
 
 ## How to run
-- ``npm devserver``  -Run the development server (http://localhost:7777/)
-- ``npm dev``  -Generate webpack files for development
-- ``npm prod``  -Generate webpack files for product
+- ``python start.py --chrome --time=60``  - Run the crawling with chrome browser

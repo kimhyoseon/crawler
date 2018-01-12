@@ -1,4 +1,5 @@
 .driver
 .log
 .ghostdriver.log
+.debug.log
 .idea
