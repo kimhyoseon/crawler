@@ -22,9 +22,9 @@ class Lottecinema:
         self.log = filewriter.get_log_file(self.FILE_NAME)
 
         if args.chrome is True:
-            self.driver = webdriver.Chrome('/Users/khs75/dev/crawler/driver/chromedriver')
+            self.driver = webdriver.Chrome('./driver/chromedriver')
         else:
-            self.driver = webdriver.PhantomJS('/Users/khs75/dev/crawler/driver/phantomjs')
+            self.driver = webdriver.PhantomJS('./driver/phantomjs')
 
     def start(self):
         # Connect to site.
