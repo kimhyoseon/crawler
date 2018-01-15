@@ -3,7 +3,9 @@
 import warnings
 import argparse
 import threading
+
 import lottecinema
+import cgv
 
 warnings.filterwarnings("ignore")
 
@@ -40,6 +42,7 @@ if __name__ == "__main__":
     FLAGS, unparsed = parser.parse_known_args()
 
     sites.append(lottecinema.Lottecinema(FLAGS))
+    sites.append(cgv.Cgv(FLAGS))
 
     print('------ 크롤링을 시작합니다. -------')
     print('크롤링 사이트 갯수: %d' % len(sites))

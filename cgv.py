@@ -48,14 +48,13 @@ class Cgv:
 
             # 1+1 영화 리스트
             for list in soup.find('div', class_="evt-item-lst").children:
-                print(list)
                 if not list == -1:
                     linkObj = list.find('a')
                     imgObj = list.find('img')
                     if not linkObj == -1:
                         title = imgObj['alt']
 
-                        if "1+1" not in ti2tle:
+                        if "1+1" not in title:
                             continue
 
                         link = linkObj['href']
