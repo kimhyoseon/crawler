@@ -21,22 +21,13 @@ class Lottecinema:
         # 기존 로그 가져오기
         self.log = filewriter.get_log_file(self.FILE_NAME)
 
-        # profile = webdriver.FirefoxProfile('./driver/geckodriver')
-        # profile.set_preference("network.proxy.type", 1)
-        # profile.set_preference("network.proxy.socks", "127.0.0.1")
-        # profile.set_preference("network.proxy.socks_port", 9050)
-        #
-        # profile.update_preferences()
-        #
-        # self.driver = webdriver.Firefox(profile)
-
-        #if args.chrome is True:
-        options = webdriver.ChromeOptions()
-        options.add_argument('--proxy-server=119.196.234.74:3128')
-        self.driver = webdriver.Chrome(executable_path='./driver/chromedriver', chrome_options=options)
+        if args.chrome is True:
+            options = webdriver.ChromeOptions()
+            options.add_argument('--proxy-server=119.196.234.74:3128')
+            self.driver = webdriver.Chrome(executable_path='./driver/chromedriver', chrome_options=options)
             # self.driver = webdriver.Chrome('./driver/chromedriver')
-        #else:
-           #self.driver = webdriver.PhantomJS('./driver/phantomjs')
+        else:
+           self.driver = webdriver.PhantomJS(executable_path='./driver/phantomjs', service_args=['--proxy=119.196.234.74:3128'])
 
     def start(self):
         # Connect to site.
