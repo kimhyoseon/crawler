@@ -31,9 +31,9 @@ class Lottecinema:
         # self.driver = webdriver.Firefox(profile)
 
         #if args.chrome is True:
-            options = webdriver.ChromeOptions()
-            options.add_argument('--proxy-server=119.196.234.74:3128')
-            self.driver = webdriver.Chrome(executable_path='./driver/chromedriver', chrome_options=options)
+        options = webdriver.ChromeOptions()
+        options.add_argument('--proxy-server=119.196.234.74:3128')
+        self.driver = webdriver.Chrome(executable_path='./driver/chromedriver', chrome_options=options)
             # self.driver = webdriver.Chrome('./driver/chromedriver')
         #else:
            #self.driver = webdriver.PhantomJS('./driver/phantomjs')
