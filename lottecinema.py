@@ -50,8 +50,6 @@ class Lottecinema:
                 text = title + '\n' + date + '\n' + price + '\n' + img
                 result = telegrambot.send_message(text)
                 print(result)
-                print(text)
-                exit()
                 self.log.append(id)
                 self.count = self.count + 1
 
