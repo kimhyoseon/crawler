@@ -60,8 +60,15 @@ class Lottecinema:
             print('%s: 새로운 핫딜이 없습니다.'%self.FILE_NAME)
 
 if __name__ == "__main__":
-    telegrambot.send_message('hihi')
+    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
+    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
+    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
+    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
+    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
+    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
+    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
     exit()
+
     # argparse를 사용하여 파라미터 정의
     parser = argparse.ArgumentParser()
 
