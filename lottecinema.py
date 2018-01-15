@@ -48,6 +48,7 @@ class Lottecinema:
                 price = list.find('span', class_='price').getText()
                 img = list.find('img')['src']
                 text = title + '\n' + date + '\n' + price + '\n' + img
+                print(text)
                 telegrambot.send_message(text)
                 self.log.append(id)
                 self.count = self.count + 1
@@ -60,14 +61,6 @@ class Lottecinema:
             print('%s: 새로운 핫딜이 없습니다.'%self.FILE_NAME)
 
 if __name__ == "__main__":
-    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
-    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
-    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
-    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
-    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
-    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
-    telegrambot.send_message('ksjhdfksjdhfskdjhfskdfh')
-    exit()
 
     # argparse를 사용하여 파라미터 정의
     parser = argparse.ArgumentParser()
