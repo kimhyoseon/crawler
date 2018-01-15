@@ -21,10 +21,19 @@ class Lottecinema:
         # 기존 로그 가져오기
         self.log = filewriter.get_log_file(self.FILE_NAME)
 
-        if args.chrome is True:
-            self.driver = webdriver.Chrome('./driver/chromedriver')
-        else:
-            self.driver = webdriver.PhantomJS('./driver/phantomjs')
+        profile = webdriver.FirefoxProfile()
+        profile.set_preference("network.proxy.type", 1)
+        profile.set_preference("network.proxy.socks", "127.0.0.1")
+        profile.set_preference("network.proxy.socks_port", 9050)
+
+        profile.update_preferences()
+
+        self.driver = webdriver.Firefox(profile)
+
+        # if args.chrome is True:
+        #     self.driver = webdriver.Chrome('./driver/chromedriver')
+        # else:
+        #     self.driver = webdriver.PhantomJS('./driver/phantomjs')
 
     def start(self):
         # Connect to site.
