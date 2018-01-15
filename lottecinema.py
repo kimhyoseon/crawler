@@ -18,7 +18,7 @@ class Lottecinema:
     count = 0
 
     def __init__(self, args):
-        # 기존 로그 가져오기
+        # 기존 로그 가져오기.
         self.log = filewriter.get_log_file(self.FILE_NAME)
 
         profile = webdriver.FirefoxProfile()
