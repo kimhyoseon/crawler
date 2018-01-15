@@ -2,6 +2,7 @@
 
 import os
 import re
+import time
 import argparse
 import filewriter
 import telegrambot
@@ -72,13 +73,14 @@ class Cgv:
             # 결과
             if self.count > 0:
                 filewriter.save_log_file(self.FILE_NAME, self.log)
-                print('%s: 새로운 핫딜 %d개가 등록 되었습니다.'%(self.FILE_NAME,self.count))
+                print('[%s] %s: 새로운 핫딜 %d개가 등록 되었습니다.' % (time.ctime(), self.FILE_NAME, self.count))
             else:
-                print('%s: 새로운 핫딜이 없습니다.'%self.FILE_NAME)
+                print('[%s] %s: 새로운 핫딜이 없습니다.' % (time.ctime(), self.FILE_NAME))
 
         except Exception as errorMessage:
-            print(errorMessage)
-            telegrambot.send_message(errorMessage)
+            text = str('[%s] %s: %s' % (time.ctime(), self.FILE_NAME, errorMessage))
+            print(text)
+            telegrambot.send_message(text)
 
         finally:
             self.count = 0
