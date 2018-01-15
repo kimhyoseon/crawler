@@ -10,7 +10,7 @@ CHAT_ID = '@khs7515_hotdeal'
 
 # 메세지 전송
 def send_message(message):
-    if isinstance(message, str):
+    if not message:
         # 봇 생성
         bot = telegram.Bot(TOKEN)
         # 메세지 전송
