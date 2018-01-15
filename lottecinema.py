@@ -48,8 +48,10 @@ class Lottecinema:
                 price = list.find('span', class_='price').getText()
                 img = list.find('img')['src']
                 text = title + '\n' + date + '\n' + price + '\n' + img
+                result = telegrambot.send_message(text)
+                print(result)
                 print(text)
-                telegrambot.send_message(text)
+                exit()
                 self.log.append(id)
                 self.count = self.count + 1
 
