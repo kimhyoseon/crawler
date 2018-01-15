@@ -82,9 +82,6 @@ class Cgv:
 
         finally:
             self.count = 0
-            self.log = []
-
-
 
 if __name__ == "__main__":
     # argparse를 사용하여 파라미터 정의

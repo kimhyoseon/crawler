@@ -75,7 +75,6 @@ class Lottecinema:
 
         finally:
             self.count = 0
-            self.log = []
 
 if __name__ == "__main__":
 
