@@ -18,4 +18,4 @@
 
 ## How to run
 - ``python start.py --chrome --second=60``  - Run the crawling with chrome browser and repeat 1minitues
-- ``nohup python start.py --second=300 &`` - Run the crawling on background and repeat 5mininutes
+- ``nohup python -u start.py --second=300 &`` - Run the crawling on background and repeat 5mininutes
