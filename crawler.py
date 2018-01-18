@@ -9,22 +9,23 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
 
 class Crawler:
 
     # 필수값
     SITE_URL = None
 
-    PROXY_IP = '13.124.253.238:3128'
+    PROXY_IP = '58.124.40.139:80'
     IS_PROXY = False
     IS_SELENIUM = False
     SELENIUM_WAIT_TAG = None
     IS_CHROME = False
-    # PATH_CHROME_DRIVER = './driver/chromedriver'
-    # PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
     PATH_CHROME_DRIVER = '/home/dev/crawler/driver/chromedriver'
     PATH_PHANTOMJS_DRIVER = '/home/dev/crawler/driver/phantomjs'
-    SITE_CONNECT_TIMEOUT = 5
+    PATH_CHROME_DRIVER = './driver/chromedriver'
+    PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
+    SITE_CONNECT_TIMEOUT = 10
 
     def __init__(self):
         # 기존 로그 가져오기
@@ -87,6 +88,14 @@ class Crawler:
 
             self.extract(html)
             self.report()
+        except TimeoutException as errorMessage:
+            text = str('[%s] %s: %s' % (self.get_time(), self.name, errorMessage))
+            print(text)
+            # telegrambot.send_message(text)
+
+            if self.IS_SELENIUM and self.driver:
+                self.driver.quit()
+                # self.driver.save_screenshot('screenshot.png')
         except Exception as errorMessage:
             text = str('[%s] %s: %s'%(self.get_time(),self.name,errorMessage))
             print(text)
