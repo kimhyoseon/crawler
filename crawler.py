@@ -61,7 +61,6 @@ class Crawler:
             element_present = EC.presence_of_element_located((By.TAG_NAME, 'body'))
         else:
             xpath = '//%s[@%s="%s"]'%(self.SELENIUM_WAIT_TAG['tag'], self.SELENIUM_WAIT_TAG['attr'], self.SELENIUM_WAIT_TAG['name'])
-            print(xpath)
             element_present = EC.presence_of_element_located((By.XPATH, xpath))
         WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
         html = self.driver.page_source
@@ -84,6 +83,7 @@ class Crawler:
             self.report()
         except Exception as errorMessage:
             text = str('[%s] %s: %s'%(self.get_time(),self.name,errorMessage))
+            print(text)
             telegrambot.send_message(text)
 
             if self.IS_SELENIUM and self.driver:
