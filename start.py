@@ -34,7 +34,7 @@ if __name__ == "__main__":
     FLAGS, unparsed = parser.parse_known_args()
 
     sites.append(lottecinema.Lottecinema())
-    #sites.append(cgv.Cgv())
+    sites.append(cgv.Cgv())
 
     print('------ 크롤링을 시작합니다. -------')
     print('크롤링 사이트 갯수: %d' % len(sites))
