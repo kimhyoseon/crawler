@@ -15,7 +15,7 @@ class Crawler:
     # 필수값
     SITE_URL = None
 
-    PROXY_IP = '220.88.15.24:80'
+    PROXY_IP = '13.124.253.238:3128'
     IS_PROXY = False
     IS_SELENIUM = False
     SELENIUM_WAIT_TAG = None
@@ -90,11 +90,11 @@ class Crawler:
         except Exception as errorMessage:
             text = str('[%s] %s: %s'%(self.get_time(),self.name,errorMessage))
             print(text)
-            telegrambot.send_message(text)
+            #telegrambot.send_message(text)
 
             if self.IS_SELENIUM and self.driver:
                 self.driver.quit()
-                self.driver.save_screenshot('screenshot.png')
+                #self.driver.save_screenshot('screenshot.png')
 
     def save(self, id, text):
         if text and id:
