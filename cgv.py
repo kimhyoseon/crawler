@@ -1,54 +1,28 @@
 #-*- coding: utf-8 -*-
 
-import os
 import re
-import time
-import argparse
-import filewriter
-import telegrambot
+from crawler import Crawler
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 
-class Cgv:
+class Cgv(Crawler):
 
-    # 사이트 주소
+    # 크롤링 할 사이트 주소를 입력
     SITE_URL = 'http://www.cgv.co.kr/culture-event/event/?menu=2'
     DETAIL_URL = 'http://www.cgv.co.kr/culture-event/event/'
 
-    # 파일명
-    FILE_NAME = os.path.splitext(os.path.basename(__file__))[0]
+    # javascript로 리스트를 가져오기 때문에 셀레니움 사용
+    IS_SELENIUM = True
+    SELENIUM_WAIT_TAG = {'tag': 'div', 'attr': 'class', 'name': 'evt-item-lst'}
 
-    # 핫딜 카운트
-    count = 0
+    # 내용 추출 정의
+    def extract(self, html):
+        soup = BeautifulSoup(html, 'html.parser')
 
-    # 최대 접속시간
-    SITE_CONNECT_TIMEOUT = 5
+        element = soup.find('div', class_="evt-item-lst")
 
-    def __init__(self, args):
-        # 기존 로그 가져오기
-        self.log = filewriter.get_log_file(self.FILE_NAME)
-
-        if args.chrome is True:
-            self.driver = webdriver.Chrome('./driver/chromedriver')
-        else:
-            self.driver = webdriver.PhantomJS('./driver/phantomjs')
-
-    def start(self):
-        try:
-            # Connect to site.
-            self.driver.get(self.SITE_URL)
-            # product_slist p10 요소를 찾을 때까지 대기
-            element_present = EC.presence_of_element_located((By.XPATH, '//div[@class="evt-item-lst"]'))
-            WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
-            html = self.driver.page_source
-            soup = BeautifulSoup(html, 'html.parser')
-
-            # 1+1 영화 리스트
-            for list in soup.find('div', class_="evt-item-lst").children:
+        # 1+1 영화 리스트
+        if element:
+            for list in element.children:
                 if not list == -1:
                     linkObj = list.find('a')
                     imgObj = list.find('img')
@@ -66,38 +40,8 @@ class Cgv:
 
                         if id and id not in self.log:
                             text = title + '\n' + link
-                            telegrambot.send_message(text)
-                            self.log.append(id)
-                            self.count = self.count + 1
-
-            # 결과
-            if self.count > 0:
-                filewriter.save_log_file(self.FILE_NAME, self.log)
-                print('[%s] %s: 새로운 핫딜 %d개가 등록 되었습니다.' % (time.ctime(), self.FILE_NAME, self.count))
-            else:
-                print('[%s] %s: 새로운 핫딜이 없습니다.' % (time.ctime(), self.FILE_NAME))
-
-        except Exception as errorMessage:
-            text = str('[%s] %s: %s' % (time.ctime(), self.FILE_NAME, errorMessage))
-            print(text)
-            telegrambot.send_message(text)
-
-        finally:
-            self.count = 0
+                            self.save(id, text)
 
 if __name__ == "__main__":
-    # argparse를 사용하여 파라미터 정의
-    parser = argparse.ArgumentParser()
-
-    # 크롬으로 실행
-    parser.add_argument(
-        '--chrome',
-        default=False,
-        help='If true, uses Chrome driver',
-        action='store_true'
-    )
-
-    FLAGS, unparsed = parser.parse_known_args()
-
-    cgv = Cgv(FLAGS)
+    cgv = Cgv()
     cgv.start()
