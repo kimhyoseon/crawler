@@ -21,6 +21,8 @@ class Lottecinema(Crawler):
 
         element = soup.find('ul', class_='product_slist p10')
 
+        print(element)
+
         # 1+1 영화 리스트
         if element:
             for list in element.find_all('li'):
