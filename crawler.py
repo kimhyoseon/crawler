@@ -64,7 +64,7 @@ class Crawler:
             element_present = EC.presence_of_element_located((By.XPATH, xpath))
         WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
         html = self.driver.page_source
-        self.driver.quit()
+        self.driver.close()
         return html
 
     def start(self):
