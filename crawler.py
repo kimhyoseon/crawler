@@ -68,7 +68,7 @@ class Crawler:
         print('connect_start3')
         html = self.driver.page_source
         print('connect_start4')
-        self.driver.close()
+        self.driver.quit()
         print('connect_start5')
         return html
 
