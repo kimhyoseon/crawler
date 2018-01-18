@@ -20,8 +20,6 @@ class Cgv(Crawler):
 
         element = soup.find('div', class_="evt-item-lst")
 
-        print(element)
-
         # 1+1 영화 리스트
         if element:
             for list in element.children:
