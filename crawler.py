@@ -20,8 +20,10 @@ class Crawler:
     IS_SELENIUM = False
     SELENIUM_WAIT_TAG = None
     IS_CHROME = False
-    PATH_CHROME_DRIVER = './driver/chromedriver'
-    PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
+    # PATH_CHROME_DRIVER = './driver/chromedriver'
+    # PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
+    PATH_CHROME_DRIVER = '/home/dev/crawler/driver/chromedriver'
+    PATH_PHANTOMJS_DRIVER = '/home/dev/crawler/driver/phantomjs'
     SITE_CONNECT_TIMEOUT = 5
 
     def __init__(self):
@@ -54,22 +56,16 @@ class Crawler:
         else:
             self.driver = webdriver.PhantomJS(executable_path=self.PATH_PHANTOMJS_DRIVER,
                                               service_args=['--proxy=' + self.PROXY_IP])
-        print('connect_start')
         self.driver.get(self.SITE_URL)
-        print('connect_start1')
         # 요소를 찾을 때까지 대기
         if self.SELENIUM_WAIT_TAG is None:
             element_present = EC.presence_of_element_located((By.TAG_NAME, 'body'))
         else:
             xpath = '//%s[@%s="%s"]'%(self.SELENIUM_WAIT_TAG['tag'], self.SELENIUM_WAIT_TAG['attr'], self.SELENIUM_WAIT_TAG['name'])
             element_present = EC.presence_of_element_located((By.XPATH, xpath))
-        print('connect_start2')
         WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
-        print('connect_start3')
         html = self.driver.page_source
-        print('connect_start4')
         self.driver.quit()
-        print('connect_start5')
         return html
 
     def start(self):
