@@ -11,6 +11,7 @@
 - ``sudo apt-get install libfontconfig``
 
 ### pip install
+- ``pip install pytz``
 - ``pip install requests``
 - ``pip install selenium``
 - ``pip install beautifulsoup4``
