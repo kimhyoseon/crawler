@@ -23,8 +23,8 @@ class Crawler:
     IS_CHROME = False
     PATH_CHROME_DRIVER = '/home/dev/crawler/driver/chromedriver'
     PATH_PHANTOMJS_DRIVER = '/home/dev/crawler/driver/phantomjs'
-    PATH_CHROME_DRIVER = './driver/chromedriver'
-    PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
+    # PATH_CHROME_DRIVER = './driver/chromedriver'
+    # PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
     SITE_CONNECT_TIMEOUT = 10
 
     def __init__(self):
