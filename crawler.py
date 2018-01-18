@@ -49,13 +49,18 @@ class Crawler:
 
     # 사이트 연결
     def connect_with_selenium(self):
+        if self.IS_PROXY is True:
+            proxy = self.PROXY_IP
+        else:
+            proxy = None
+
         if self.IS_CHROME is True:
             options = webdriver.ChromeOptions()
-            options.add_argument('--proxy-server=' + self.PROXY_IP)
+            options.add_argument('--proxy-server=' + proxy)
             self.driver = webdriver.Chrome(executable_path=self.PATH_CHROME_DRIVER, chrome_options=options)
         else:
             self.driver = webdriver.PhantomJS(executable_path=self.PATH_PHANTOMJS_DRIVER,
-                                              service_args=['--proxy=' + self.PROXY_IP])
+                                              service_args=['--proxy=' + proxy])
         self.driver.get(self.SITE_URL)
         # 요소를 찾을 때까지 대기
         if self.SELENIUM_WAIT_TAG is None:
