@@ -14,7 +14,6 @@ class Ppomppu(Crawler):
 
     BASE_GOOD = 5
 
-    IS_PROXY = True
     IS_SELENIUM = True
 
     # 내용 추출 정의
