@@ -43,7 +43,6 @@ class Proxy(Crawler):
 
             if len(list_ip) > 0:
                 self.save_file(list_ip)
-                print(list_ip)
 
 if __name__ == "__main__":
     proxy = Proxy()

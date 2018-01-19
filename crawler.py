@@ -1,16 +1,15 @@
 #-*- coding: utf-8 -*-
 
+import os
 import filewriter
 import telegrambot
 import requests
-import random
 from datetime import datetime
 from pytz import timezone
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
 
 class Crawler:
 
@@ -22,11 +21,10 @@ class Crawler:
     IS_SELENIUM = False
     SELENIUM_WAIT_TAG = None
     IS_CHROME = False
-    PATH_CHROME_DRIVER = '/home/dev/crawler/driver/chromedriver'
-    PATH_PHANTOMJS_DRIVER = '/home/dev/crawler/driver/phantomjs'
-    # PATH_CHROME_DRIVER = './driver/chromedriver'
-    # PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
-    SITE_CONNECT_TIMEOUT = 5
+    PATH_NAME = os.path.dirname(os.path.realpath(__file__))
+    PATH_CHROME_DRIVER = os.path.join(PATH_NAME, 'driver/chromedriver')
+    PATH_PHANTOMJS_DRIVER = os.path.join(PATH_NAME, 'driver/phantomjs')
+    SITE_CONNECT_TIMEOUT = 60
 
     def __init__(self):
         # 기존 로그 가져오기
@@ -34,12 +32,6 @@ class Crawler:
         self.log = filewriter.get_log_file(self.name)
         self.driver = None
 
-    def get_proxy_server_ip_list(self):
-        proxy_list_from_file = filewriter.get_log_file('proxy')
-        if len(proxy_list_from_file) > 0:
-            return random.choice(proxy_list_from_file)
-        else:
-            raise Exception('Proxy server ip is not found.')
     # 사이트 연결
     def connect_with_requests(self):
         if self.IS_PROXY is True:
@@ -70,13 +62,17 @@ class Crawler:
                 args = []
             self.driver = webdriver.PhantomJS(executable_path=self.PATH_PHANTOMJS_DRIVER,
                                               service_args=args)
+
+        self.driver.set_page_load_timeout(self.SITE_CONNECT_TIMEOUT)
         self.driver.get(self.SITE_URL)
+
         # 요소를 찾을 때까지 대기
         if self.SELENIUM_WAIT_TAG is None:
             element_present = EC.presence_of_element_located((By.TAG_NAME, 'body'))
         else:
             xpath = '//%s[@%s="%s"]'%(self.SELENIUM_WAIT_TAG['tag'], self.SELENIUM_WAIT_TAG['attr'], self.SELENIUM_WAIT_TAG['name'])
             element_present = EC.presence_of_element_located((By.XPATH, xpath))
+
         WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
         html = self.driver.page_source
         self.driver.quit()
@@ -101,22 +97,17 @@ class Crawler:
 
             if self.IS_REPORT is True:
                 self.report()
-        except TimeoutException as errorMessage:
-            text = str('[%s] %s: %s' % (self.get_time(), self.name, errorMessage))
-            print(text)
-            # telegrambot.send_message(text)
 
-            if self.IS_SELENIUM and self.driver:
-                self.driver.quit()
-                # self.driver.save_screenshot('screenshot.png')
         except Exception as errorMessage:
             text = str('[%s] %s: %s'%(self.get_time(),self.name,errorMessage))
             print(text)
             #telegrambot.send_message(text)
 
+            if self.IS_PROXY is True:
+                self.remove_proxy_server_ip_list()
+
             if self.IS_SELENIUM and self.driver:
                 self.driver.quit()
-                #self.driver.save_screenshot('screenshot.png')
 
     def save(self, id, text):
         if text and id:
@@ -137,6 +128,24 @@ class Crawler:
         else:
             print('[%s] %s: 새로운 핫딜이 없습니다.' %(self.get_time(), self.name))
 
+    def get_proxy_server_ip_list(self):
+        self.proxy_list_from_file = filewriter.get_log_file('proxy')
+
+        if len(self.proxy_list_from_file) > 0:
+            return self.proxy_list_from_file[0]
+        else:
+            from proxy import Proxy
+            proxy = Proxy()
+            proxy.start()
+            raise Exception('Proxy server ip is not found.')
+
+    def remove_proxy_server_ip_list(self):
+        if self.proxy_list_from_file:
+            del self.proxy_list_from_file[0]
+            if len(self.proxy_list_from_file) == 0:
+                filewriter.save_log_file('proxy', self.proxy_list_from_file)
+            else:
+                filewriter.save_log_file('proxy', self.proxy_list_from_file)
+
     def extract(self, html):
         pass
-
