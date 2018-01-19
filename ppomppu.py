@@ -27,9 +27,12 @@ class Ppomppu(Crawler):
             for list in element.find_all('tr', class_=re.compile('list[0-9]')):
                 try:
                     tds = list.find_all('td', recursive=False)
-                    print(tds)
+
                     id = tds[0].getText().strip()
                     good = int(tds[5].getText().strip().split('-')[0].strip())
+
+                    print(id)
+                    print(good)
 
                     if id and id not in self.log and good and good >= self.BASE_GOOD:
                         link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
