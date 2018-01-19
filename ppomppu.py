@@ -51,7 +51,7 @@ class Ppomppu(Crawler):
                         self.save(id, text)
 
                 except Exception as errorMessage:
-                    #print(errorMessage)
+                    print(errorMessage)
                     continue
 
 
