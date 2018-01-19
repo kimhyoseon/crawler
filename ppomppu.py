@@ -21,9 +21,9 @@ class Ppomppu(Crawler):
     def extract(self, html):
         soup = BeautifulSoup(html, 'html.parser')
 
-        print(soup)
-
         element = soup.find('table', id='revolution_main_table')
+
+        print(element)
 
         # 1+1 영화 리스트
         if element:
