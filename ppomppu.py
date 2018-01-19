@@ -31,13 +31,11 @@ class Ppomppu(Crawler):
                     id = tds[0].getText().strip()
                     good = int(tds[5].getText().strip().split('-')[0].strip())
 
-                    print(id)
-                    print(good)
-
                     if id and id not in self.log and good and good >= self.BASE_GOOD:
                         link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
                         title = tds[3].getText().strip()
                         s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
+                        print(title)
                         try:
                             s2 = tds[4].getText().strip()
                             tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
@@ -48,6 +46,7 @@ class Ppomppu(Crawler):
                             timelap = '등록시간: 하루 전'
                         good = '추천수: %d' % good
                         text = title + '\n' + good + '\n' + timelap + '\n' + link
+                        print(text)
                         self.save(id, text)
 
                 except Exception as errorMessage:
