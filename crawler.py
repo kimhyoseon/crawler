@@ -116,6 +116,7 @@ class Crawler:
 
     def save(self, id, text):
         if text and id:
+            print('save')
             self.count = self.count + 1
             telegrambot.send_message(text)
             if id not in self.log:
