@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 class Lottecinema(Crawler):
 
     # 크롤링 할 사이트 주소를 입력
-    SITE_URL = 'http://www.lottecinema.co.kr/LCHS/Contents/Cinema-Mall/gift-shop.aspx'
+    SITE_URL = ['http://www.lottecinema.co.kr/LCHS/Contents/Cinema-Mall/gift-shop.aspx']
 
     # 롯데시네마는 국내IP만 허용하기 때문에 국내 프록시 서버를 이용
     IS_PROXY = True

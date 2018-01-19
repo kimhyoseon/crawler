@@ -41,7 +41,8 @@ class Crawler:
             }
         else:
             proxy_dict = None
-        response = requests.get(self.SITE_URL, proxies=proxy_dict)
+
+        response = requests.get(self.url, proxies=proxy_dict)
 
         if response.status_code != 200:
             raise Exception('Site connect error (status_code:%d)'%response.status_code)
@@ -64,7 +65,7 @@ class Crawler:
                                               service_args=args)
 
         self.driver.set_page_load_timeout(self.SITE_CONNECT_TIMEOUT)
-        self.driver.get(self.SITE_URL)
+        self.driver.get(self.url)
 
         # 요소를 찾을 때까지 대기
         if self.SELENIUM_WAIT_TAG is None:
@@ -75,7 +76,6 @@ class Crawler:
 
         WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
         html = self.driver.page_source
-        self.driver.quit()
         return html
 
     def start(self):
@@ -88,15 +88,20 @@ class Crawler:
             if self.IS_PROXY is True:
                 self.proxy_ip = self.get_proxy_server_ip_list()
 
+            for url in self.SITE_URL:
+                self.url = url
+                if self.IS_SELENIUM:
+                    html = self.connect_with_selenium()
+                else:
+                    html = self.connect_with_requests()
+
+                self.extract(html)
+
+                if self.IS_REPORT is True:
+                    self.report()
+
             if self.IS_SELENIUM:
-                html = self.connect_with_selenium()
-            else:
-                html = self.connect_with_requests()
-
-            self.extract(html)
-
-            if self.IS_REPORT is True:
-                self.report()
+                self.driver.quit()
 
         except Exception as errorMessage:
             text = str('[%s] %s: %s'%(self.get_time(),self.name,errorMessage))
@@ -113,8 +118,9 @@ class Crawler:
         if text and id:
             self.count = self.count + 1
             telegrambot.send_message(text)
-            self.log.append(id)
-            filewriter.save_log_file(self.name, self.log)
+            if id not in self.log:
+                self.log.append(id)
+                filewriter.save_log_file(self.name, self.log)
 
     def save_file(self, log):
         filewriter.save_log_file(self.name, log)

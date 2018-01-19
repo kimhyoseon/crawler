@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 class Cgv(Crawler):
 
     # 크롤링 할 사이트 주소를 입력
-    SITE_URL = 'http://www.cgv.co.kr/culture-event/event/?menu=2'
+    SITE_URL = ['http://www.cgv.co.kr/culture-event/event/?menu=2']
     DETAIL_URL = 'http://www.cgv.co.kr/culture-event/event/'
 
     # javascript로 리스트를 가져오기 때문에 셀레니움 사용
