@@ -3,6 +3,7 @@
 import filewriter
 import telegrambot
 import requests
+import random
 from datetime import datetime
 from pytz import timezone
 from selenium import webdriver
@@ -16,7 +17,7 @@ class Crawler:
     # 필수값
     SITE_URL = None
 
-    PROXY_IP = '58.124.40.139:80'
+    IS_REPORT = True
     IS_PROXY = False
     IS_SELENIUM = False
     SELENIUM_WAIT_TAG = None
@@ -25,19 +26,26 @@ class Crawler:
     PATH_PHANTOMJS_DRIVER = '/home/dev/crawler/driver/phantomjs'
     # PATH_CHROME_DRIVER = './driver/chromedriver'
     # PATH_PHANTOMJS_DRIVER = './driver/phantomjs'
-    SITE_CONNECT_TIMEOUT = 10
+    SITE_CONNECT_TIMEOUT = 5
 
     def __init__(self):
         # 기존 로그 가져오기
         self.name = self.__class__.__name__.lower()
         self.log = filewriter.get_log_file(self.name)
+        self.driver = None
 
+    def get_proxy_server_ip_list(self):
+        proxy_list_from_file = filewriter.get_log_file('proxy')
+        if len(proxy_list_from_file) > 0:
+            return random.choice(proxy_list_from_file)
+        else:
+            raise Exception('Proxy server ip is not found.')
     # 사이트 연결
     def connect_with_requests(self):
         if self.IS_PROXY is True:
             proxy_dict = {
-                'http': self.PROXY_IP,
-                'https': self.PROXY_IP
+                'http': self.proxy_ip,
+                'https': self.proxy_ip
             }
         else:
             proxy_dict = None
@@ -48,16 +56,16 @@ class Crawler:
 
         return response.text
 
-    # 사이트 연결
+    # 사이트 연결 (셀레니움)
     def connect_with_selenium(self):
         if self.IS_CHROME is True:
             options = webdriver.ChromeOptions()
             if self.IS_PROXY is True:
-                options.add_argument('--proxy-server=' + self.PROXY_IP)
+                options.add_argument('--proxy-server=' + self.proxy_ip)
             self.driver = webdriver.Chrome(executable_path=self.PATH_CHROME_DRIVER, chrome_options=options)
         else:
             if self.IS_PROXY is True:
-                args = ['--proxy=' + self.PROXY_IP]
+                args = ['--proxy=' + self.proxy_ip]
             else:
                 args = []
             self.driver = webdriver.PhantomJS(executable_path=self.PATH_PHANTOMJS_DRIVER,
@@ -81,13 +89,18 @@ class Crawler:
             if self.SITE_URL is None:
                 raise Exception('Site url is not defined.')
 
+            if self.IS_PROXY is True:
+                self.proxy_ip = self.get_proxy_server_ip_list()
+
             if self.IS_SELENIUM:
                 html = self.connect_with_selenium()
             else:
                 html = self.connect_with_requests()
 
             self.extract(html)
-            self.report()
+
+            if self.IS_REPORT is True:
+                self.report()
         except TimeoutException as errorMessage:
             text = str('[%s] %s: %s' % (self.get_time(), self.name, errorMessage))
             print(text)
@@ -111,6 +124,9 @@ class Crawler:
             telegrambot.send_message(text)
             self.log.append(id)
             filewriter.save_log_file(self.name, self.log)
+
+    def save_file(self, log):
+        filewriter.save_log_file(self.name, log)
 
     def get_time(self):
         return datetime.now(timezone('Asia/Seoul')).strftime('%Y-%m-%d %H:%M:%S')
