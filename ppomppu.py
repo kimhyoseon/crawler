@@ -23,13 +23,12 @@ class Ppomppu(Crawler):
 
         element = soup.find('table', id='revolution_main_table')
 
-        print(element)
-
         # 1+1 영화 리스트
         if element:
             for list in element.find_all('tr', class_=re.compile('list[0-9]')):
                 try:
                     tds = list.find_all('td', recursive=False)
+                    print(tds)
                     id = tds[0].getText().strip()
                     good = int(tds[5].getText().strip().split('-')[0].strip())
 
