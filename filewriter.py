@@ -15,7 +15,7 @@ def make_path(path):
 def save_log_file(filename, data):
     if isinstance(filename, str) and isinstance(data, list):
         make_path(LOG_PATH)
-        with open(os.path.join(LOG_PATH, filename + '.json'), 'w', encoding='UTF-8') as file:
+        with open(os.path.join(LOG_PATH, filename + '.json'), 'w') as file:
             json.dump(data, file)
 
 # 로그 가져오기
@@ -26,7 +26,7 @@ def get_log_file(filename):
             log_path = os.path.join(LOG_PATH, filename + '.json')
             if os.path.exists(log_path):
                 try:
-                    with open(log_path, encoding='UTF-8') as f:
+                    with open(log_path) as f:
                         return json.load(f)
                 except Exception as errorMessage:
                     remove_log_file(filename)
