@@ -35,18 +35,19 @@ class Ppomppu(Crawler):
                         link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
                         title = tds[3].getText().strip()
                         s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
-                        print(title)
-                        try:
-                            s2 = tds[4].getText().strip()
-                            tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
-                            hours, remainder = divmod(tdelta.seconds, 3600)
-                            minutes, seconds = divmod(remainder, 60)
-                            timelap = '등록시간: %d시간 %d분 전' % (hours, minutes)
-                        except Exception as errorMessage:
-                            timelap = '등록시간: 하루 전'
+
+                        # try:
+                        #     s2 = tds[4].getText().strip()
+                        #     tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
+                        #     hours, remainder = divmod(tdelta.seconds, 3600)
+                        #     minutes, seconds = divmod(remainder, 60)
+                        #     timelap = '등록시간: %d시간 %d분 전' % (hours, minutes)
+                        # except Exception as errorMessage:
+                        #     timelap = '등록시간: 하루 전'
+
                         good = '추천수: %d' % good
-                        text = title + '\n' + good + '\n' + timelap + '\n' + link
-                        print(text)
+                        text = title + '\n' + good + '\n' + link
+
                         self.save(id, text)
 
                 except Exception as errorMessage:
