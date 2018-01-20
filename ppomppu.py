@@ -45,7 +45,7 @@ class Ppomppu(Crawler):
                         # except Exception as errorMessage:
                         #     timelap = '등록시간: 하루 전'
 
-                        good = '추천수: %d' % good
+                        good = 'Good count: %d' % good
                         text = title + '\n' + good + '\n' + link
 
                         self.save(id, text)
