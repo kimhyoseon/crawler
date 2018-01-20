@@ -115,8 +115,6 @@ class Crawler:
                 self.driver.quit()
 
     def save(self, id, text):
-        print(id)
-        print(text)
         if text and id:
             self.count = self.count + 1
             telegrambot.send_message(text)
