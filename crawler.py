@@ -153,5 +153,15 @@ class Crawler:
             else:
                 filewriter.save_log_file('proxy', self.proxy_list_from_file)
 
+    def selenium_click_event(self, tags):
+        if len(tags) > 0:
+            for tag in tags:
+                xpath = '//%s[@%s="%s"]' % (
+                tag['tag'], tag['attr'], tag['name'])
+                element_present = EC.presence_of_element_located((By.XPATH, xpath))
+                element_found = WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
+                element_found.click()
+                #self.driver.implicitly_wait(1)
+
     def extract(self, html):
         pass
