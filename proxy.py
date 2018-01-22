@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 class Proxy(Crawler):
 
     # 크롤링 할 사이트 주소를 입력
-    SITE_URL = 'https://www.proxynova.com/proxy-server-list/country-kr/'
+    SITE_URL = ['http://www.proxynova.com/proxy-server-list/country-kr/']
 
     IS_REPORT = False
 

@@ -46,7 +46,7 @@ class Ppomppu(Crawler):
                         #     timelap = '등록시간: 하루 전'
 
                         good = 'Good count: %d' % good
-                        text = title + '\n' + good + '\n' + link
+                        text = id + '\n' + title + '\n' + good + '\n' + link
 
                         self.save(id, text)
 
