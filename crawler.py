@@ -10,6 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.alert import Alert
 
 class Crawler:
 
@@ -158,17 +159,31 @@ class Crawler:
             for tag in tags:
                 xpath = '//%s[@%s="%s"]' % (
                 tag['tag'], tag['attr'], tag['name'])
-                element_present = EC.presence_of_element_located((By.XPATH, xpath))
+                element_present = EC.element_to_be_clickable((By.XPATH, xpath))
                 element_found = WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
                 element_found.click()
                 #self.driver.implicitly_wait(1)
 
     def selenium_extract_with_xpath(self, tag):
-        xpath = '//%s[@%s="%s"]' % (
-        tag['tag'], tag['attr'], tag['name'])
-        element_present = EC.presence_of_element_located((By.XPATH, xpath))
-        element_found = WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
-        return element_found
+        xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+        element_present = EC.visibility_of_element_located((By.XPATH, xpath))
+        print(element_present)
+        WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
+
+        return self.driver.page_source
+
+    def selenium_get_alert_text(self):
+        try:
+            alert_text = Alert(self.driver).text
+            print('alert text: %s'%alert_text)
+            if alert_text and len(alert_text) > 0:
+                Alert(self.driver).accept()
+                return alert_text
+            else:
+                return False
+        except Exception:
+            return False
+
 
     def extract(self, html):
         pass
