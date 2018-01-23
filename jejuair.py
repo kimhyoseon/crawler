@@ -11,13 +11,15 @@ class Jejuair(Crawler):
     # 크롤링 할 사이트 주소를 입력
     SITE_URL = ['http://www.jejuair.net/jejuair/kr/main.do']
 
-    #IS_CHROME = True
-    #IS_REPORT = False
+    # IS_CHROME = True
+    IS_REPORT = False
 
     # javascript로 리스트를 가져오기 때문에 셀레니움 사용
     IS_SELENIUM = True
     SELENIUM_WAIT_TAG = {'tag': 'div', 'attr': 'id', 'name': 'divDepStn1'}
 
+    MAX_WHILE_COUNT = 5
+    while_count = 0
     price_depature = 999999999999
     price_return = 999999999999
     date_depature = []
@@ -46,6 +48,8 @@ class Jejuair(Crawler):
 
     def extract_price(self):
         try:
+            self.while_count = self.while_count + 1
+
             html = self.selenium_extract_with_xpath({'tag': 'div', 'attr': 'id', 'name': 'divDepDateRoll'})
 
             soup = BeautifulSoup(html, 'html.parser')
@@ -90,20 +94,30 @@ class Jejuair(Crawler):
 
             self.selenium_click_event([{'tag': 'button', 'attr': 'id', 'name': 'btnNextDep'}])
 
-            if self.selenium_get_alert_text() == '일정을 조회하실 수 없습니다.':
+            if self.while_count > self.MAX_WHILE_COUNT:
                 self.send_message()
-                self.is_searching = False
+
+            if self.selenium_is_alert_exist() == True:
+                self.send_message()
+
 
         except Exception as errorMessage:
-            #print(errorMessage)
+            if self.while_count > self.MAX_WHILE_COUNT:
+                self.send_message()
             pass
 
     def send_message(self):
-        print(self.price_depature)
-        print(self.date_depature)
-        print(self.price_return)
-        print(self.date_return)
+        self.is_searching = False
+        price_depature = 'depature price: {:0,.0f} won'.format(self.price_depature)
+        price_return = 'return price: {:0,.0f} won'.format(self.price_return)
+        date_depature = 'depature date: %s'%",".join(self.date_depature)
+        date_return = 'return date: %s'%",".join(self.date_return)
 
+        text = price_depature + '\n' + date_depature + '\n' + price_return + '\n' + date_return
+
+        self.save('20180123-NRT', text)
+
+        self.while_count  = 0
         self.price_depature = 999999999999
         self.price_return = 999999999999
         self.date_depature = []

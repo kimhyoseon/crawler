@@ -172,13 +172,12 @@ class Crawler:
 
         return self.driver.page_source
 
-    def selenium_get_alert_text(self):
+    def selenium_is_alert_exist(self):
         try:
-            alert_text = Alert(self.driver).text
-            print('alert text: %s'%alert_text)
-            if alert_text and len(alert_text) > 0:
-                Alert(self.driver).accept()
-                return alert_text
+            alert_element = Alert(self.driver)
+            if alert_element:
+                alert_element.accept()
+                return True
             else:
                 return False
         except Exception:
