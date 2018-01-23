@@ -11,8 +11,8 @@ class Jejuair(Crawler):
     # 크롤링 할 사이트 주소를 입력
     SITE_URL = ['http://www.jejuair.net/jejuair/kr/main.do']
 
-    IS_CHROME = True
-    IS_REPORT = False
+    #IS_CHROME = True
+    #IS_REPORT = False
 
     # javascript로 리스트를 가져오기 때문에 셀레니움 사용
     IS_SELENIUM = True
