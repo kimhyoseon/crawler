@@ -12,7 +12,7 @@ class Ppomppu(Crawler):
     SITE_URL = ['http://www.ppomppu.co.kr/zboard/zboard.php?id=ppomppu', 'http://www.ppomppu.co.kr/zboard/zboard.php?id=ppomppu4']
     DETAIL_URL = 'http://www.ppomppu.co.kr/zboard/'
 
-    BASE_GOOD = 5
+    BASE_GOOD = 10
 
     IS_SELENIUM = True
 
@@ -28,27 +28,26 @@ class Ppomppu(Crawler):
                 try:
                     tds = list.find_all('td', recursive=False)
 
-                    id = tds[0].getText().strip()
+                    title = tds[3].find('font').getText().strip()
                     good = int(tds[5].getText().strip().split('-')[0].strip())
 
-                    if id and id not in self.log and good and good >= self.BASE_GOOD:
+                    if title and title not in self.log and good and good >= self.BASE_GOOD:
                         link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
-                        title = tds[3].getText().strip()
                         s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
 
-                        # try:
-                        #     s2 = tds[4].getText().strip()
-                        #     tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
-                        #     hours, remainder = divmod(tdelta.seconds, 3600)
-                        #     minutes, seconds = divmod(remainder, 60)
-                        #     timelap = '등록시간: %d시간 %d분 전' % (hours, minutes)
-                        # except Exception as errorMessage:
-                        #     timelap = '등록시간: 하루 전'
+                        try:
+                            s2 = tds[4].getText().strip()
+                            tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
+                            hours, remainder = divmod(tdelta.seconds, 3600)
+                            minutes, seconds = divmod(remainder, 60)
+                            timelap = 'time lap: %d hour %d minutes before' % (hours, minutes)
+                        except Exception as errorMessage:
+                            timelap = 'time lap: 1 day before'
 
                         good = 'Good count: %d' % good
-                        text = id + '\n' + title + '\n' + good + '\n' + link
+                        text = title + '\n' + good + '\n' + timelap + '\n' +link
 
-                        self.save(id, text)
+                        self.save(title, text)
 
                 except Exception as errorMessage:
                     # print(errorMessage)

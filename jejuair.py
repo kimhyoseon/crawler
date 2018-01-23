@@ -27,10 +27,17 @@ class Jejuair(Crawler):
             {'tag': 'button', 'attr': 'id', 'name': 'btnReservation'},
         ])
 
-        #self.driver.find_element_by_xpath('//div[@id="divDepStn1"]').click()
-        #WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
-        #self.driver.find_element_by_xpath('//button[@aircode="ICN"]').click()
+        self.extract_price()
         exit()
+
+    def extract_price(self):
+        depatureList = self.selenium_extract_with_xpath({'tag': 'div', 'attr': 'id', 'name': 'divDepDateRoll'})
+        returnList = self.selenium_extract_with_xpath({'tag': 'div', 'attr': 'id', 'name': 'divRetDateRoll'})
+
+        print(depatureList)
+        print(returnList)
+        print(depatureList.page_source)
+        print(returnList.page_source)
 
 
 if __name__ == "__main__":

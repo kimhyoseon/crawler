@@ -163,5 +163,12 @@ class Crawler:
                 element_found.click()
                 #self.driver.implicitly_wait(1)
 
+    def selenium_extract_with_xpath(self, tag):
+        xpath = '//%s[@%s="%s"]' % (
+        tag['tag'], tag['attr'], tag['name'])
+        element_present = EC.presence_of_element_located((By.XPATH, xpath))
+        element_found = WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
+        return element_found
+
     def extract(self, html):
         pass
