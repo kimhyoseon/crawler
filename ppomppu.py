@@ -22,7 +22,7 @@ class Ppomppu(Crawler):
 
         element = soup.find('table', id='revolution_main_table')
 
-        # 핫딜 리스트
+        # 핫딜리스트
         if element:
             for list in element.find_all('tr', class_=re.compile('list[0-9]')):
                 try:
