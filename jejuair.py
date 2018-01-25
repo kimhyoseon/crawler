@@ -131,8 +131,6 @@ class Jejuair(Crawler):
             # 도착 가격 엘리먼트
             return_element = soup.find('div', id='divRetDateRoll').find('ul', class_='dataList').find_all('li', recursive=False)
 
-            log.logger.info('collect_price')
-
             # 출발 가격 추출
             for depature in depature_element:
                 try:
@@ -174,16 +172,17 @@ class Jejuair(Crawler):
                 except Exception:
                     pass
 
-            log.logger.info(return_country)
-
             # 다음 구간 검색 버튼 선택
             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnNextDep'}) is False:
                 raise Exception('selenium_click_by_xpath fail.')
 
             # 다음 구간 버튼을 누른 후 알럿 확인 후 없다면 다시 수집
             if self.selenium_is_alert_exist() == False:
+                log.logger.info('selenium_is_alert_exist false')
                 self.collect_price()
             else:
+                log.logger.info('selenium_is_alert_exist true')
+                log.logger.info('reconnect')
                 return True
 
         except Exception as e:
