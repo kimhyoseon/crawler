@@ -147,8 +147,9 @@ class Crawler:
                 return True
             else:
                 return False
-        except Exception:
-            return False
+        except Exception as e:
+        self.log.logger.error(e, exc_info=True)
+        return False
 
     # 프록시 서버 IP 1개 획득
     def get_proxy_server_ip_list(self):
