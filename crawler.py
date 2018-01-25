@@ -162,12 +162,22 @@ class Crawler:
                 element_present = EC.element_to_be_clickable((By.XPATH, xpath))
                 element_found = WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
                 element_found.click()
-                #self.driver.implicitly_wait(1)
+
+    def selenium_click_event_ignore(self, tags):
+        if len(tags) > 0:
+            for tag in tags:
+                try:
+                    xpath = '//%s[@%s="%s"]' % (
+                    tag['tag'], tag['attr'], tag['name'])
+                    element_present = EC.element_to_be_clickable((By.XPATH, xpath))
+                    element_found = WebDriverWait(self.driver, 10).until(element_present)
+                    element_found.click()
+                except Exception:
+                    pass
 
     def selenium_extract_with_xpath(self, tag):
         xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
         element_present = EC.visibility_of_element_located((By.XPATH, xpath))
-        print(element_present)
         WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
 
         return self.driver.page_source
