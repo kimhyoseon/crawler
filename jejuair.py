@@ -43,25 +43,27 @@ class Jejuair(Crawler):
 
             # 날짜 선택완료 선택
             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnDoubleOk'}) is False:
-                raise Exception('selenium_click_by_xpath fail.')
+                raise Exception('selenium_click_by_xpath fail. btnDoubleOk')
 
             # 예매하기 선택
             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnReservation'}) is False:
-                raise Exception('selenium_click_by_xpath fail.')
+                raise Exception('selenium_click_by_xpath fail. btnReservation')
 
             # 항공권 검색 선택
+            log.logger.info('항공권 검색 선택')
             if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'id', 'name': 'btnSearch'}) is False:
+                log.logger.info('레이어 확인')
                 # 레이어 확인
                 if self.selenium_click_by_xpath(tag={'tag': 'label', 'attr': 'for', 'name': 'svch3'}) is False:
-                    raise Exception('selenium_click_by_xpath fail.')
+                    raise Exception('selenium_click_by_xpath fail. svch3')
                 else:
                     # 레이어 확인버튼 선택
                     if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'id', 'name': 'divAgreeConfirm'}) is False:
-                        raise Exception('selenium_click_by_xpath fail.')
+                        raise Exception('selenium_click_by_xpath fail. divAgreeConfirm')
                     else:
                         # 항공권 검색 선택
                         if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'id', 'name': 'btnSearch'}) is False:
-                            raise Exception('selenium_click_by_xpath fail.')
+                            raise Exception('selenium_click_by_xpath fail. btnSearch')
 
             # 가격 추출 시작
             for country in return_country:
@@ -84,7 +86,6 @@ class Jejuair(Crawler):
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
-            log.logger.info(self.driver.page_source)
             # 국가 수집 다시 시작
             self.start()
 
