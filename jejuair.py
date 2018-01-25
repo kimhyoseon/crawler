@@ -15,7 +15,7 @@ class Jejuair(Crawler):
         try:
             log.logger.info('[%s] collection start.' % self.name)
 
-            if jejuair.connect(site_url='http://www.jejuair.net/jejuair/kr/main.do', is_proxy=False, default_driver='selenium',
+            if jejuair.connect(site_url='http://www.jejuair.net/jejuair/kr/main.do', is_proxy=True, default_driver='selenium',
                         is_chrome=False) is False:
                 raise Exception('site connect fail')
 
