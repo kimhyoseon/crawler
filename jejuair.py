@@ -16,7 +16,7 @@ class Jejuair(Crawler):
             log.logger.info('[%s] collection start.' % self.name)
 
             if jejuair.connect(site_url='http://www.jejuair.net/jejuair/kr/main.do', is_proxy=False, default_driver='selenium',
-                        is_chrome=True) is False:
+                        is_chrome=False) is False:
                 raise Exception('site connect fail')
 
             # 출발지 선택
