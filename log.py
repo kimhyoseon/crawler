@@ -20,8 +20,8 @@ logging_config = dict(
               'formatter': 'formatter',
               'level': logging.INFO,
               'filename': os.path.join(os.path.dirname(os.path.realpath(__file__)), 'log/' + datetime.now().strftime('log_file_%Y_%m_%d.log')),
-              'encoding': 'utf-8'}
-              #'maxBytes': 1048576,
+              'encoding': 'utf-8',
+              'maxBytes': 1048576}
               #'backupCount': 0}
     },
     root = {

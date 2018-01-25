@@ -131,6 +131,10 @@ class Jejuair(Crawler):
             # 도착 가격 엘리먼트
             return_element = soup.find('div', id='divRetDateRoll').find('ul', class_='dataList').find_all('li', recursive=False)
 
+            log.logger.info(soup)
+            log.logger.info(depature_element)
+            log.logger.info(return_element)
+
             # 출발 가격 추출
             for depature in depature_element:
                 try:
