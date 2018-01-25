@@ -50,7 +50,7 @@ class Jejuair(Crawler):
                 raise Exception('selenium_click_by_xpath fail. btnReservation')
 
             # 항공권 검색 선택
-            log.logger.info('항공권 검색 선택')
+            log.logger.info('항공권 검색  선택')
             if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'id', 'name': 'btnSearch'}) is False:
                 log.logger.info('레이어 확인')
                 # 레이어 확인
