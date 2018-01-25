@@ -131,9 +131,6 @@ class Jejuair(Crawler):
             # 도착 가격 엘리먼트
             return_element = soup.find('div', id='divRetDateRoll').find('ul', class_='dataList').find_all('li', recursive=False)
 
-            log.logger.info(depature_element)
-            log.logger.info(return_element)
-
             # 출발 가격 추출
             for depature in depature_element:
                 try:
@@ -142,15 +139,15 @@ class Jejuair(Crawler):
                     date = depature.find('span').getText()
 
                     # 목금토일만
-                    if any(s in date for s in ['목', '금', '토', '일']):
-                        # 최저가와 같거나 작을 때
-                        if price <= return_country['price_depature']:
-                            # 최저가라면 날짜 초기화
-                            if price < return_country['price_depature']:
-                                return_country['date_depature'] = []
+                    #if any(s in date for s in ['목', '금', '토', '일']):
+                    # 최저가와 같거나 작을 때
+                    if price <= return_country['price_depature']:
+                        # 최저가라면 날짜 초기화
+                        if price < return_country['price_depature']:
+                            return_country['date_depature'] = []
 
-                            return_country['price_depature'] = price
-                            return_country['date_depature'].append(date)
+                        return_country['price_depature'] = price
+                        return_country['date_depature'].append(date)
 
                 except Exception as e:
                     pass
@@ -163,14 +160,14 @@ class Jejuair(Crawler):
                     date = returns.find('span').getText()
 
                     # 토일월화만
-                    if any(s in date for s in ['토', '일', '월', '화']):
-                        # 최저가와 같거나 작을 때
-                        if price <= return_country['price_return']:
-                            # 최저가라면 날짜 초기화
-                            if price < return_country['price_return']:
-                                self.date_return = []
-                                return_country['price_return'] = price
-                                return_country['date_return'].append(returns.find('span').getText())
+                    # if any(s in date for s in ['토', '일', '월', '화']):
+                    # 최저가와 같거나 작을 때
+                    if price <= return_country['price_return']:
+                        # 최저가라면 날짜 초기화
+                        if price < return_country['price_return']:
+                            self.date_return = []
+                            return_country['price_return'] = price
+                            return_country['date_return'].append(returns.find('span').getText())
 
                 except Exception:
                     pass
