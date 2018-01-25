@@ -84,6 +84,7 @@ class Jejuair(Crawler):
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
+            log.logger.info(self.driver.page_source)
             # 국가 수집 다시 시작
             self.start()
 
