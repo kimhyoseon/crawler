@@ -14,6 +14,7 @@ class Jejuair(Crawler):
     def start(self):
         try:
             log.logger.info('[%s] collection start.' % self.name)
+            self.count_collect_fail = 0
 
             if jejuair.connect(site_url='http://www.jejuair.net/jejuair/kr/main.do', is_proxy=False, default_driver='selenium',
                         is_chrome=False) is False:
@@ -117,6 +118,8 @@ class Jejuair(Crawler):
 
     def collect_price(self):
         try:
+            is_collect_success = False
+
             # 현재 검색중인 국가 정보
             return_country = self.result_list[self.process_count]
 
@@ -149,6 +152,8 @@ class Jejuair(Crawler):
                         return_country['price_depature'] = price
                         return_country['date_depature'].append(date)
 
+                    is_collect_success = True
+
                 except Exception as e:
                     pass
 
@@ -169,21 +174,39 @@ class Jejuair(Crawler):
                             return_country['price_return'] = price
                             return_country['date_return'].append(returns.find('span').getText())
 
+                    is_collect_success = True
+
                 except Exception:
                     pass
 
-            # 다음 구간 검색 버튼 선택
-            if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnNextDep'}) is False:
-                raise Exception('selenium_click_by_xpath fail.')
+            if is_collect_success is False:
+                self.count_collect_fail = self.count_collect_fail + 1
 
-            # 다음 구간 버튼을 누른 후 알럿 확인 후 없다면 다시 수집
-            if self.selenium_is_alert_exist() == False:
-                log.logger.info('selenium_is_alert_exist false')
-                self.collect_price()
-            else:
-                log.logger.info('selenium_is_alert_exist true')
-                log.logger.info('reconnect')
+            log.logger.info(self.count_collect_fail)
+
+            # 10번 이상 수집에 실패했다면 종료
+            if self.count_collect_fail > 10:
+                log.logger.info('collect end')
                 return True
+            # 수집중이라면 다음 버튼을 누르고 재귀호출
+            else:
+                log.logger.info('collect continue')
+
+                # 다음 구간 검색 버튼 선택
+                if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnNextDep'}) is False:
+                    raise Exception('selenium_click_by_xpath fail.')
+
+                self.collect_price()
+
+
+            # # 다음 구간 버튼을 누른 후 알럿 확인 후 없다면 다시 수집
+            # if self.selenium_is_alert_exist() == False:
+            #     log.logger.info('selenium_is_alert_exist false')
+            #     self.collect_price()
+            # else:
+            #     log.logger.info('selenium_is_alert_exist true')
+            #     log.logger.info('reconnect')
+            #     return True
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
