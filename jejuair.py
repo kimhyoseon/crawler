@@ -178,7 +178,6 @@ class Jejuair(Crawler):
 
             # 다음 구간 버튼을 누른 후 알럿 확인 후 없다면 다시 수집
             if self.selenium_is_alert_exist() == False:
-                return True
                 self.collect_price()
             else:
                 return True
