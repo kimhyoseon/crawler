@@ -214,23 +214,32 @@ class Jejuair(Crawler):
     def send_message(self):
         try:
             text = '[%s]'%self.name
-            for result in self.result_list:
-                if result['price_depature'] < 99999999999 or result['price_return'] < 99999999999:
-                    text_each = '\n\n%s(%s):'%(result['title'], result['airport'])
-                    if result['price_depature'] < 99999999999:
-                        price_depature = 'depature price: {:0,.0f} won'.format(result['price_depature'])
-                        date_depature = 'depature date: %s' % ",".join(result['date_depature'])
-                        text_each += '\n%s\n%s' % (price_depature, date_depature)
-                    if result['price_return'] < 99999999999:
-                        price_return = 'return price: {:0,.0f} won'.format(result['price_return'])
-                        date_return = 'return date: %s' % ",".join(result['date_return'])
-                        text_each += '\n%s\n%s' % (price_return, date_return)
+            for idx, result in enumerate(self.result_list):
+                try:
+                    if result['price_depature'] < 99999999999 or result['price_return'] < 99999999999:
+                        text_each = '\n\n%s(%s):'%(result['title'], result['airport'])
+                        if result['price_depature'] < 99999999999:
+                            price_depature = 'depature price: {:0,.0f} won'.format(result['price_depature'])
+                            date_depature = 'depature date: %s' % ",".join(result['date_depature'])
+                            text_each += '\n%s\n%s' % (price_depature, date_depature)
+                        if result['price_return'] < 99999999999:
+                            price_return = 'return price: {:0,.0f} won'.format(result['price_return'])
+                            date_return = 'return date: %s' % ",".join(result['date_return'])
+                            text_each += '\n%s\n%s' % (price_return, date_return)
 
-                    log.logger.info(text_each)
-                    text += text_each
+                        log.logger.info(text_each)
+                        text += text_each
 
+                        if idx % 5 == 0:
+                            telegrambot.send_message(text)
+                            text = ''
+                except:
+                    pass
+
+            if text:
                 telegrambot.send_message(text)
-                filewriter.remove_log_file(self.name)
+
+            #filewriter.remove_log_file(self.name)
         except Exception as e:
             log.logger.error(e, exc_info=True)
 
