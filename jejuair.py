@@ -180,7 +180,7 @@ class Jejuair(Crawler):
                     #log.logger.error(e, exc_info=True)
                     pass
 
-            if is_collect_success is False or True:
+            if is_collect_success is False:
                 self.count_collect_fail = self.count_collect_fail + 1
 
             log.logger.info('collecting price.. %s (fail count: %d)' % (date, self.count_collect_fail))
