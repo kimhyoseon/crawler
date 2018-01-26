@@ -1,8 +1,7 @@
 #-*- coding: utf-8 -*-
-
 import sys
-from importlib import reload
-reload(sys)
+from six.moves import reload_module
+reload_module(sys)
 sys.setdefaultencoding('utf-8')
 
 import re
