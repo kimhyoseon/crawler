@@ -2,20 +2,25 @@
 
 import re
 import log
+import time
 import filewriter
 import telegrambot
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
 
 class Jejuair(Crawler):
+
     def start(self):
         try:
             log.logger.info('[%s] collection start.' % self.name)
             self.count_collect_fail = 0
 
-            if jejuair.connect(site_url='http://www.jejuair.net/jejuair/kr/main.do', is_proxy=False, default_driver='selenium',
+            if self.connect(site_url='http://www.jejuair.net/jejuair/kr/main.do', is_proxy=False, default_driver='selenium',
                         is_chrome=False) is False:
                 raise Exception('site connect fail')
+
+            # 로그인
+            jejuair.login()
 
             # 출발지 선택
             if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'id', 'name': 'divDepStn1'}) is False:
@@ -42,6 +47,16 @@ class Jejuair(Crawler):
             # 날짜 선택완료 선택
             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnDoubleOk'}) is False:
                 raise Exception('selenium_click_by_xpath fail. btnDoubleOk')
+
+            # 성인 인원 선택
+            if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'id', 'name': 'divSelADT'}) is False:
+                raise Exception('selenium_click_by_xpath fail. btnDoubleOk')
+
+            # 2명
+            if self.selenium_click_by_xpath(tag={'tag': 'ul', 'attr': 'id', 'name': 'ulADT'}, etc='/li[2]') is False:
+                raise Exception('selenium_click_by_xpath fail. btnDoubleOk')
+
+            exit()
 
             # 예매하기 선택
             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnReservation'}) is False:
@@ -239,20 +254,62 @@ class Jejuair(Crawler):
             if text:
                 telegrambot.send_message(text)
 
-            #filewriter.remove_log_file(self.name)
+            filewriter.remove_log_file(self.name)
         except Exception as e:
             log.logger.error(e, exc_info=True)
 
     def get_log(self):
-        log_data = filewriter.get_log_file(self.name)
-        log.logger.info(log_data)
-        # 처음부터 진행
-        if not log_data:
+        try:
+            log_data = filewriter.get_log_file(self.name)
+            log.logger.info(log_data)
+
+            # 처음부터 진행
+            if not log_data:
+                self.process_count = 0
+                self.result_list = []
+            else:
+                self.process_count = log_data[0]
+                self.result_list = log_data[1]
+            return True
+        except:
             self.process_count = 0
             self.result_list = []
-        else:
-            self.process_count = log_data[0]
-            self.result_list = log_data[1]
+
+            return False
+
+    def login(self):
+        try:
+            if self.is_login:
+                return True
+        except:
+            try:
+                self.is_login = True
+
+                # 계정정보 가져오기
+                account_data = filewriter.get_log_file(self.name + '_account')
+                log.logger.info(account_data)
+                if account_data:
+                    # 로그인 버튼 선택
+                    if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'class', 'name': 'loginOpen'}) is False:
+                        raise Exception('selenium_click_by_xpath fail. loginOpen')
+                    # 아이디 비번 입력
+                    if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name',
+                                                                                    'name': 'gnb_userid'}) is False:
+                        raise Exception('selenium_input_text_by_xpath fail. gnb_userid')
+                    if self.selenium_input_text_by_xpath(text=account_data[1],
+                                                         tag={'tag': 'input', 'attr': 'name', 'name': 'gnb_pid'}) is False:
+                        raise Exception('selenium_input_text_by_xpath fail. gnb_pid')
+                    # 로그인하기 선택
+                    if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'id', 'name': 'gnb_idLogin'}) is False:
+                        raise Exception('selenium_click_by_xpath fail. gnb_idLogin')
+
+                    log.logger.info('login success')
+                    time.sleep(5)
+                    return True
+            except:
+                return False
+
+
 
 
 if __name__ == "__main__":
