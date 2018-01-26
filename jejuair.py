@@ -56,8 +56,6 @@ class Jejuair(Crawler):
             if self.selenium_click_by_xpath(tag={'tag': 'ul', 'attr': 'id', 'name': 'ulADT'}, etc='/li[2]') is False:
                 raise Exception('selenium_click_by_xpath fail. btnDoubleOk')
 
-            exit()
-
             # 예매하기 선택
             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnReservation'}) is False:
                 raise Exception('selenium_click_by_xpath fail. btnReservation')
