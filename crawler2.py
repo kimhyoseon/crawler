@@ -177,3 +177,13 @@ class Crawler:
         except Exception as e:
             log.logger.error(e, exc_info=True)
             return False
+
+    def utf_8_reload(self):
+        try:
+            import sys
+            from six.moves import reload_module
+            reload_module(sys)
+            sys.setdefaultencoding('utf-8')
+            return True
+        except:
+            return False

@@ -1,20 +1,13 @@
 #-*- coding: utf-8 -*-
-import sys
-from six.moves import reload_module
-reload_module(sys)
-sys.setdefaultencoding('utf-8')
 
 import re
 import log
+import filewriter
 import telegrambot
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
-from decimal import Decimal
 
 class Jejuair(Crawler):
-    result_list = []
-    process_count = 0
-
     def start(self):
         try:
             log.logger.info('[%s] collection start.' % self.name)
@@ -76,6 +69,8 @@ class Jejuair(Crawler):
                     self.process_count = self.process_count + 1
                     log.logger.info('searching complete %s %s' % (return_country['title'], return_country['airport']))
                     log.logger.info(return_country)
+                    # 국가별 수집이 성공했을 시 현재 진행 상황을 파일에 기록
+                    filewriter.save_log_file(self.name, [self.process_count, self.result_list])
                     # 다음 국가 수집 시작
                     self.start()
 
@@ -142,7 +137,7 @@ class Jejuair(Crawler):
             for depature in depature_element:
                 try:
                     price = depature.find('strong', class_='price0').getText()
-                    price = Decimal(re.sub(r'[^\d.]', '', price))
+                    price = int(re.sub(r'[^\d.]', '', price))
                     date = depature.find('span').getText()
 
                     # 목금토일만
@@ -166,7 +161,7 @@ class Jejuair(Crawler):
             for returns in return_element:
                 try:
                     price = returns.find('strong', class_='price0').getText()
-                    price = Decimal(re.sub(r'[^\d.]', '', price))
+                    price = int(re.sub(r'[^\d.]', '', price))
                     date = returns.find('span').getText()
 
                     # 토일월화만
@@ -185,7 +180,7 @@ class Jejuair(Crawler):
                     #log.logger.error(e, exc_info=True)
                     pass
 
-            if is_collect_success is False:
+            if is_collect_success is False or True:
                 self.count_collect_fail = self.count_collect_fail + 1
 
             log.logger.info('collecting price.. %s (fail count: %d)' % (date, self.count_collect_fail))
@@ -234,9 +229,24 @@ class Jejuair(Crawler):
                     text += text_each
 
                 telegrambot.send_message(text)
+                filewriter.remove_log_file(self.name)
         except Exception as e:
             log.logger.error(e, exc_info=True)
 
+    def get_log(self):
+        log_data = filewriter.get_log_file(self.name)
+        log.logger.info(log_data)
+        # 처음부터 진행
+        if not log_data:
+            self.process_count = 0
+            self.result_list = []
+        else:
+            self.process_count = log_data[0]
+            self.result_list = log_data[1]
+
+
 if __name__ == "__main__":
     jejuair = Jejuair()
+    jejuair.utf_8_reload()
+    jejuair.get_log()
     jejuair.start()
