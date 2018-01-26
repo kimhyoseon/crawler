@@ -142,19 +142,20 @@ class Jejuair(Crawler):
                     date = depature.find('span').getText()
 
                     # 목금토일만
-                    #if any(s in date for s in ['목', '금', '토', '일']):
-                    # 최저가와 같거나 작을 때
-                    if price <= return_country['price_depature']:
-                        # 최저가라면 날짜 초기화
-                        if price < return_country['price_depature']:
-                            return_country['date_depature'] = []
+                    if any(s in date for s in ['목', '금', '토', '일']):
+                        # 최저가와 같거나 작을 때
+                        if price <= return_country['price_depature']:
+                            # 최저가라면 날짜 초기화
+                            if price < return_country['price_depature']:
+                                return_country['date_depature'] = []
 
-                        return_country['price_depature'] = price
-                        return_country['date_depature'].append(date)
+                            return_country['price_depature'] = price
+                            return_country['date_depature'].append(date)
 
                     is_collect_success = True
 
                 except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     pass
 
             # 도착 가격 추출
@@ -165,33 +166,29 @@ class Jejuair(Crawler):
                     date = returns.find('span').getText()
 
                     # 토일월화만
-                    # if any(s in date for s in ['토', '일', '월', '화']):
-                    # 최저가와 같거나 작을 때
-                    if price <= return_country['price_return']:
-                        # 최저가라면 날짜 초기화
-                        if price < return_country['price_return']:
-                            self.date_return = []
-                            return_country['price_return'] = price
-                            return_country['date_return'].append(returns.find('span').getText())
+                    if any(s in date for s in ['토', '일', '월', '화']):
+                        # 최저가와 같거나 작을 때
+                        if price <= return_country['price_return']:
+                            # 최저가라면 날짜 초기화
+                            if price < return_country['price_return']:
+                                self.date_return = []
+                                return_country['price_return'] = price
+                                return_country['date_return'].append(returns.find('span').getText())
 
                     is_collect_success = True
 
-                except Exception:
+                except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     pass
 
             if is_collect_success is False:
                 self.count_collect_fail = self.count_collect_fail + 1
 
-            log.logger.info(self.count_collect_fail)
-
-            # 10번 이상 수집에 실패했다면 종료
-            if self.count_collect_fail > 10:
-                log.logger.info('collect end')
+            # 5번 이상 수집에 실패했다면 종료
+            if self.count_collect_fail > 5:
                 return True
             # 수집중이라면 다음 버튼을 누르고 재귀호출
             else:
-                log.logger.info('collect continue')
-
                 # 다음 구간 검색 버튼 선택
                 if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'id', 'name': 'btnNextDep'}) is False:
                     raise Exception('selenium_click_by_xpath fail.')
