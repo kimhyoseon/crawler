@@ -122,6 +122,7 @@ class Jejuair(Crawler):
 
     def collect_price(self):
         try:
+            log.logger.info('collecting price.. (fail count: %d)'%self.count_collect_fail)
             is_collect_success = False
 
             # 현재 검색중인 국가 정보
@@ -159,7 +160,7 @@ class Jejuair(Crawler):
                     is_collect_success = True
 
                 except Exception as e:
-                    log.logger.error(e, exc_info=True)
+                    #log.logger.error(e, exc_info=True)
                     pass
 
             # 도착 가격 추출
@@ -182,7 +183,7 @@ class Jejuair(Crawler):
                     is_collect_success = True
 
                 except Exception as e:
-                    log.logger.error(e, exc_info=True)
+                    #log.logger.error(e, exc_info=True)
                     pass
 
             if is_collect_success is False:
