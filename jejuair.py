@@ -122,7 +122,6 @@ class Jejuair(Crawler):
 
     def collect_price(self):
         try:
-            log.logger.info('collecting price.. (fail count: %d)'%self.count_collect_fail)
             is_collect_success = False
 
             # 현재 검색중인 국가 정보
@@ -188,6 +187,8 @@ class Jejuair(Crawler):
 
             if is_collect_success is False:
                 self.count_collect_fail = self.count_collect_fail + 1
+
+            log.logger.info('collecting price.. %s (fail count: %d)' % (date, self.count_collect_fail))
 
             # 5번 이상 수집에 실패했다면 종료
             if self.count_collect_fail > 5:
