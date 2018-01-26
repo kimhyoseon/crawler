@@ -118,6 +118,7 @@ class Jejuair(Crawler):
     def collect_price(self):
         try:
             is_collect_success = False
+            date = 'empty'
 
             # 현재 검색중인 국가 정보
             return_country = self.result_list[self.process_count]
