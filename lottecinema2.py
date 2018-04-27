@@ -45,7 +45,7 @@ class Cgv(Crawler):
                         img = list.find('img')['src']
                         idnum = id.replace('ic', '')
                         link = self.DETAIL_URL + idnum
-                        text = title + '\n' + date + '\n' + price + '\n' + link
+                        text = title + '\n' + date + '\n' + price + '\n' + img + '\n' + link
 
                         self.send_messge_and_save(id, text)
 
