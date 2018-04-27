@@ -88,6 +88,7 @@ class Crawler:
             proxy_ip = None
 
             if self.driver is not None:
+                log.logger.info('Connecting site with selenium, url:%s' % (site_url))
                 self.driver.get(site_url)
                 return True
 
