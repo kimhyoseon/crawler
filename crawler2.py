@@ -36,8 +36,6 @@ class Crawler:
             # 셀레니움 or 리퀘스츠 연결
             if default_driver == 'selenium':
                 if self.connect_with_selenium(site_url=site_url, is_chrome=is_chrome, is_proxy=is_proxy) is False:
-                    self.driver.quit()
-                    exit()
                     raise Exception('Site connect fail with selenium.')
                 return True
             elif default_driver == 'requests':
@@ -47,6 +45,7 @@ class Crawler:
             else:
                 raise Exception('Wrong default driver.')
         except Exception as e:
+            self.destroy()
             log.logger.error(e, exc_info=True)
             return False
 
@@ -79,6 +78,7 @@ class Crawler:
 
             return True
         except Exception as e:
+            self.destroy()
             log.logger.error(e, exc_info=True)
             return False
 
@@ -117,6 +117,7 @@ class Crawler:
 
             return True
         except Exception as e:
+            self.destroy()
             log.logger.error(e, exc_info=True)
             return False
 
@@ -216,3 +217,6 @@ class Crawler:
             if id not in self.log:
                 self.log.append(id)
                 filewriter.save_log_file(self.name, self.log)
+
+    def destroy(self):
+        self.driver.quit()

@@ -20,6 +20,8 @@ class Cgv(Crawler):
 
             self.scan_page()
 
+            self.destroy()
+
         except Exception as e:
             log.logger.error(e, exc_info=True)
 
