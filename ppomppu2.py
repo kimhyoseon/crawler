@@ -64,7 +64,7 @@ class Ppomppu(Crawler):
                             except Exception as errorMessage:
                                 timelap = '등록시간: 1일전'
 
-                            good = 'Good count: %d' % good
+                            good = '추천: %d' % good
                             text = title + '\n' + good + '\n' + timelap + '\n' + link
 
                             self.send_messge_and_save(regdate, text)
