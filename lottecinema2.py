@@ -13,7 +13,7 @@ class Cgv(Crawler):
         try:
             self.log = filewriter.get_log_file(self.name)
 
-            if self.connect(site_url='http://www.lottecinema.co.kr/LCHS/Contents/Cinema-Mall/gift-shop.aspx', is_proxy=False, default_driver='selenium',
+            if self.connect(site_url='http://www.lottecinema.co.kr/LCHS/Contents/Cinema-Mall/gift-shop.aspx', is_proxy=True, default_driver='selenium',
                         is_chrome=False) is False:
                 raise Exception('site connect fail')
 
