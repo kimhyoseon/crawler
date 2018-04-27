@@ -5,7 +5,7 @@ import log
 import requests
 import filewriter
 
-#import telegrambot
+import telegrambot
 #from datetime import datetime
 #from pytz import timezone
 from selenium import webdriver
@@ -207,3 +207,11 @@ class Crawler:
             return True
         except:
             return False
+
+    def send_messge_and_save(self, id, text):
+        if text and id:
+            telegrambot.send_message(text)
+            log.logger.info('New hotdeal has just been registerd. (%s)' % (id))
+            if id not in self.log:
+                self.log.append(id)
+                filewriter.save_log_file(self.name, self.log)
