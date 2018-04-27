@@ -68,12 +68,12 @@ class Crawler:
                 else:
                     proxy_dict = None
 
-            log.logger.info('Connecting site with requests, url:%s, proxy:%s' % (site_url, proxy_ip))
-
             response = requests.get(site_url, proxies=proxy_dict)
 
             if response.status_code != 200:
                 raise Exception('Site connect error (status_code:%d)' % response.status_code)
+
+            log.logger.info('Connecting site with requests, url:%s, proxy:%s' % (site_url, proxy_ip))
 
             self.drive = response
 
