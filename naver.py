@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 
+import re
 import log
 import filewriter
 import telegrambot
@@ -42,7 +43,7 @@ class Naver(Crawler):
 
             if element:
                 price_str = element[1].find('a').getText().strip()
-                price = int(''.join(filter(str.isdigit, price_str)))
+                price = re.sub("\D", "", price_str)
 
                 try:
                     if self.log[url] > price:
