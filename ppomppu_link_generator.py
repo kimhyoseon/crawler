@@ -2,7 +2,7 @@
 
 import os
 import xlrd
-import urllib.parse
+import urllib3
 import tldextract
 from shortener import Shortener
 
@@ -50,7 +50,7 @@ class PpomppuLinkGenerator:
         if key is None or url is None:
             return False
 
-        url = urllib.parse.quote_plus(url)
+        url = urllib3.parse.quote_plus(url)
 
         return 'http://click.linkprice.com/click.php?m=%s&a=%s&l=9999&l_cd1=3&l_cd2=0&tu=%s' % (key, self.LINKPRICE_ID, url)
 
