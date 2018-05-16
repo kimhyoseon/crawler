@@ -25,7 +25,7 @@ class PpomppuLinkGenerator:
     def getLinkPriceData(self):
         data = dict()
 
-        wb = xlrd.open_workbook(os.path.join(os.path.join(os.path.dirname(__file__), 'log'), 'linkprice.xlsx'))
+        wb = xlrd.open_workbook(os.path.join(os.path.join(os.path.dirname(__file__), 'data'), 'linkprice.xlsx'))
 
         # Get the first sheet either by index or by name
         sh = wb.sheet_by_index(0)

@@ -76,6 +76,9 @@ class Ppomppu(Crawler):
                             if ailliateLink is not False and len(ailliateLink) > 0:
                                 text += '\n상품바로가기: ' + ailliateLink
 
+                            #print(text)
+                            #exit()
+
                             self.send_messge_and_save(regdate, text)
                     except Exception as e:
                         continue
