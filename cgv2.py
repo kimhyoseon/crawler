@@ -14,8 +14,9 @@ class Cgv(Crawler):
         try:
             self.log = filewriter.get_log_file(self.name)
 
-            if self.connect(site_url='http://s.ppomppu.co.kr?idno=ppomppu_285628&encode=on&target=aHR0cDovL20ubGZtYWxsLmNvLmtyL3Byb2R1Y3QuZG8%2FY21kPWdldFByb2R1Y3REZXRhaWwmUFJPRF9DRD1HNTEzWFgwMDI1OCZJVEhSX0NEPUlUMDcwMSZhZj1CSTkw', is_proxy=False, default_driver='selenium',
-                        is_chrome=False) is False:
+            if self.connect(site_url='http://www.cgv.co.kr/culture-event/event/', is_proxy=False,
+                            default_driver='selenium',
+                            is_chrome=False) is False:
                 raise Exception('site connect fail')
 
             self.scan_page()
