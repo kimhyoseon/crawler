@@ -112,6 +112,7 @@ class Ppomppu(Crawler):
                     return apiliateLink
 
                 except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     raise Exception('Exception')
             else:
                 raise Exception('Exception')
