@@ -7,6 +7,7 @@ from datetime import datetime
 from crawler2 import Crawler
 from pytz import timezone
 from bs4 import BeautifulSoup
+from ppomppu_link_generator import PpomppuLinkGenerator
 
 class Ppomppu(Crawler):
 
@@ -69,9 +70,51 @@ class Ppomppu(Crawler):
                             good = '추천: %d' % good
                             text = title + '\n' + good + '\n' + timelap + '\n' + link
 
+                            # 어필리에이트 링크 생성
+                            ailliateLink = self.get_item_link(link)
+
+                            if ailliateLink is not False and len(ailliateLink) > 0:
+                                text += '\n상품바로가기: ' + ailliateLink
+
                             self.send_messge_and_save(regdate, text)
                     except Exception as e:
                         continue
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+    def get_item_link(self, url=None):
+        try:
+            if self.connect(site_url=url, is_proxy=False, default_driver='selenium',
+                        is_chrome=False) is False:
+                raise Exception('site connect fail')
+
+            if self.selenium_extract_by_xpath(tag={'tag': 'div', 'attr': 'class', 'name': 'wordfix'}) is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+            element = soup.find('div', class_='wordfix')
+
+            # 핫딜리스트
+            if element:
+                try:
+                    link = element.find('a', recursive=False).getText()
+
+                    if link is None:
+                        raise Exception('link is not founded.')
+
+                    ppomppuLinkGenerator = PpomppuLinkGenerator()
+                    apiliateLink = ppomppuLinkGenerator.genLink(url=link)
+
+                    if apiliateLink is None:
+                        raise Exception('apiliateLink is not generated.')
+
+                    return apiliateLink
+
+                except Exception as e:
+                    raise Exception('Exception')
+            else:
+                raise Exception('Exception')
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
