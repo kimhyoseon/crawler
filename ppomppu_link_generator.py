@@ -17,8 +17,9 @@ class PpomppuLinkGenerator:
         domain = "{}.{}".format(extracted.domain, extracted.suffix)
 
         if domain in self.listLinkPrice.keys():
-            shortener = Shortener()
-            return shortener.genShortenerPolr(url=self.getLinkLinkPrice(key=self.listLinkPrice[domain], url=url))
+            #shortener = Shortener()
+            #return shortener.genShortenerPolr(url=self.getLinkLinkPrice(key=self.listLinkPrice[domain], url=url))
+            return self.getLinkLinkPrice(key=self.listLinkPrice[domain], url=url)
 
         return False
 
