@@ -12,14 +12,17 @@ class PpomppuLinkGenerator:
     def __init__(self):
         self.listLinkPrice = self.getLinkPriceData()
 
+    def getShortener(self, url=None):
+        shortener = Shortener()
+        return shortener.genShortenerBitly(url=url)
+
     def genLink(self, url=None):
         extracted = tldextract.extract(url)
         domain = "{}.{}".format(extracted.domain, extracted.suffix)
 
         if domain in self.listLinkPrice.keys():
-            #shortener = Shortener()
-            #return shortener.genShortenerPolr(url=self.getLinkLinkPrice(key=self.listLinkPrice[domain], url=url))
-            return self.getLinkLinkPrice(key=self.listLinkPrice[domain], url=url)
+            return self.getShortener(url=self.getLinkLinkPrice(key=self.listLinkPrice[domain], url=url))
+            #return self.getLinkLinkPrice(key=self.listLinkPrice[domain], url=url)
 
         return False
 

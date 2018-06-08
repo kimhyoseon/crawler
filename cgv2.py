@@ -5,6 +5,7 @@ import log
 import filewriter
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
+from ppomppu_link_generator import PpomppuLinkGenerator
 
 class Cgv(Crawler):
 
@@ -53,7 +54,17 @@ class Cgv(Crawler):
                             link = self.DETAIL_URL + link.replace('./', '')
 
                             if id and id not in self.log:
-                                text = title + '\n' + link
+                                shop = '핫딜사이트: CGV'
+                                title = '상품명: %s' % title
+                                ppomppuLinkGenerator = PpomppuLinkGenerator()
+                                link = ppomppuLinkGenerator.getShortener(url=link)
+                                link = '구매 바로가기: %s' % link
+                                text = shop + '\n' + title + '\n' + link
+
+                                # print(text)
+                                # self.destroy()
+                                # exit()
+
                                 self.send_messge_and_save(id, text)
 
         except Exception as e:

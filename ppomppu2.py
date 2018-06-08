@@ -56,28 +56,52 @@ class Ppomppu(Crawler):
                         if regdate and regdate not in self.log and good and good >= self.BASE_GOOD:
                             link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
                             s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
+                            status = '★★☆☆☆'
 
                             try:
                                 s2 = tds[4].getText().strip()
                                 tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
                                 hours, remainder = divmod(tdelta.seconds, 3600)
                                 minutes, seconds = divmod(remainder, 60)
-                                #timelap = 'time lap: %d hour %d minutes before' % (hours, minutes)
-                                timelap = '등록시간: %d시간 %d분 전' % (hours, minutes)
-                            except Exception as errorMessage:
-                                timelap = '등록시간: 1일전'
 
-                            good = '추천: %d' % good
-                            text = title + '\n' + good + '\n' + timelap + '\n' + link
+                                if hours < 2:
+                                    status = '★★★☆☆'
+                                if hours < 1:
+                                    status = '★★★★☆'
+                                    if minutes < 20:
+                                        status = '★★★★★'
+
+                                #timelap = 'time lap: %d hour %d minutes before' % (hours, minutes)
+                                #timelap = '등록시간: %d시간 %d분 전' % (hours, minutes)
+                                timelap = '핫딜점수: %s' % status
+                            except Exception as errorMessage:
+                                status = '★★☆☆☆'
+
+                            try:
+                                indexShop = title.index(']')
+                                shop = '핫딜사이트: %s' % title[1:indexShop].strip()
+                                title = '상품명: %s' % title[indexShop + 1:].strip()
+                                title = shop + '\n' + title
+                            except Exception as errorMessage:
+                                title = '상품명: %s' % title
+
+                            ppomppuLinkGenerator = PpomppuLinkGenerator()
+                            boardLink = ppomppuLinkGenerator.getShortener(url=link)
+                            boardLink = '게시글 바로가기: %s' % boardLink
+
+                            text = title + '\n' + timelap + '\n' + boardLink
 
                             # 어필리에이트 링크 생성
                             ailliateLink = self.get_item_link(link)
 
                             if ailliateLink is not False and len(ailliateLink) > 0:
-                                text += '\n상품바로가기: ' + ailliateLink
+                                text += '\n상품 바로가기: ' + ailliateLink
 
-                            #print(text)
-                            #exit()
+                            text = text + '\n\n * 이미지를 클릭해 상세내용을 확인하세요.'
+
+                            # print(text)
+                            # self.destroy()
+                            # exit()
 
                             self.send_messge_and_save(regdate, text)
                     except Exception as e:

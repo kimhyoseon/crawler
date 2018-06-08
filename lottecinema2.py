@@ -4,6 +4,7 @@ import log
 import filewriter
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
+from ppomppu_link_generator import PpomppuLinkGenerator
 
 class Cgv(Crawler):
 
@@ -42,12 +43,21 @@ class Cgv(Crawler):
                         if "1+1" not in title:
                             continue
 
+                        shop = '핫딜사이트: 롯데시네마'
                         date = list.find('dd', class_='date').getText()
                         price = list.find('span', class_='price').getText()
-                        img = list.find('img')['src']
+                        title = '상품명: %s %s (%s)' % (title, price, date)
+                        ppomppuLinkGenerator = PpomppuLinkGenerator()
                         idnum = id.replace('ic', '')
+                        img = list.find('img')['src']
                         link = self.DETAIL_URL + idnum
-                        text = title + '\n' + date + '\n' + price + '\n' + img + '\n' + link
+                        link = ppomppuLinkGenerator.getShortener(url=link)
+                        link = '구매 바로가기: %s' % link
+                        text = shop + '\n' + title + '\n' + link + '\n' + img
+
+                        # print(text)
+                        # self.destroy()
+                        # exit()
 
                         self.send_messge_and_save(id, text)
 
