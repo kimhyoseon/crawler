@@ -29,6 +29,7 @@ class Cgv(Crawler):
     def scan_page(self):
         try:
             if self.selenium_extract_by_xpath(tag={'tag': 'ul', 'attr': 'class', 'name': 'emovie_list'}) is False:
+                self.remove_proxy_server_ip_list()
                 raise Exception('selenium_extract_by_xpath fail.')
 
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
@@ -65,6 +66,7 @@ class Cgv(Crawler):
                         self.send_messge_and_save(id, text)
 
         except Exception as e:
+            self.destroy()
             log.logger.error(e, exc_info=True)
 
 if __name__ == "__main__":

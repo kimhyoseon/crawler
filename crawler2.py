@@ -18,7 +18,7 @@ class Crawler:
     PATH_NAME = os.path.dirname(os.path.realpath(__file__))
     PATH_CHROME_DRIVER = os.path.join(PATH_NAME, 'driver/chromedriver')
     PATH_PHANTOMJS_DRIVER = os.path.join(PATH_NAME, 'driver/phantomjs')
-    SITE_CONNECT_TIMEOUT = 60
+    SITE_CONNECT_TIMEOUT = 30
 
     def __init__(self):
         # 자식 클래스명
@@ -117,6 +117,8 @@ class Crawler:
 
             return True
         except Exception as e:
+            if is_proxy is True:
+                self.remove_proxy_server_ip_list()
             self.destroy()
             log.logger.error(e, exc_info=True)
             return False
@@ -199,6 +201,17 @@ class Crawler:
         except Exception as e:
             log.logger.error(e, exc_info=True)
             return False
+
+    # 첫번째 프록시 서버 IP 삭제
+    def remove_proxy_server_ip_list(self):
+        proxy_list_from_file = filewriter.get_log_file('proxy')
+
+        if proxy_list_from_file:
+            del proxy_list_from_file[0]
+            if len(proxy_list_from_file) == 0:
+                self.request_proxy_server_ip_list()
+            else:
+                filewriter.save_log_file('proxy', proxy_list_from_file)
 
     def utf_8_reload(self):
         try:

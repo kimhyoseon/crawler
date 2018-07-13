@@ -19,7 +19,6 @@ class Proxy(Crawler):
 
         list_ip = []
 
-        # 1+1 영화 리스트
         if element:
             for idx, list in enumerate(element.find_all('tr')):
                 try:
