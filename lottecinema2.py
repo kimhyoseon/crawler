@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 
+import re
 import log
 import filewriter
 from crawler2 import Crawler
@@ -8,13 +9,13 @@ from ppomppu_link_generator import PpomppuLinkGenerator
 
 class Cgv(Crawler):
 
-    DETAIL_URL = 'http://www.lottecinema.co.kr/LCHS/Contents/Cinema-Mall/gift-shop-detail.aspx?displayMiddleClassification=10&displayItemID='
+    DETAIL_URL = 'http://event.lottecinema.co.kr/LCHS/Contents/Event/infomation-delivery-event.aspx?EventID='
 
     def start(self):
         try:
             self.log = filewriter.get_log_file(self.name)
 
-            if self.connect(site_url='http://www.lottecinema.co.kr/LCHS/Contents/Cinema-Mall/gift-shop.aspx', is_proxy=True, default_driver='selenium',
+            if self.connect(site_url='http://event.lottecinema.co.kr/LCHS/Contents/Event/movie-booking-list.aspx', is_proxy=True, default_driver='selenium',
                         is_chrome=False) is False:
                 raise Exception('site connect fail')
 
@@ -27,30 +28,32 @@ class Cgv(Crawler):
 
     def scan_page(self):
         try:
-            if self.selenium_extract_by_xpath(tag={'tag': 'ul', 'attr': 'class', 'name': 'product_slist p10'}) is False:
+            if self.selenium_extract_by_xpath(tag={'tag': 'ul', 'attr': 'class', 'name': 'emovie_list'}) is False:
                 raise Exception('selenium_extract_by_xpath fail.')
 
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-            element = soup.find('ul', class_='product_slist p10')
+            element = soup.find('ul', class_='emovie_list')
 
             # 1+1 영화 리스트
             if element:
                 for list in element.find_all('li'):
-                    id = list.get('id')
+                    link_tag = list.find('dt', class_='event').find('a')
+                    attr_click = link_tag['onclick'].strip()
+                    id = re.search(r'ilsMove\(\"(.*?)\",', attr_click).group(1)
+
                     if id and id not in self.log:
-                        title = list.find('dt', class_='product_tit').getText()
+                        title = link_tag.getText().strip()
 
                         if "1+1" not in title:
                             continue
 
                         shop = '핫딜사이트: 롯데시네마'
-                        date = list.find('dd', class_='date').getText()
-                        price = list.find('span', class_='price').getText()
-                        title = '상품명: %s %s (%s)' % (title, price, date)
+                        date = list.find('dd', class_='eventdate').getText().strip()
+                        #price = list.find('span', class_='price').getText()
+                        title = '상품명: %s (%s)' % (title, date)
                         ppomppuLinkGenerator = PpomppuLinkGenerator()
-                        idnum = id.replace('ic', '')
                         img = list.find('img')['src']
-                        link = self.DETAIL_URL + idnum
+                        link = self.DETAIL_URL + id
                         link = ppomppuLinkGenerator.getShortener(url=link)
                         link = '구매 바로가기: %s' % link
                         text = shop + '\n' + title + '\n' + link + '\n' + img

@@ -56,7 +56,7 @@ class Ppomppu(Crawler):
                         if regdate and regdate not in self.log and good and good >= self.BASE_GOOD:
                             link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
                             s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
-                            status = '★★☆☆☆'
+                            status = '★☆☆☆☆'
 
                             try:
                                 s2 = tds[4].getText().strip()
@@ -64,6 +64,8 @@ class Ppomppu(Crawler):
                                 hours, remainder = divmod(tdelta.seconds, 3600)
                                 minutes, seconds = divmod(remainder, 60)
 
+                                if hours < 4:
+                                    status = '★★☆☆☆'
                                 if hours < 2:
                                     status = '★★★☆☆'
                                 if hours < 1:
