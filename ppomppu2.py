@@ -128,7 +128,7 @@ class Ppomppu(Crawler):
             if element:
                 try:
                     if not element.find('a', recursive=False):
-                        raise Exception('link is not founded.')
+                        raise Exception('link is not founded!.')
 
                     link = element.find('a', recursive=False).getText()
 
