@@ -6,8 +6,6 @@ import requests
 import filewriter
 
 import telegrambot
-#from datetime import datetime
-#from pytz import timezone
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -23,7 +21,6 @@ class Crawler:
     def __init__(self):
         # 자식 클래스명
         self.name = self.__class__.__name__.lower()
-        #self.log = filewriter.get_log_file(self.name)
         self.log = None
         self.driver = None
 
@@ -225,11 +222,11 @@ class Crawler:
 
     def send_messge_and_save(self, id, text):
         if text and id:
-            telegrambot.send_message(text)
-            log.logger.info('New hotdeal has just been registerd. (%s)' % (id))
             if id not in self.log:
                 self.log.append(id)
                 filewriter.save_log_file(self.name, self.log)
+                log.logger.info('New hotdeal has just been registerd. (%s)' % (id))
+                telegrambot.send_message(text)
 
     def destroy(self):
         self.driver.quit()
