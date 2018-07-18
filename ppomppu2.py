@@ -127,6 +127,9 @@ class Ppomppu(Crawler):
             # 핫딜리스트
             if element:
                 try:
+                    if not element.find('a', recursive=False):
+                        raise Exception('link is not founded.')
+
                     link = element.find('a', recursive=False).getText()
 
                     if link is None:
@@ -142,12 +145,13 @@ class Ppomppu(Crawler):
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
-                    raise Exception('Exception')
+                    return False
             else:
-                raise Exception('Exception')
+                return False
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
+            return false
 
 if __name__ == "__main__":
     ppomppu = Ppomppu()
