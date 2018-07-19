@@ -44,3 +44,12 @@ def get_log_file(filename, is_json=False):
 def remove_log_file(filename):
     if isinstance(filename, str):
         os.remove(os.path.join(LOG_PATH, filename + '.json'))
+
+# json 데이터 갯수 관리
+def slice_json_by_max_len(data, max_len=100):
+    if isinstance(data, list) or isinstance(data, dict):
+        for i in range(len(data)):
+            if len(data) < max_len: break
+            del data[0]
+
+    return data
