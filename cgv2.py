@@ -67,7 +67,7 @@ class Cgv(Crawler):
 
                                 self.log = filewriter.slice_json_by_max_len(self.log, max_len=100)
 
-                                self.send_messge_and_save(id, text)
+                                self.send_messge_and_save(id, text, 'hotdeal')
 
         except Exception as e:
             log.logger.error(e, exc_info=True)

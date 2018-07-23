@@ -107,7 +107,7 @@ class Ppomppu(Crawler):
 
                             self.log = filewriter.slice_json_by_max_len(self.log, max_len=100)
 
-                            self.send_messge_and_save(regdate, text)
+                            self.send_messge_and_save(regdate, text, 'hotdeal')
                     except Exception as e:
                         continue
 

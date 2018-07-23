@@ -220,13 +220,13 @@ class Crawler:
         except:
             return False
 
-    def send_messge_and_save(self, id, text):
-        if text and id:
+    def send_messge_and_save(self, id=None, text=None, bot_name=None):
+        if text and id and bot_name:
             if id not in self.log:
                 self.log.append(id)
                 filewriter.save_log_file(self.name, self.log)
                 log.logger.info('New hotdeal has just been registerd. (%s)' % (id))
-                telegrambot.send_message(text)
+                telegrambot.send_message(text, bot_name)
 
     def destroy(self):
         self.driver.quit()
