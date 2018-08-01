@@ -38,30 +38,30 @@ class Cgv(Crawler):
             # 1+1 영화 리스트
             if element:
                 for list in element.find_all('li'):
-                    link_tag = list.find('dt', class_='event').find('a')
+                    link_tag = list.find('a')
                     attr_click = link_tag['onclick'].strip()
                     id = re.search(r'ilsMove\(\"(.*?)\",', attr_click).group(1)
 
                     if id and id not in self.log:
-                        title = link_tag.getText().strip()
+                        title = link_tag.find('img')['alt'].strip()
 
                         if "1+1" not in title:
                             continue
 
                         shop = '핫딜사이트: 롯데시네마'
-                        date = list.find('dd', class_='eventdate').getText().strip()
+                        date = list.find('p', class_='evt_period').getText().strip()
                         #price = list.find('span', class_='price').getText()
                         title = '상품명: %s (%s)' % (title, date)
                         ppomppuLinkGenerator = PpomppuLinkGenerator()
-                        img = list.find('img')['src']
+                        img = link_tag.find('img')['src'].strip()
                         link = self.DETAIL_URL + id
                         link = ppomppuLinkGenerator.getShortener(url=link)
                         link = '구매 바로가기: %s' % link
                         text = shop + '\n' + title + '\n' + link + '\n' + img
 
-                        # print(text)
-                        # self.destroy()
-                        # exit()
+                        print(text)
+                        self.destroy()
+                        exit()
 
                         self.log = filewriter.slice_json_by_max_len(self.log, max_len=100)
 
