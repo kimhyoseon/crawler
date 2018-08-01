@@ -59,9 +59,9 @@ class Cgv(Crawler):
                         link = '구매 바로가기: %s' % link
                         text = shop + '\n' + title + '\n' + link + '\n' + img
 
-                        print(text)
-                        self.destroy()
-                        exit()
+                        # print(text)
+                        # self.destroy()
+                        # exit()
 
                         self.log = filewriter.slice_json_by_max_len(self.log, max_len=100)
 
