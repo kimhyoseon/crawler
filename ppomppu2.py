@@ -53,6 +53,9 @@ class Ppomppu(Crawler):
                         good = int(tds[5].getText().strip().split('-')[0].strip())
                         regdate = tds[4]['title'].strip()
 
+                        # 수집 성공로그
+                        self.record_success_log()
+
                         if regdate and regdate not in self.log and good and good >= self.BASE_GOOD:
                             link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
                             s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')

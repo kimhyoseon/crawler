@@ -4,6 +4,7 @@ import os
 import log
 import requests
 import filewriter
+from datetime import datetime
 
 import telegrambot
 from selenium import webdriver
@@ -209,6 +210,36 @@ class Crawler:
                 self.request_proxy_server_ip_list()
             else:
                 filewriter.save_log_file('proxy', proxy_list_from_file)
+
+    # 당일 성공로그
+    def record_success_log(self):
+
+        try:
+            if self.is_record_call is True:
+                return False
+        except:
+            self.is_record_call = True
+
+        # print('called')
+
+        log_success = filewriter.get_log_file('success', is_json=True)
+        date = datetime.now().strftime('%Y_%m_%d')
+
+        if not log_success or not log_success[date]:
+            # print('new')
+            log_success[date] = {};
+
+        try:
+            if log_success[date][self.name]:
+                return False
+        except:
+            log_success[date][self.name] = 1
+
+        log_success[date][self.name] = 1
+
+        # print('recorded')
+
+        filewriter.save_log_file('success', log_success)
 
     def utf_8_reload(self):
         try:

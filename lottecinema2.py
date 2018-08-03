@@ -7,7 +7,7 @@ from crawler2 import Crawler
 from bs4 import BeautifulSoup
 from ppomppu_link_generator import PpomppuLinkGenerator
 
-class Cgv(Crawler):
+class Lottecinema(Crawler):
 
     DETAIL_URL = 'http://event.lottecinema.co.kr/LCHS/Contents/Event/infomation-delivery-event.aspx?EventID='
 
@@ -45,6 +45,9 @@ class Cgv(Crawler):
                     if id and id not in self.log:
                         title = link_tag.find('img')['alt'].strip()
 
+                        # 수집 성공로그
+                        self.record_success_log()
+
                         if "1+1" not in title:
                             continue
 
@@ -72,6 +75,6 @@ class Cgv(Crawler):
             log.logger.error(e, exc_info=True)
 
 if __name__ == "__main__":
-    cgv = Cgv()
-    cgv.utf_8_reload()
-    cgv.start()
+    lottecinema = Lottecinema()
+    lottecinema.utf_8_reload()
+    lottecinema.start()

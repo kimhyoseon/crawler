@@ -44,6 +44,9 @@ class Cgv(Crawler):
                         if not linkObj == -1:
                             title = imgObj['alt']
 
+                            # 수집 성공로그
+                            self.record_success_log()
+
                             if "1+1" not in title:
                                 continue
 
