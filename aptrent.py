@@ -52,12 +52,15 @@ class Aptrent(Crawler):
             if element:
                 for list in element.find_all('tr'):
                     try:
-                        print(list)
+                        #print(list)
                         tds = list.find_all('td', recursive=False)
                         link_tag = tds[3].find('a')
                         href_attr = link_tag['href'].strip()
                         id = re.search(r'Detail\(\'(.*?)\'', href_attr).group(1)
                         log_id = self.kind + id
+
+                        # 수집 성공로그
+                        self.record_success_log()
 
                         if log_id and log_id not in self.log:
                             tab = '분류: %s' % self.tab
