@@ -16,6 +16,10 @@ BOT_LIST = {
     'aptrent': {
         'token': '478859546:AAHyBspDwCBJ8abuPRKn9d7Gjk6ryuExjVE',
         'chat_id': '@apt_rent' # 임대아파트알리미 채널의 id
+    },
+    'lowdeal': {
+        'token': '478859546:AAHyBspDwCBJ8abuPRKn9d7Gjk6ryuExjVE',
+        'chat_id': '@lowdeal' # 최저가 알리미 채널의 id
     }
 }
 

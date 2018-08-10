@@ -10,12 +10,14 @@ from bs4 import BeautifulSoup
 class Naver(Crawler):
 
     DETECT_URLS = [
-        # 에어컨
-        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=13799551012',
-        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=11452498768',
-        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=13745706053',
-        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=11399379411',
-        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=11169795789'
+        # 냉장고
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14113121107',
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=8674749343',
+        # 세탁기
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=12479195998',
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=12243647058',
+        # 건조기
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14058391283',
     ]
 
     def start(self):
@@ -45,6 +47,9 @@ class Naver(Crawler):
                 price_str = element[1].find('a').getText().strip()
                 price = re.sub("\D", "", price_str)
 
+                # 수집 성공로그
+                self.record_success_log()
+
                 try:
                     if self.log[url] > price:
                         title = soup.find('div', class_="h_area").find('h2').getText().strip()
@@ -52,7 +57,7 @@ class Naver(Crawler):
                         price_before = format(self.log[url], ',')
                         price_new = format(price, ',')
                         message = '[네이버쇼핑] 최저가가 갱신되었습니다.\n[%s]\n%s\n이전 가격: %s원\n최저 가격: %s원\n%s' % (service, title, price_before, price_new, url)
-                        telegrambot.send_message(message)
+                        telegrambot.send_message(message, 'lowdeal')
                         self.log[url] = price;
                 except Exception as e:
                     self.log[url] = price;
