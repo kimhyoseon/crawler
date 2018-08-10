@@ -23,7 +23,7 @@ BOT_LIST = {
 def send_message(message=None, bot_name=None):
 
     # 테스트
-    # bot_name = 'dev'
+    #bot_name = 'dev'
 
     if message and BOT_LIST[bot_name]:
         # 봇 생성
