@@ -224,9 +224,11 @@ class Crawler:
 
         log_success = filewriter.get_log_file('success', is_json=True)
         date = datetime.now().strftime('%Y_%m_%d')
-
-        if not log_success or not log_success[date]:
-            # print('new')
+        try:
+            if not log_success or not log_success[date]:
+                # print('new')
+                log_success[date] = {};
+        except:
             log_success[date] = {};
 
         try:
