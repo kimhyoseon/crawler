@@ -11,11 +11,12 @@ class Naver(Crawler):
 
     DETECT_URLS = [
         # 냉장고
-        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14113121107',
-        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=8674749343',
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14375296756',
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14375336173',
         # 세탁기
         'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=12479195998',
         'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=12243647058',
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14453183840',
         # 건조기
         'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14058391283',
     ]
