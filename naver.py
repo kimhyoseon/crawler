@@ -19,6 +19,8 @@ class Naver(Crawler):
         'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14453183840',
         # 건조기
         'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=14058391283',
+        # 소파
+        'https://search.shopping.naver.com/detail/detail.nhn?nv_mid=10433638740'
     ]
 
     def start(self):
