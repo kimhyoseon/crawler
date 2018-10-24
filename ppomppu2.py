@@ -12,7 +12,8 @@ from ppomppu_link_generator import PpomppuLinkGenerator
 class Ppomppu(Crawler):
 
     DETAIL_URL = 'http://www.ppomppu.co.kr/zboard/'
-    BASE_GOOD = 10
+    BASE_GOOD = 5
+    MAX_GOOD = 10
 
     def start(self):
         try:
@@ -52,21 +53,23 @@ class Ppomppu(Crawler):
                         title = tds[3].find('font').getText().strip()
                         good = int(tds[5].getText().strip().split('-')[0].strip())
                         regdate = tds[4]['title'].strip()
+                        s2 = tds[4].getText().strip()
+                        s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
+                        tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
+                        hours, remainder = divmod(tdelta.seconds, 3600)
+                        minutes, seconds = divmod(remainder, 60)
 
                         # 수집 성공로그
                         self.record_success_log()
 
                         if regdate and regdate not in self.log and good and good >= self.BASE_GOOD:
+                            if hours > 0 and minutes > 10 and good < self.MAX_GOOD:
+                                continue
+
                             link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
-                            s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
                             status = '★☆☆☆☆'
 
                             try:
-                                s2 = tds[4].getText().strip()
-                                tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
-                                hours, remainder = divmod(tdelta.seconds, 3600)
-                                minutes, seconds = divmod(remainder, 60)
-
                                 if hours < 4:
                                     status = '★★☆☆☆'
                                 if hours < 2:
@@ -75,18 +78,19 @@ class Ppomppu(Crawler):
                                     status = '★★★★☆'
                                     if minutes < 20:
                                         status = '★★★★★'
+                                        if minutes < 10:
+                                            status = '★★★★★★'
 
                                 #timelap = 'time lap: %d hour %d minutes before' % (hours, minutes)
                                 #timelap = '등록시간: %d시간 %d분 전' % (hours, minutes)
                                 timelap = '핫딜점수: %s' % status
                             except Exception as errorMessage:
-                                status = '★★☆☆☆'
+                                status = '★☆☆☆☆'
 
                             try:
                                 indexShop = title.index(']')
                                 shop = '핫딜사이트: %s' % title[1:indexShop].strip()
                                 title = '상품명: %s' % title[indexShop + 1:].strip()
-                                title = shop + '\n' + title
                             except Exception as errorMessage:
                                 title = '상품명: %s' % title
 
@@ -94,7 +98,7 @@ class Ppomppu(Crawler):
                             boardLink = ppomppuLinkGenerator.getShortener(url=link)
                             boardLink = '게시글 바로가기: %s' % boardLink
 
-                            text = title + '\n' + timelap + '\n' + boardLink
+                            text = title + '\n' + timelap+ '\n' + shop + '\n' + boardLink
 
                             # 어필리에이트 링크 생성
                             ailliateLink = self.get_item_link(link)
