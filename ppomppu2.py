@@ -63,8 +63,9 @@ class Ppomppu(Crawler):
                         self.record_success_log()
 
                         if regdate and regdate not in self.log and good and good >= self.BASE_GOOD:
-                            if hours > 0 and minutes > 10 and good < self.MAX_GOOD:
-                                continue
+                            if good < self.MAX_GOOD:
+                                if hours > 0 or minutes > 10:
+                                    continue
 
                             link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
                             status = '★☆☆☆☆'
