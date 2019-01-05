@@ -1,0 +1,186 @@
+#-*- coding: utf-8 -*-
+
+import re
+import log
+import filewriter
+from datetime import datetime
+from crawler2 import Crawler
+from pytz import timezone
+from bs4 import BeautifulSoup
+from ppomppu_link_generator import PpomppuLinkGenerator
+
+class PpomppuMarket(Crawler):
+
+    DETAIL_URL = 'http://www.ppomppu.co.kr/zboard/zboard.php?id=onmarket'    
+
+    def start(self):
+        try:
+            self.log = filewriter.get_log_file(self.name)
+
+            if self.connect(site_url='http://www.ppomppu.co.kr/zboard/zboard.php?id=onmarket', is_proxy=False, default_driver='selenium',
+                        is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            self.login()
+
+            self.scan_page()
+
+            # self.destroy()
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+    def login(self):
+        try:         
+            account_data = filewriter.get_log_file(self.name + '_account')
+
+            if account_data is None:
+                raise Exception('Login account info can not be founded.')
+
+            # 로그인 버튼 클릭
+            if self.selenium_click_by_xpath(tag={'tag': 'div', 'attr': 'class', 'name': 'login_request_btn'}) is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'user_id'}) is False:
+                raise Exception('selenium_input_text_by_xpath fail. gnb_userid')
+
+            if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'password'}) is False:
+                raise Exception('selenium_input_text_by_xpath fail. gnb_password')
+
+            if self.selenium_click_by_xpath(tag={'tag': 'li', 'attr': 'class', 'name': 'log_btn'}) is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+                        
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+    def scan_page(self):
+        try:
+            if self.selenium_extract_by_xpath(tag={'tag': 'table', 'attr': 'id', 'name': 'revolution_main_table'}) is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+            element = soup.find('table', id='revolution_main_table')
+
+            # 핫딜리스트
+            if element:
+                for list in element.find_all('tr', class_=re.compile('list[0-9]')):
+                    try:
+                        tds = list.find_all('td', recursive=False)
+
+                        title = tds[3].find('font').getText().strip()
+                        good = int(tds[5].getText().strip().split('-')[0].strip())
+                        regdate = tds[4]['title'].strip()
+                        s2 = tds[4].getText().strip()
+                        s1 = datetime.now(timezone('Asia/Seoul')).strftime('%H:%M:%S')
+                        tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
+                        hours, remainder = divmod(tdelta.seconds, 3600)
+                        minutes, seconds = divmod(remainder, 60)
+
+                        # 수집 성공로그
+                        self.record_success_log()
+
+                        # if regdate and regdate not in self.log and good and good >= self.BASE_GOOD:
+                        #     if good < self.MAX_GOOD:
+                        #         if hours > 0 or minutes > 10:
+                        #             continue
+
+                        #     link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
+                        #     status = '★☆☆☆☆'
+
+                        #     try:
+                        #         if hours < 4:
+                        #             status = '★★☆☆☆'
+                        #         if hours < 2:
+                        #             status = '★★★☆☆'
+                        #         if hours < 1:
+                        #             status = '★★★★☆'
+                        #             if minutes < 20:
+                        #                 status = '★★★★★'
+                        #                 if minutes < 10:
+                        #                     status = '★★★★★★'
+
+                        #         #timelap = 'time lap: %d hour %d minutes before' % (hours, minutes)
+                        #         #timelap = '등록시간: %d시간 %d분 전' % (hours, minutes)
+                        #         timelap = '핫딜점수: %s' % status
+                        #     except Exception as errorMessage:
+                        #         status = '★☆☆☆☆'
+
+                        #     try:
+                        #         indexShop = title.index(']')
+                        #         shop = '핫딜사이트: %s' % title[1:indexShop].strip()
+                        #         title = '상품명: %s' % title[indexShop + 1:].strip()
+                        #     except Exception as errorMessage:
+                        #         title = '상품명: %s' % title
+
+                        #     ppomppuLinkGenerator = PpomppuLinkGenerator()
+                        #     boardLink = ppomppuLinkGenerator.getShortener(url=link)
+                        #     boardLink = '게시글 바로가기: %s' % boardLink
+
+                        #     text = title + '\n' + timelap+ '\n' + shop + '\n' + boardLink
+
+                        #     # 어필리에이트 링크 생성
+                        #     ailliateLink = self.get_item_link(link)
+
+                        #     if ailliateLink is not False and len(ailliateLink) > 0:
+                        #         text += '\n상품 바로가기: ' + ailliateLink
+
+                        #     text = text + '\n\n * 이미지를 클릭해 상세내용을 확인하세요.'
+
+                            # print(text)
+                            # self.destroy()
+                            # exit()
+
+                            # self.log = filewriter.slice_json_by_max_len(self.log, max_len=100)
+
+                            # self.send_messge_and_save(regdate, text, 'hotdeal')
+                    except Exception as e:
+                        continue
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+    def get_item_link(self, url=None):
+        try:
+            if self.connect(site_url=url, is_proxy=False, default_driver='selenium',
+                        is_chrome=False) is False:
+                raise Exception('site connect fail')
+
+            if self.selenium_extract_by_xpath(tag={'tag': 'div', 'attr': 'class', 'name': 'wordfix'}) is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
+            element = soup.find('div', class_='wordfix')
+
+            # 핫딜리스트
+            if element:
+                try:
+                    if not element.find('a', recursive=False):
+                        raise Exception('link is not founded!.')
+
+                    link = element.find('a', recursive=False).getText()
+
+                    if link is None:
+                        raise Exception('link is not founded.')
+
+                    ppomppuLinkGenerator = PpomppuLinkGenerator()
+                    apiliateLink = ppomppuLinkGenerator.genLink(url=link)
+
+                    if apiliateLink is None:
+                        raise Exception('apiliateLink is not generated.')
+
+                    return apiliateLink
+
+                except Exception as e:
+                    log.logger.error(e, exc_info=True)
+                    return False
+            else:
+                return False
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+            return False
+
+if __name__ == "__main__":
+    ppomppuMarket = PpomppuMarket()
+    ppomppuMarket.utf_8_reload()
+    ppomppuMarket.start()

@@ -4,6 +4,7 @@ import os
 import log
 import requests
 import filewriter
+from time import sleep
 from datetime import datetime
 
 import telegrambot
@@ -122,11 +123,15 @@ class Crawler:
             return False
 
     # 버튼 클릭
-    def selenium_click_by_xpath(self, tag = None, etc=None):
+    def selenium_click_by_xpath(self, tag = None, etc=None, index=None, xpath=None):
         try:
-            xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
-            if etc is not None:
-                xpath = xpath + etc
+            if xpath is None:
+                xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+                if etc is not None:
+                    xpath = xpath + etc
+                if index is not None:
+                    xpath = '(%s)[%s]' % (xpath, index)
+
             element_present = EC.element_to_be_clickable((By.XPATH, xpath))
             element_found = WebDriverWait(self.driver, 15).until(element_present)
             element_found.click()
@@ -142,6 +147,7 @@ class Crawler:
                 xpath = xpath + etc
             element_present = EC.element_to_be_clickable((By.XPATH, xpath))
             element_found = WebDriverWait(self.driver, 10).until(element_present)
+            element_found.clear()
             element_found.send_keys(text)
             return True
         except Exception as e:
@@ -172,6 +178,38 @@ class Crawler:
 
     def selenium_wait_second(self, second=0):
         self.driver.implicitly_wait(second)
+
+    # 특정 영역이 변경될때까지 기다림 (시작)
+    def selenium_wait_change_start_by_xpath(self, tag=None, etc=None):
+        try:
+            xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+            if etc is not None:
+                xpath = xpath + etc
+            element_present = EC.element_to_be_clickable((By.XPATH, xpath))
+            element_found = WebDriverWait(self.driver, 10).until(element_present)  
+               
+            return element_found.text
+        except Exception as e:
+            return False
+
+    # 특정 영역이 변경될때까지 기다림 (끝)
+    def selenium_wait_change_end_by_xpath(self, text=None, tag=None, etc=None):
+        try:
+            xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+            if etc is not None:
+                xpath = xpath + etc
+            element_present = EC.element_to_be_clickable((By.XPATH, xpath))
+            element_found = WebDriverWait(self.driver, 10).until(element_present)  
+            
+            for i in range(0, 10):                 
+                if element_found.text != text:                                    
+                    return True
+                sleep(0.2)
+
+            return False
+        except Exception as e:
+            return False   
+    
 
     # 프록시 서버 IP 1개 획득
     def get_proxy_server_ip_list(self):
