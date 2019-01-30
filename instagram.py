@@ -24,7 +24,7 @@ class Instagram (Crawler):
             random.shuffle(self.tag)
 
             # 100개
-            self.tag = self.tag[:2]
+            self.tag = self.tag[:100]
 
             self.login()
 
