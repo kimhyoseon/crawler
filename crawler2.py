@@ -98,6 +98,8 @@ class Crawler:
 
             if is_chrome is True:
                 options = webdriver.ChromeOptions()
+                options.add_argument("--headless");
+                options.add_argument("--no-sandbox");
                 if is_proxy is True:
                     options.add_argument('--proxy-server=' + proxy_ip)
                 self.driver = webdriver.Chrome(executable_path=self.PATH_CHROME_DRIVER, chrome_options=options)
@@ -108,6 +110,7 @@ class Crawler:
                     args = []
                 self.driver = webdriver.PhantomJS(executable_path=self.PATH_PHANTOMJS_DRIVER,
                                                   service_args=args)
+                self.driver.set_window_size(1400, 1000)
 
             log.logger.info('Connecting site with selenium, url:%s, proxy:%s' % (site_url, proxy_ip))
 
@@ -123,45 +126,54 @@ class Crawler:
             return False
 
     # 버튼 클릭
-    def selenium_click_by_xpath(self, tag = None, etc=None, index=None, xpath=None):
+    def selenium_click_by_xpath(self, tag=None, etc=None, index=None, xpath=None, element=None):
+        try:
+            if element is not None:
+                element_found = element
+            else:
+                if xpath is None:
+                    xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+                    if etc is not None:
+                        xpath = xpath + etc
+                    if index is not None:
+                        xpath = '(%s)[%s]' % (xpath, index)
+
+                element_present = EC.element_to_be_clickable((By.XPATH, xpath))
+                element_found = WebDriverWait(self.driver, 15).until(element_present)
+
+            element_found.click()
+            return True
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+            return False
+
+    # 텍스트 입력
+    def selenium_input_text_by_xpath(self, text=None, tag=None, etc=None, xpath=None):
         try:
             if xpath is None:
                 xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
                 if etc is not None:
                     xpath = xpath + etc
-                if index is not None:
-                    xpath = '(%s)[%s]' % (xpath, index)
-
-            element_present = EC.element_to_be_clickable((By.XPATH, xpath))
-            element_found = WebDriverWait(self.driver, 15).until(element_present)
-            element_found.click()
-            return True
-        except Exception as e:
-            return False
-
-    # 텍스트 입력
-    def selenium_input_text_by_xpath(self, text=None, tag=None, etc=None):
-        try:
-            xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
-            if etc is not None:
-                xpath = xpath + etc
             element_present = EC.element_to_be_clickable((By.XPATH, xpath))
             element_found = WebDriverWait(self.driver, 10).until(element_present)
             element_found.clear()
             element_found.send_keys(text)
             return True
         except Exception as e:
+            log.logger.error(e, exc_info=True)
             return False
 
-    def selenium_extract_by_xpath(self, tag = None, etc=None):
+    def selenium_extract_by_xpath(self, tag = None, etc=None, xpath=None):
         try:
-            xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
-            if etc is not None:
-                xpath = xpath + etc
+            if xpath is None:
+                xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+                if etc is not None:
+                    xpath = xpath + etc
             element_present = EC.visibility_of_element_located((By.XPATH, xpath))
             WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
             return True
         except Exception as e:
+            log.logger.error(e, exc_info=True)
             return False
 
     def selenium_is_alert_exist(self):

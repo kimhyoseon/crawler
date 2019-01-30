@@ -40,7 +40,7 @@ def get_log_file(filename, is_json=False):
                 else:
                     return {}
 
-# 로그 저장
+# 로그 삭제
 def remove_log_file(filename):
     if isinstance(filename, str):
         os.remove(os.path.join(LOG_PATH, filename + '.json'))

@@ -4,3 +4,4 @@ driver/
 .log
 .ghostdriver.log
 .idea
+__pycache__

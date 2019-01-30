@@ -161,7 +161,7 @@ class Ppomppu(Crawler):
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
-            return false
+            return False
 
 if __name__ == "__main__":
     ppomppu = Ppomppu()
