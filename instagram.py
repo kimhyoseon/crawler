@@ -10,8 +10,11 @@ class Instagram (Crawler):
 
     LOGIN_URL = 'https://www.instagram.com/accounts/login/?source=auth_switcher'
     TAG_URL = 'https://www.instagram.com/explore/tags/'
-    FOLLOW_CNT = 0;
-    LIKE_CNT = 0;
+    FOLLOW_CNT_NEW = 0;
+    FOLLOW_CNT_OLD = 0;
+    LIKE_CNT_NEW = 0;
+    LIKE_CNT_OLD = 0;
+    FAIL_CNT = 0;
 
     def start(self):
         try:
@@ -23,8 +26,10 @@ class Instagram (Crawler):
             # 랜덤
             random.shuffle(self.tag)
 
-            # 100개
-            self.tag = self.tag[:100]
+            # 20개 (10분)
+            self.tag = self.tag[:3]
+
+            self.tag = ['홈트레이닝']
 
             self.login()
 
@@ -32,7 +37,7 @@ class Instagram (Crawler):
 
             self.destroy()
 
-            log.logger.info('Instagram process has completed. Like (%d), Follow (%d)' % (self.LIKE_CNT, self.FOLLOW_CNT))
+            log.logger.info('Instagram process has completed. LIKE_CNT_NEW (%d), LIKE_CNT_OLD (%d), FOLLOW_CNT_NEW (%d), FOLLOW_CNT_OLD (%d), FAIL_CNT (%d)' % (self.LIKE_CNT_NEW, self.LIKE_CNT_OLD, self.FOLLOW_CNT_NEW, self.FOLLOW_CNT_OLD, self.FAIL_CNT))
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
@@ -99,27 +104,44 @@ class Instagram (Crawler):
                     if self.selenium_extract_by_xpath(xpath='//article[contains(@class,"M9sTE")]') is False:
                         raise Exception('selenium_extract_by_xpath fail.')
 
+                    # 채널명
+                    channel_name = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[1]/h2/a')
+
+                    if channel_name:
+                        print(channel_name.text)
+
                     # 좋아요
-                    btn_like = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/div[2]/section[1]/span[1]/button/span')
+                    btn_like = self.driver.find_element_by_xpath('/html/body/div[2]/div/div[2]/div/article/div[2]/section[1]/span[1]/button/span')
 
                     if btn_like:
+                        print(btn_like.get_attribute("class"))
+                        print(btn_like.get_attribute("aria-label"))
+
                         if 'grey' in btn_like.get_attribute("class"):
-                            self.selenium_click_by_xpath(xpath='//article[contains(@class,"M9sTE")]/div[2]/section[1]/span[1]/button')
-                            self.LIKE_CNT = self.LIKE_CNT + 1
+                            self.selenium_click_by_xpath(xpath='/html/body/div[2]/div/div[2]/div/article/div[2]/section[1]/span[1]/button')
+                            self.LIKE_CNT_NEW = self.LIKE_CNT_NEW + 1
+                        else:
+                            self.LIKE_CNT_OLD = self.LIKE_CNT_OLD + 1
 
                     # 팔로우
                     btn_follow = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[2]/button')
 
                     if btn_follow:
-                        if '팔로우' in btn_follow.text:
+                        #print(btn_follow.text)
+
+                        if '팔로우' in btn_follow.text or 'Follow' == btn_follow.text:
                             self.selenium_click_by_xpath(xpath='//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[2]/button')
-                            self.FOLLOW_CNT = self.FOLLOW_CNT + 1
-                            sleep(0.5)
+                            self.FOLLOW_CNT_NEW = self.FOLLOW_CNT_NEW + 1
+                            sleep(1)
+                        else:
+                            self.FOLLOW_CNT_OLD = self.FOLLOW_CNT_OLD + 1
 
                     # 레이어 닫기
                     self.selenium_click_by_xpath(xpath='/html/body/div[2]/div/button[1]')
 
                 except Exception as e:
+                    self.FAIL_CNT = self.FAIL_CNT + 1
+                    continue
                     # self.driver.save_screenshot('screenshot_error.png')
                     # log.logger.error(e, exc_info=True)
 
