@@ -121,7 +121,7 @@ class Instagram (Crawler):
 
                 except Exception as e:
                     # self.driver.save_screenshot('screenshot_error.png')
-                    log.logger.error(e, exc_info=True)
+                    # log.logger.error(e, exc_info=True)
 
             self.tag.pop(0)
 
