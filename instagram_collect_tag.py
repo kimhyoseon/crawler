@@ -2,7 +2,6 @@
 
 import log
 import filewriter
-from urllib import parse
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
 
@@ -16,9 +15,9 @@ class InstagramCollectTag (Crawler):
         try:
             self.log = filewriter.get_log_file(self.name)
 
-            if self.connect(site_url=self.DETAIL_URL + parse.quote(self.KEYWORD), is_proxy=False,
+            if self.connect(site_url=self.DETAIL_URL + self.KEYWORD, is_proxy=False,
                             default_driver='selenium',
-                            is_chrome=False) is False:
+                            is_chrome=True) is False:
                 raise Exception('site connect fail')
 
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')

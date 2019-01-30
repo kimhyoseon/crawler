@@ -3,7 +3,6 @@
 import log
 import random
 import filewriter
-from urllib import parse
 from crawler2 import Crawler
 from time import sleep
 
@@ -79,7 +78,7 @@ class Instagram (Crawler):
 
     def scan_page(self):
         try:
-            if self.connect(site_url=self.TAG_URL + parse.quote(self.tag[0]) + '/', is_proxy=False,
+            if self.connect(site_url=self.TAG_URL + self.tag[0] + '/', is_proxy=False,
                             default_driver='selenium',
                             is_chrome=True) is False:
                 raise Exception('site connect fail')
