@@ -13,6 +13,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.common.keys import Keys
 
 class Crawler:
     PATH_NAME = os.path.dirname(os.path.realpath(__file__))
@@ -160,6 +161,28 @@ class Crawler:
             element_found = WebDriverWait(self.driver, 10).until(element_present)
             element_found.clear()
             element_found.send_keys(text)
+            return True
+        except Exception as e:
+            # log.logger.error(e, exc_info=True)
+            return False
+
+    # 키누름
+    def selenium_enterkey_by_xpath(self, tag=None, etc=None, index=None, xpath=None, element=None):
+        try:
+            if element is not None:
+                element_found = element
+            else:
+                if xpath is None:
+                    xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+                    if etc is not None:
+                        xpath = xpath + etc
+                    if index is not None:
+                        xpath = '(%s)[%s]' % (xpath, index)
+
+                element_present = EC.visibility_of_element_located((By.XPATH, xpath))
+                element_found = WebDriverWait(self.driver, 15).until(element_present)
+
+            element_found.send_keys(Keys.ENTER)
             return True
         except Exception as e:
             log.logger.error(e, exc_info=True)

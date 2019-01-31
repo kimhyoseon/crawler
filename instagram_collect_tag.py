@@ -8,12 +8,14 @@ from bs4 import BeautifulSoup
 class InstagramCollectTag (Crawler):
 
     DETAIL_URL = 'http://startag.io/search.php?mode=0&q='
-    KEYWORD = '필라테스'
+    KEYWORD = '맞팔'
     ADD_COUNT = 0;
+    DEL_COUNT = 0;
 
     def start(self):
         try:
             self.log = filewriter.get_log_file(self.name)
+            log.logger.info('before tags (%d)' % (len(self.log)))
 
             if self.connect(site_url=self.DETAIL_URL + self.KEYWORD, is_proxy=False,
                             default_driver='selenium',
@@ -34,14 +36,20 @@ class InstagramCollectTag (Crawler):
 
                         if tag:
                             if tag not in self.log:
-                                print(tag)
+                                log.logger.info(tag)
                                 self.log.append(tag)
                                 self.ADD_COUNT = self.ADD_COUNT + 1;
                     except Exception:
                         continue
 
+            # 제외 단어 정리
+            for tag in self.log:
+                if any(word in tag for word in ['화장품','남자','남성','피부','운동화','태그']):
+                    self.log.remove(tag)
+                    self.DEL_COUNT = self.DEL_COUNT + 1
+
             filewriter.save_log_file(self.name, self.log)
-            log.logger.info('(%d/%d) tags has just updated.' % (self.ADD_COUNT, len(self.log)))
+            log.logger.info('add(%d), remove(%d), total(%d) tags has just updated.' % (self.ADD_COUNT, self.DEL_COUNT, len(self.log)))
 
             self.destroy()
 
