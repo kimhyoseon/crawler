@@ -60,7 +60,7 @@ class Instagram (Crawler):
         if self.CRITICAL_CNT > 5:
             duration = int((datetime.now() - self.starttime).total_seconds() / 60)
             log.logger.info('[duration %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FAIL_CNT))
-            telegrambot.send_message('Instagram bot has just stopoed!!!', 'dev')
+            telegrambot.send_message('Instagram bot has just stopoed!!!!', 'dev')
             exit();
 
         self.start()
