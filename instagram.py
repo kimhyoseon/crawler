@@ -21,9 +21,10 @@ class Instagram (Crawler):
     CRITICAL_CNT = 0;
     REPLY = [];
 
+    starttime = datetime.now()
+
     def start(self):
         try:
-            self.starttime = datetime.now()
 
             # 복사된 태그 가져오기
             self.tag = filewriter.get_log_file('instagramcollecttag_copied')
@@ -55,7 +56,8 @@ class Instagram (Crawler):
     def end_restart(self):
         self.destroy()
 
-        sleep(60)
+        # 5분 대기
+        sleep(60 * 5)
 
         if self.CRITICAL_CNT > 5:
             duration = int((datetime.now() - self.starttime).total_seconds() / 60)
@@ -147,7 +149,7 @@ class Instagram (Crawler):
 
                     # 작업이 있었다면 block을 피하기 위해 sleep
                     if self.is_need_sleep is True:
-                        sleep_second = random.randint(20, 30)
+                        sleep_second = random.randint(40, 60)
                         log.logger.info('sleeping.. %d' % (sleep_second))
                         sleep(sleep_second)
                         self.is_need_sleep = True
@@ -157,9 +159,8 @@ class Instagram (Crawler):
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
-                    self.selenium_click_by_xpath(xpath='//button[contains(@class,"ckWGn")]')
                     self.FAIL_CNT = self.FAIL_CNT + 1
-                    continue
+                    break
                     # self.driver.save_screenshot('screenshot_error.png')
 
             self.tag.pop(0)
@@ -295,7 +296,7 @@ class Instagram (Crawler):
                                     if len(reply_text) > 30:
                                         continue
                                     # 금지 문구
-                                    if any(word in reply_text for word in ['덕','레슨','맘', '육아', '#', '무료', '신발', '그램', '진행', '세요', '세용', '운동', '이쁘', '이뻐', '님', '가세요', '?', '부탁', '방문', '옷', '몸']):
+                                    if any(word in reply_text for word in ['염','덕','레슨','맘', '육아', '#', '무료', '신발', '그램', '진행', '세요', '세용', '운동', '이쁘', '이뻐', '예', '쁜', '님', '가세요', '?', '부탁', '방문', '옷', '몸','누나','옆구리']):
                                         continue
 
                                     # 공백 제거
