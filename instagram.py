@@ -25,7 +25,6 @@ class Instagram (Crawler):
 
     def start(self):
         try:
-
             # 복사된 태그 가져오기
             self.tag = filewriter.get_log_file('instagramcollecttag_copied')
 
@@ -42,9 +41,6 @@ class Instagram (Crawler):
             # 태그 랜덤으로 섞기
             random.shuffle(self.tag)
 
-            # 10개 (30분)
-            # self.tag = self.tag[:10]
-
             self.login()
 
             self.scan_page()
@@ -54,14 +50,24 @@ class Instagram (Crawler):
             self.end_restart()
 
     def end_restart(self):
+        duration = int((datetime.now() - self.starttime).total_seconds() / 60)
+        log.logger.info('[duration %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FAIL_CNT))
+
+        self.FOLLOW_CNT = 0;
+        self.LIKE_CNT = 0;
+        self.REPLY_CNT = 0;
+        self.FAIL_CNT = 0;
+        self.REPLY = [];
+
         self.destroy()
 
-        # 5분 대기
-        sleep(60 * 5)
+        log.logger.info('Waiting browser rebooting.... (2 min)')
 
-        if self.CRITICAL_CNT > 5:
-            duration = int((datetime.now() - self.starttime).total_seconds() / 60)
-            log.logger.info('[duration %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FAIL_CNT))
+        # 2분 대기
+        sleep(60 * 2)
+
+        # 오류가 반복되면 텔레그램 메세지 보내고 종료
+        if self.CRITICAL_CNT > 2:
             telegrambot.send_message('Instagram bot has just stopoed!!!!', 'dev')
             exit();
 
@@ -117,7 +123,6 @@ class Instagram (Crawler):
             # 상단의 인기게시글 (최대 9개)
             list = self.driver.find_element_by_xpath("//div[@class='EZdmt']").find_elements_by_xpath('.//div[contains(@class,"v1Nh3")]/a')
 
-            # li = list[2]
             for li in list:
                 try:
                     self.is_need_sleep = False
@@ -165,6 +170,13 @@ class Instagram (Crawler):
 
             self.tag.pop(0)
             filewriter.save_log_file('instagramcollecttag_copied', self.tag)
+
+            self.CRITICAL_CNT = 0
+
+            # 팔로우 100개 마다 브라우저 리셋
+            if (self.FOLLOW_CNT > 100):
+                self.end_restart()
+                return True
 
             if len(self.tag) > 0:
                 self.scan_page()
@@ -296,7 +308,7 @@ class Instagram (Crawler):
                                     if len(reply_text) > 30:
                                         continue
                                     # 금지 문구
-                                    if any(word in reply_text for word in ['염','덕','레슨','맘', '육아', '#', '무료', '신발', '그램', '진행', '세요', '세용', '운동', '이쁘', '이뻐', '예', '쁜', '님', '가세요', '?', '부탁', '방문', '옷', '몸','누나','옆구리']):
+                                    if any(word in reply_text for word in ['입니다','염','덕','레슨','맘', '육아', '#', '무료', '신발', '그램', '진행', '세요', '세용', '운동', '이쁘', '이뻐', '예', '쁜', '님', '가세요', '?', '부탁', '방문', '옷', '몸','누나','옆구리','오세요']):
                                         continue
 
                                     # 공백 제거

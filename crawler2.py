@@ -338,3 +338,4 @@ class Crawler:
 
     def destroy(self):
         self.driver.quit()
+        self.driver = None
