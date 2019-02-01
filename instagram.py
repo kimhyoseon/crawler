@@ -149,7 +149,7 @@ class Instagram (Crawler):
 
                     # 작업이 있었다면 block을 피하기 위해 sleep
                     if self.is_need_sleep is True:
-                        sleep_second = random.randint(40, 60)
+                        sleep_second = random.randint(20, 40)
                         log.logger.info('sleeping.. %d' % (sleep_second))
                         sleep(sleep_second)
                         self.is_need_sleep = True
