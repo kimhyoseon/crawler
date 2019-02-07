@@ -14,12 +14,17 @@ class Instagram (Crawler):
 
     LOGIN_URL = 'https://www.instagram.com/accounts/login/?source=auth_switcher'
     TAG_URL = 'https://www.instagram.com/explore/tags/'
+    UNFOLLOW_URL = 'https://www.instagram.com/kuhitlove/'
     FOLLOW_CNT = 0;
+    FOLLOW_ACCEPT_CNT = 0;
+    FOLLOWING_CANCEL_CNT = 0;
     LIKE_CNT = 0;
     REPLY_CNT = 0;
     FAIL_CNT = 0;
     CRITICAL_CNT = 0;
     REPLY = [];
+    FOLLOWERS = [];
+    FOLLOWINGS = [];
 
     starttime = datetime.now()
 
@@ -43,7 +48,15 @@ class Instagram (Crawler):
 
             self.login()
 
+            # 작업 시작
             self.scan_page()
+
+            # 팔로워 정리
+            if self.follower() is True:
+                # 팔로윙 정리
+                self.following()
+
+            self.end_restart()
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
@@ -51,7 +64,7 @@ class Instagram (Crawler):
 
     def end_restart(self):
         duration = int((datetime.now() - self.starttime).total_seconds() / 60)
-        log.logger.info('[duration %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FAIL_CNT))
+        log.logger.info('[duration %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT))
 
         self.FOLLOW_CNT = 0;
         self.LIKE_CNT = 0;
@@ -180,7 +193,6 @@ class Instagram (Crawler):
             # 30분 동안 작업 했다면 종료
             if duration > 30:
             # if (self.FOLLOW_CNT > 5):
-                self.end_restart()
                 return True
 
             if len(self.tag) > 0:
@@ -337,6 +349,142 @@ class Instagram (Crawler):
             # return False
 
         return False
+
+    # 팔로워 정리
+    def follower(self):
+        try:
+            if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            if self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a') is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            if self.selenium_extract_by_xpath(xpath='/html/body/div[2]/div/div[2]/ul/div/li[1]') is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            # 스크롤 내려서 모두 불러오기
+            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]')
+
+            # 맞팔이 아닌 경우 팔로우 클릭
+            list = self.driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/ul/div/li')
+
+            for li in list:
+                try:
+                    accept_follow = li.find_element_by_xpath('.//button[text() = "follow"]')
+                    if accept_follow:
+                        accept_follow.click()
+                        self.FOLLOW_ACCEPT_CNT = self.FOLLOW_ACCEPT_CNT + 1
+                        log.logger.info('New follow accepted.')
+                        sleep(2)
+                except Exception as e:
+                    continue
+
+            followers = self.driver.find_element_by_xpath('/html/body/div[2]/div/div[2]/ul')
+            if followers:
+                soup_list_follewers = BeautifulSoup(followers.get_attribute('innerHTML'), 'html.parser')
+                for follower in soup_list_follewers.find_all('li'):
+                    try:
+                        if follower:
+                            soup_follower_link = follower.find('a', class_='FPmhX')
+                            if soup_follower_link:
+                                follower_id = soup_follower_link.getText().strip()
+                                # print('%s' % (follower_id))
+
+                                # 팔로워 목록에 추가
+                                if follower_id not in self.FOLLOWERS:
+                                    self.FOLLOWERS.append(follower_id)
+                    except Exception:
+                        continue
+
+            print(self.FOLLOWERS)
+
+            self.selenium_click_by_xpath(xpath='/html/body/div[2]/div/div[1]/div/div[2]/button')
+
+            return True
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+        return False
+
+    # 팔로윙 정리
+    def following(self):
+        try:
+            if self.selenium_click_by_xpath(
+                    xpath='//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a') is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            if self.selenium_extract_by_xpath(xpath='/html/body/div[2]/div/div[2]/ul/div/li[1]') is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            # 스크롤 내려서 모두 불러오기
+            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]',
+                               selectorDom='document.getElementsByClassName("_6xe7A")[0]')
+
+            # 아래부터 팔로우 취소
+            list = self.driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/ul/div/li')
+
+            for li in reversed(list):
+                try:
+                    # 15분동안 30회 취소 후 종료
+                    if self.FOLLOWING_CANCEL_CNT > 30:
+                        break;
+
+                    elem_following = li.find_element_by_xpath('.//a[contains(@class,"FPmhX")]')
+                    if elem_following:
+                        id_following = elem_following.text
+                        if id_following not in self.FOLLOWERS:
+                            cancel_following = li.find_element_by_xpath('.//button[contains(@class,"_8A5w5")]')
+                            if cancel_following:
+                                cancel_following.click()
+                                self.selenium_click_by_xpath(xpath='/html/body/div[3]/div/div/div[3]/button[1]')
+                                self.FOLLOWING_CANCEL_CNT = self.FOLLOWING_CANCEL_CNT + 1
+                                log.logger.info('following canceled. (%s)' % (id_following))
+                                sleep(30)
+                except Exception as e:
+                    continue
+
+            return True
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+        return False
+
+    # 스크롤 가장 아래로
+    def scroll_bottom(self, selectorParent=None, selectorDom=None):
+        try:
+            if selectorParent is None or selectorDom is None:
+                return False
+
+            limit = 0
+
+            # Get scroll height
+            last_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
+
+            print(last_height)
+
+            while True:
+                if limit > 50:
+                    break;
+
+                # Scroll down to bottom
+                self.driver.execute_script(selectorParent+".scrollTo(0, "+selectorDom+".scrollHeight);")
+
+                # Wait to load page
+                sleep(1)
+
+                # Calculate new scroll height and compare with last scroll height
+                new_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
+                limit = limit + 1
+                print(new_height)
+                if new_height == last_height:
+                    break
+                last_height = new_height
+
+            log.logger.info('last_height: %d' % (last_height))
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
 
 if __name__ == "__main__":
     cgv = Instagram()
