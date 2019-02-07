@@ -49,7 +49,7 @@ class Instagram (Crawler):
             self.login()
 
             # 작업 시작
-            self.scan_page()
+            # self.scan_page()
 
             # 팔로워 정리
             if self.follower() is True:
@@ -374,7 +374,7 @@ class Instagram (Crawler):
                     if accept_follow:
                         accept_follow.click()
                         self.FOLLOW_ACCEPT_CNT = self.FOLLOW_ACCEPT_CNT + 1
-                        log.logger.info('New follow accepted.')
+                        log.logger.info('New follower accepted.')
                         sleep(2)
                 except Exception as e:
                     continue
@@ -396,7 +396,7 @@ class Instagram (Crawler):
                     except Exception:
                         continue
 
-            print(self.FOLLOWERS)
+            # print(self.FOLLOWERS)
 
             self.selenium_click_by_xpath(xpath='/html/body/div[2]/div/div[1]/div/div[2]/button')
 
@@ -426,8 +426,8 @@ class Instagram (Crawler):
 
             for li in reversed(list):
                 try:
-                    # 10분동안 20회 취소 후 종료
-                    if self.FOLLOWING_CANCEL_CNT > 20:
+                    # 30분동안 30회 취소 후 종료
+                    if self.FOLLOWING_CANCEL_CNT > 30:
                         break;
 
                     elem_following = li.find_element_by_xpath('.//a[contains(@class,"FPmhX")]')
@@ -440,7 +440,7 @@ class Instagram (Crawler):
                                 self.selenium_click_by_xpath(xpath='/html/body/div[3]/div/div/div[3]/button[1]')
                                 self.FOLLOWING_CANCEL_CNT = self.FOLLOWING_CANCEL_CNT + 1
                                 log.logger.info('following canceled. (%s)' % (id_following))
-                                sleep(30)
+                                sleep(60)
                 except Exception as e:
                     continue
 
