@@ -370,7 +370,7 @@ class Instagram (Crawler):
 
             for li in list:
                 try:
-                    accept_follow = li.find_element_by_xpath('.//button[text() = "follow"]')
+                    accept_follow = li.find_element_by_xpath('.//button[text() = "Follow"]')
                     if accept_follow:
                         accept_follow.click()
                         self.FOLLOW_ACCEPT_CNT = self.FOLLOW_ACCEPT_CNT + 1
@@ -462,11 +462,9 @@ class Instagram (Crawler):
             # Get scroll height
             last_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
 
-            print(last_height)
-
             while True:
-                if limit > 50:
-                    break;
+                # if limit > 50:
+                #     break;
 
                 # Scroll down to bottom
                 self.driver.execute_script(selectorParent+".scrollTo(0, "+selectorDom+".scrollHeight);")
@@ -477,12 +475,11 @@ class Instagram (Crawler):
                 # Calculate new scroll height and compare with last scroll height
                 new_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
                 limit = limit + 1
-                print(new_height)
                 if new_height == last_height:
                     break
                 last_height = new_height
 
-            log.logger.info('last_height: %d' % (last_height))
+            # log.logger.info('last_height: %d' % (last_height))
         except Exception as e:
             log.logger.error(e, exc_info=True)
 
