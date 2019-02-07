@@ -337,5 +337,8 @@ class Crawler:
                 telegrambot.send_message(text, bot_name)
 
     def destroy(self):
-        self.driver.quit()
-        self.driver = None
+        try:
+            self.driver = None
+            self.driver.quit()
+        except:
+            return False

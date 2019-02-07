@@ -60,6 +60,7 @@ class Instagram (Crawler):
         self.REPLY = [];
 
         self.destroy()
+        exit()
 
         log.logger.info('Waiting browser rebooting.... (2 min)')
 
@@ -141,20 +142,20 @@ class Instagram (Crawler):
                     #     print(channel_name.text)
 
                     # 사용할 댓글이 없다면 수집만 먼저
-                    if len(self.REPLY) == 0:
-                        self.reply_collect()
-                        self.selenium_click_by_xpath(xpath='//button[contains(@class,"ckWGn")]')
-                        continue
+                    # if len(self.REPLY) == 0:
+                        # self.reply_collect()
+                        # self.selenium_click_by_xpath(xpath='//button[contains(@class,"ckWGn")]')
+                        # continue
 
                     # 일단 팔로우를 모아야 해서
                     if self.follow() is True:
                         self.like()
-                        self.reply_collect()
-                        self.reply_send()
+                        # self.reply_collect()
+                        # self.reply_send()
 
                     # 작업이 있었다면 block을 피하기 위해 sleep
                     if self.is_need_sleep is True:
-                        sleep_second = random.randint(20, 40)
+                        sleep_second = random.randint(100, 120)
                         log.logger.info('sleeping.. %d' % (sleep_second))
                         sleep(sleep_second)
                         self.is_need_sleep = True
@@ -174,7 +175,11 @@ class Instagram (Crawler):
             self.CRITICAL_CNT = 0
 
             # 팔로우 100개 마다 브라우저 리셋
-            if (self.FOLLOW_CNT > 100):
+            duration = int((datetime.now() - self.starttime).total_seconds() / 60)
+            print(duration)
+            # 30분 동안 작업 했다면 종료
+            if duration > 30:
+            # if (self.FOLLOW_CNT > 5):
                 self.end_restart()
                 return True
 
@@ -235,6 +240,10 @@ class Instagram (Crawler):
     # 댓글 달기
     def reply_send(self):
         try:
+            # 댓글은 팔로우 3회당 1회씩 적자
+            if self.FOLLOW_CNT % 3 != 0:
+                return True
+
             # 댓글 달기
             self.selenium_click_by_xpath(xpath='//article[contains(@class,"M9sTE")]/div[2]/section[1]/span[2]/button')
 
@@ -271,12 +280,12 @@ class Instagram (Crawler):
     def like(self):
         try:
             # 좋아요
-            btn_like = self.driver.find_element_by_xpath('/html/body/div[2]/div/div[2]/div/article/div[2]/section[1]/span[1]/button/span')
+            btn_like = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/div[2]/section[1]/span[1]/button/span')
 
             if btn_like:
                 if 'grey' in btn_like.get_attribute("class"):
                     # 좋아요 버튼 클릭
-                    self.selenium_click_by_xpath(xpath='/html/body/div[2]/div/div[2]/div/article/div[2]/section[1]/span[1]/button')
+                    self.selenium_click_by_xpath(xpath='//article[contains(@class,"M9sTE")]/div[2]/section[1]/span[1]/button')
                     self.LIKE_CNT = self.LIKE_CNT + 1
                     self.is_need_sleep = True
 
@@ -308,7 +317,7 @@ class Instagram (Crawler):
                                     if len(reply_text) > 30:
                                         continue
                                     # 금지 문구
-                                    if any(word in reply_text for word in ['입니다','염','덕','레슨','맘', '육아', '#', '무료', '신발', '그램', '진행', '세요', '세용', '운동', '이쁘', '이뻐', '예', '쁜', '님', '가세요', '?', '부탁', '방문', '옷', '몸','누나','옆구리','오세요']):
+                                    if any(word in reply_text for word in ['넹','필라','요가','군요','귀','입니다','염','덕','레슨','맘', '육아', '#', '무료', '신발', '그램', '진행', '세', '셔', '운동', '이쁘', '이뻐', '예', '쁜', '님', '가세요', '?', '부탁', '방문', '옷', '몸','누나','옆구리']):
                                         continue
 
                                     # 공백 제거
