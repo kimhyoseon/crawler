@@ -64,7 +64,7 @@ class Instagram (Crawler):
 
     def end_restart(self):
         duration = int((datetime.now() - self.starttime).total_seconds() / 60)
-        log.logger.info('[duration %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT))
+        log.logger.info('[durations %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT))
 
         self.FOLLOW_CNT = 0;
         self.LIKE_CNT = 0;
