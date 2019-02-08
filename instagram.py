@@ -190,9 +190,9 @@ class Instagram (Crawler):
 
             # 팔로우 100개 마다 브라우저 리셋
             duration = int((datetime.now() - self.starttime).total_seconds() / 60)
-            print(duration)
-            # 30분 동안 작업 했다면 종료
-            if duration > 30:
+            # print(duration)
+            # 20분 동안 작업 했다면 종료
+            if duration > 20:
             # if (self.FOLLOW_CNT > 5):
                 return True
 
