@@ -49,7 +49,7 @@ class Instagram (Crawler):
             self.login()
 
             # 작업 시작
-            # self.scan_page()
+            self.scan_page()
 
             # 팔로워 정리
             if self.follower() is True:
@@ -161,14 +161,15 @@ class Instagram (Crawler):
                         # continue
 
                     # 일단 팔로우를 모아야 해서
-                    if self.follow() is True:
-                        self.like()
+                    #if self.follow() is True:
+                    self.like()
                         # self.reply_collect()
                         # self.reply_send()
 
                     # 작업이 있었다면 block을 피하기 위해 sleep
                     if self.is_need_sleep is True:
-                        sleep_second = random.randint(100, 120)
+                        #sleep_second = random.randint(100, 120)
+                        sleep_second = random.randint(60, 70)
                         log.logger.info('sleeping.. %d' % (sleep_second))
                         sleep(sleep_second)
                         self.is_need_sleep = True
@@ -397,6 +398,7 @@ class Instagram (Crawler):
                         continue
 
             # print(self.FOLLOWERS)
+            log.logger.info('followers list. (%s)' % (','.join(self.FOLLOWERS)))
 
             self.selenium_click_by_xpath(xpath='/html/body/div[2]/div/div[1]/div/div[2]/button')
 
@@ -426,7 +428,7 @@ class Instagram (Crawler):
 
             for li in reversed(list):
                 try:
-                    # 30분동안 30회 취소 후 종료
+                    # 15분동안 30회 취소 후 종료
                     if self.FOLLOWING_CANCEL_CNT > 30:
                         break;
 
@@ -440,7 +442,7 @@ class Instagram (Crawler):
                                 self.selenium_click_by_xpath(xpath='/html/body/div[3]/div/div/div[3]/button[1]')
                                 self.FOLLOWING_CANCEL_CNT = self.FOLLOWING_CANCEL_CNT + 1
                                 log.logger.info('following canceled. (%s)' % (id_following))
-                                sleep(60)
+                                sleep(30)
                 except Exception as e:
                     continue
 
@@ -457,25 +459,27 @@ class Instagram (Crawler):
             if selectorParent is None or selectorDom is None:
                 return False
 
-            limit = 0
+            limit = 1
 
             # Get scroll height
             last_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
 
             while True:
                 try:
-                    # if limit > 50:
-                    #     break;
+                    if limit > 100:
+                        break;
 
                     # Scroll down to bottom
                     self.driver.execute_script(selectorParent+".scrollTo(0, "+selectorDom+".scrollHeight);")
 
                     # Wait to load page
-                    sleep(2)
+                    sleep(1)
 
                     # Calculate new scroll height and compare with last scroll height
                     new_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
                     limit = limit + 1
+                    if limit % 10 == 0:
+                        log.logger.info('scroll bottom %d steps.' % (limit))
                     if new_height == last_height:
                         break
                     last_height = new_height
