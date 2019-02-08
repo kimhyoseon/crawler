@@ -49,22 +49,25 @@ class Instagram (Crawler):
             self.login()
 
             # 작업 시작
-            # self.scan_page()
+            self.scan_page()
 
             # 팔로워 정리
             if self.follower() is True:
                 # 팔로윙 정리
                 self.following()
 
-            self.end_restart()
+            self.end_report()
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
-            self.end_restart()
+            self.end_report()
 
-    def end_restart(self):
+    def end_report(self):
         duration = int((datetime.now() - self.starttime).total_seconds() / 60)
         log.logger.info('[durations %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT))
+
+        # 당분간 텔레그램으로 결과알림을 받자
+        telegrambot.send_message('[durations %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT), 'dev')
 
         self.FOLLOW_CNT = 0;
         self.LIKE_CNT = 0;
@@ -75,17 +78,17 @@ class Instagram (Crawler):
         self.destroy()
         exit()
 
-        log.logger.info('Waiting browser rebooting.... (2 min)')
-
-        # 2분 대기
-        sleep(60 * 2)
-
-        # 오류가 반복되면 텔레그램 메세지 보내고 종료
-        if self.CRITICAL_CNT > 2:
-            telegrambot.send_message('Instagram bot has just stopoed!!!!', 'dev')
-            exit();
-
-        self.start()
+        # log.logger.info('Waiting browser rebooting.... (2 min)')
+        #
+        # # 2분 대기
+        # sleep(60 * 2)
+        #
+        # # 오류가 반복되면 텔레그램 메세지 보내고 종료
+        # if self.CRITICAL_CNT > 2:
+        #     telegrambot.send_message('Instagram bot has just stopoed!!!!', 'dev')
+        #     exit();
+        #
+        # self.start()
 
     def login(self):
         try:
@@ -122,7 +125,7 @@ class Instagram (Crawler):
         except Exception as e:
             log.logger.error(e, exc_info=True)
             self.CRITICAL_CNT = self.CRITICAL_CNT + 1
-            self.end_restart()
+            self.end_report()
 
         return False
 
@@ -203,7 +206,7 @@ class Instagram (Crawler):
             # self.driver.save_screenshot('screenshot_error.png')
             self.CRITICAL_CNT = self.CRITICAL_CNT + 1
             log.logger.error(e, exc_info=True)
-            self.end_restart()
+            self.end_report()
 
     # 팔로우
     def follow(self):
