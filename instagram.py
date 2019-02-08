@@ -463,21 +463,25 @@ class Instagram (Crawler):
             last_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
 
             while True:
-                # if limit > 50:
-                #     break;
+                try:
+                    # if limit > 50:
+                    #     break;
 
-                # Scroll down to bottom
-                self.driver.execute_script(selectorParent+".scrollTo(0, "+selectorDom+".scrollHeight);")
+                    # Scroll down to bottom
+                    self.driver.execute_script(selectorParent+".scrollTo(0, "+selectorDom+".scrollHeight);")
 
-                # Wait to load page
-                sleep(1)
+                    # Wait to load page
+                    sleep(2)
 
-                # Calculate new scroll height and compare with last scroll height
-                new_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
-                limit = limit + 1
-                if new_height == last_height:
+                    # Calculate new scroll height and compare with last scroll height
+                    new_height = self.driver.execute_script("return "+selectorDom+".scrollHeight")
+                    limit = limit + 1
+                    if new_height == last_height:
+                        break
+                    last_height = new_height
+                except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     break
-                last_height = new_height
 
             # log.logger.info('last_height: %d' % (last_height))
         except Exception as e:
