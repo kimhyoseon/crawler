@@ -420,13 +420,12 @@ class Instagram (Crawler):
                 raise Exception('selenium_extract_by_xpath fail.')
 
             # 스크롤 내려서 모두 불러오기
-            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]',
-                               selectorDom='document.getElementsByClassName("_6xe7A")[0]')
+            # self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]')
 
             # 아래부터 팔로우 취소
             list = self.driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/ul/div/li')
 
-            for li in reversed(list):
+            for li in list:
                 try:
                     # 15분동안 30회 취소 후 종료
                     if self.FOLLOWING_CANCEL_CNT > 30:
