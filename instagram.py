@@ -49,7 +49,7 @@ class Instagram (Crawler):
             self.login()
 
             # 작업 시작
-            self.scan_page()
+            # self.scan_page()
 
             # 팔로워 정리
             if self.follower() is True:
@@ -443,6 +443,7 @@ class Instagram (Crawler):
                                 log.logger.info('following canceled. (%s)' % (id_following))
                                 sleep(30)
                 except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     continue
 
             return True
