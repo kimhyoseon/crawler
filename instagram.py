@@ -51,7 +51,7 @@ class Instagram (Crawler):
             # 작업 시작
             self.scan_page()
 
-            # 팔로워 정리
+            # 팔로워 정리            
             if self.follower() is True:
                 # 팔로윙 정리
                 self.following()
@@ -158,22 +158,21 @@ class Instagram (Crawler):
                     #     print(channel_name.text)
 
                     # 사용할 댓글이 없다면 수집만 먼저
-                    # if len(self.REPLY) == 0:
-                        # self.reply_collect()
-                        # self.selenium_click_by_xpath(xpath='//button[contains(@class,"ckWGn")]')
-                        # continue
+                    if len(self.REPLY) == 0:
+                        self.reply_collect()
+                        self.selenium_click_by_xpath(xpath='//button[contains(@class,"ckWGn")]')
+                        continue
 
-                    # 일단 팔로우를 모아야 해서
-                    #if self.follow() is True:
-                    self.like()
-                        # self.reply_collect()
-                        # self.reply_send()
+                    if self.like() is True:
+                        self.follow()
+                        self.reply_collect()
+                        self.reply_send()
 
                     # 작업이 있었다면 block을 피하기 위해 sleep
                     if self.is_need_sleep is True:
-                        #sleep_second = random.randint(100, 120)
+                        #sleep_second = random.randint(180, 200)
                         sleep_second = random.randint(60, 70)
-                        log.logger.info('sleeping.. %d' % (sleep_second))
+                        #log.logger.info('sleeping.. %d' % (sleep_second))
                         sleep(sleep_second)
                         self.is_need_sleep = True
 
@@ -211,6 +210,10 @@ class Instagram (Crawler):
     # 팔로우
     def follow(self):
         try:
+            # follow은 like 5회당 1회씩 적자 (5min)
+	    if self.LIKE_CNT % 5 != 0:
+                return True
+            
             btn_follow = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[2]/button')
 
             if btn_follow:
@@ -256,8 +259,8 @@ class Instagram (Crawler):
     # 댓글 달기
     def reply_send(self):
         try:
-            # 댓글은 팔로우 3회당 1회씩 적자
-            if self.FOLLOW_CNT % 3 != 0:
+            # 댓글은 like 6회당 1회씩 적자 (6min)
+	    if self.LIKE_CNT % 6 != 0:
                 return True
 
             # 댓글 달기
@@ -431,7 +434,7 @@ class Instagram (Crawler):
             for li in reversed(list):
                 try:
                     # 15분동안 30회 취소 후 종료
-                    if self.FOLLOWING_CANCEL_CNT > 20:
+                    if self.FOLLOWING_CANCEL_CNT >= self.FOLLOW_CNT:
                         break;
 
                     elem_following = li.find_element_by_xpath('.//a[contains(@class,"FPmhX")]')
