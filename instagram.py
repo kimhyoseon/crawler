@@ -434,7 +434,7 @@ class Instagram (Crawler):
             for li in reversed(list):
                 try:
                     # 15분동안 30회 취소 후 종료
-                    if self.FOLLOWING_CANCEL_CNT >= self.FOLLOW_CNT + 1:
+                    if self.FOLLOWING_CANCEL_CNT >= self.FOLLOW_CNT:
                         break;
 
                     elem_following = li.find_element_by_xpath('.//a[contains(@class,"FPmhX")]')
