@@ -99,7 +99,6 @@ class Instagram (Crawler):
 
             # 계정정보 가져오기
             account_data = filewriter.get_log_file(self.name + '_account')
-            # log.logger.info(account_data)
 
             if account_data:
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'username'}) is False:
@@ -351,7 +350,7 @@ class Instagram (Crawler):
 
                 return True
 
-        except Exception:
+        except Exception as e:
             log.logger.error(e, exc_info=True)
             # return False
 
@@ -366,14 +365,14 @@ class Instagram (Crawler):
             if self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a') is False:
                 raise Exception('selenium_extract_by_xpath fail.')
 
-            if self.selenium_extract_by_xpath(xpath='/html/body/div[2]/div/div[2]/ul/div/li[1]') is False:
+            if self.selenium_extract_by_xpath(xpath='/html/body/div[3]/div/div[2]/ul/div/li[1]') is False:
                 raise Exception('selenium_extract_by_xpath fail.')
 
             # 스크롤 내려서 모두 불러오기
             self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]')
 
             # 맞팔이 아닌 경우 팔로우 클릭
-            list = self.driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/ul/div/li')
+            list = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div[2]/ul/div/li')
 
             for li in list:
                 try:
@@ -386,7 +385,7 @@ class Instagram (Crawler):
                 except Exception as e:
                     continue
 
-            followers = self.driver.find_element_by_xpath('/html/body/div[2]/div/div[2]/ul')
+            followers = self.driver.find_element_by_xpath('/html/body/div[3]/div/div[2]/ul')
             if followers:
                 soup_list_follewers = BeautifulSoup(followers.get_attribute('innerHTML'), 'html.parser')
                 for follower in soup_list_follewers.find_all('li'):
@@ -406,7 +405,7 @@ class Instagram (Crawler):
             # print(self.FOLLOWERS)
             log.logger.info('followers list. (%s)' % (','.join(self.FOLLOWERS)))
 
-            self.selenium_click_by_xpath(xpath='/html/body/div[2]/div/div[1]/div/div[2]/button')
+            self.selenium_click_by_xpath(xpath='/html/body/div[3]/div/div[1]/div/div[2]/button')
 
             return True
 
@@ -422,14 +421,14 @@ class Instagram (Crawler):
                     xpath='//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a') is False:
                 raise Exception('selenium_extract_by_xpath fail.')
 
-            if self.selenium_extract_by_xpath(xpath='/html/body/div[2]/div/div[2]/ul/div/li[1]') is False:
+            if self.selenium_extract_by_xpath(xpath='/html/body/div[3]/div/div[2]/ul/div/li[1]') is False:
                 raise Exception('selenium_extract_by_xpath fail.')
 
             # 스크롤 내려서 모두 불러오기
             self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]')
 
             # 아래부터 팔로우 취소
-            list = self.driver.find_elements_by_xpath('/html/body/div[2]/div/div[2]/ul/div/li')
+            list = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div[2]/ul/div/li')
 
             for li in reversed(list):
                 try:
@@ -445,7 +444,7 @@ class Instagram (Crawler):
                             cancel_following = li.find_element_by_xpath('.//button[contains(@class,"_8A5w5")]')
                             if cancel_following:
                                 cancel_following.click()
-                                self.selenium_click_by_xpath(xpath='/html/body/div[3]/div/div/div[3]/button[1]')
+                                self.selenium_click_by_xpath(xpath='/html/body/div[4]/div/div/div[3]/button[1]')
                                 self.FOLLOWING_CANCEL_CNT = self.FOLLOWING_CANCEL_CNT + 1
                                 log.logger.info('following canceled. (%s)' % (id_following))
                                 sleep(30)
