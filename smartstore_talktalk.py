@@ -22,7 +22,7 @@ class SmartstoreTalktalk(Crawler):
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False,
                             default_driver='selenium',
-                            is_chrome=True) is False:
+                            is_chrome=False) is False:
                 raise Exception('site connect fail')
 
             self.login()
@@ -32,6 +32,7 @@ class SmartstoreTalktalk(Crawler):
             self.destroy()
 
         except Exception as e:
+            self.destroy()
             log.logger.error(e, exc_info=True)
 
     def scan_page(self):
@@ -66,9 +67,8 @@ class SmartstoreTalktalk(Crawler):
                 try:
                     if li:
                         soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
-                        print(soup_order_info)
                         tds = soup_order_info.find_all('td')
-                        print(tds)
+
                         if tds:
                             item_order_id = tds[1].getText()
                             buyer = tds[12].getText()
@@ -96,10 +96,10 @@ class SmartstoreTalktalk(Crawler):
                             self.driver.switch_to.window(window_after)
 
                             # 레이어가 있다면 닫기
-                            # try:
-                            #     self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'class', 'name': '_partnerTempOpenAlertCloseBtn'})
-                            # except:
-                            #     pass
+                            try:
+                                self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'class', 'name': '_partnerTempOpenAlertCloseBtn'})
+                            except:
+                                pass
 
                             # 메세지 생성
                             message = self.get_delevery_message(item_id=item_id, item_name=item_name, destination=destination)
@@ -119,11 +119,12 @@ class SmartstoreTalktalk(Crawler):
                             message = message.replace('\\n', '\n')
 
                             self.send_messge_and_save(item_order_id, message, 'dev')
-                            telegrambot.send_message(message, 'dev')
+                            # telegrambot.send_message(message, 'dev')
 
                             # 창 닫고 복귀
                             self.driver.close()
-                            # self.driver.switch_to.window(window_before)
+                            self.driver.switch_to.window(window_before)
+                            self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
 
                             # 테스트로그
                             # print(buyer)
@@ -172,7 +173,7 @@ class SmartstoreTalktalk(Crawler):
             delevery_message += '\\n\\n'
             delevery_message += '※ 수령 위치 또는 택배사의 사정에 따라 1~2일정도 더 소요될 수 있습니다.​'
 
-            print(delevery_message)
+            log.logger.info(delevery_message, exc_info=True)
 
             return delevery_message
 
@@ -227,8 +228,8 @@ class SmartstoreTalktalk(Crawler):
             delevery_date = str(delevery_date.year) + '년 ' + str(delevery_date.month) + '월 ' + str(delevery_date.day) + '일 (' + week_text[delevery_date.weekday()] + ')'
             destination_date = str(destination_date.year) + '년 ' + str(destination_date.month) + '월 ' + str(destination_date.day) + '일 (' + week_text[destination_date.weekday()] + ')'
 
-            print(delevery_date)
-            print(destination_date)
+            # print(delevery_date)
+            # print(destination_date)
 
             return delevery_date, destination_date
         except Exception as e:
@@ -261,9 +262,8 @@ class SmartstoreTalktalk(Crawler):
                 if data and data['response']['body']['items']:
                     for key, item in data['response']['body']['items'].items():
                         for it in item:
+                            log.logger.info(it['locdate'], exc_info=True)
                             reddays.append(it['locdate'])
-
-            #print(reddays)
             return reddays
         except Exception as e:
             log.logger.error(e, exc_info=True)
