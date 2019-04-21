@@ -80,8 +80,8 @@ class SmartstoreTalktalk(Crawler):
                                 continue
 
                             # 발송내역에 없는지 확인
-                            # if not item_order_id or item_order_id in self.log:
-                            #     continue
+                            if not item_order_id or item_order_id in self.log:
+                                continue
 
                             talktalklink = li.find_element_by_xpath('.//td[10]/a')
 
