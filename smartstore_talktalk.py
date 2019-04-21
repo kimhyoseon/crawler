@@ -2,9 +2,8 @@
 
 import log
 import filewriter
-import urllib.request as urllib2
 import xmltodict
-import telegrambot
+import requests
 from time import sleep
 from pytz import timezone
 from crawler2 import Crawler
@@ -253,11 +252,15 @@ class SmartstoreTalktalk(Crawler):
             # print(urls)
 
             for url in urls:
-                file = urllib2.urlopen(url)
-                data = file.read()
-                file.close()
-                data = xmltodict.parse(data)
-                # print(data)
+                # file = urllib2.urlopen(url)
+                # data = file.read()
+                # file.close()
+                response = requests.get(url)
+
+                if response.status_code != 200:
+                    continue
+
+                data = xmltodict.parse(response.content)
 
                 if data and data['response']['body']['items']:
                     for key, item in data['response']['body']['items'].items():
