@@ -76,8 +76,8 @@ class SmartstoreTalktalk(Crawler):
                             destination = tds[44].getText()
 
                             # 테스트
-                            if buyer != '이재은':
-                                continue
+                            # if buyer != '이재은':
+                            #     continue
 
                             # 발송내역에 없는지 확인
                             if not item_order_id or item_order_id in self.log:
@@ -96,7 +96,8 @@ class SmartstoreTalktalk(Crawler):
 
                             # 레이어가 있다면 닫기
                             try:
-                                self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'class', 'name': '_partnerTempOpenAlertCloseBtn'})
+                                if self.driver.find_element_by_xpath('//*[@id="content"]/div[10]/a').is_displayed():
+                                    self.selenium_click_by_xpath(xpath='//*[@id="content"]/div[10]/a')
                             except:
                                 pass
 
@@ -116,6 +117,8 @@ class SmartstoreTalktalk(Crawler):
                             sleep(1)
 
                             message = message.replace('\\n', '\n')
+
+                            self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
 
                             self.send_messge_and_save(item_order_id, message, 'dev')
                             # telegrambot.send_message(message, 'dev')
@@ -160,10 +163,10 @@ class SmartstoreTalktalk(Crawler):
             delevery_message += '[' + item_name + ']'
             delevery_message += ' 제품의 배송 일정 안내 드립니다~'
             delevery_message += '\\n\\n'
-            delevery_message += '배송출발일 : '
+            delevery_message += '배송출발 : '
             delevery_message += delevery_date
             delevery_message += '\\n'
-            delevery_message += '도착예정일 : '
+            delevery_message += '도착예정 : '
             delevery_message += destination_date
             delevery_message += '\\n\\n'
             delevery_message += '최대한 빨리 고객님에게 제품이 전달되도록 최선을 다하겠습니다.'
@@ -172,7 +175,7 @@ class SmartstoreTalktalk(Crawler):
             delevery_message += '\\n\\n'
             delevery_message += '※ 수령 위치 또는 택배사의 사정에 따라 1~2일정도 더 소요될 수 있습니다.​'
 
-            log.logger.info(delevery_message, exc_info=True)
+            log.logger.info(delevery_message)
 
             return delevery_message
 
@@ -185,15 +188,20 @@ class SmartstoreTalktalk(Crawler):
         try:
             week_text = ['월', '화', '수', '목', '금', '토', '일']
 
+            # 발송 상세 시간
+            start_hour = '16:00'
+
             # 상품별 발송 제한시간 (기본)
             limit_hour = 7
 
             # 짐볼 (오후 2시)
             if item_id in ['4324723046']:
                 limit_hour = 14
+                start_hour = '18:00'
             # 폼롤러 (오후 4시)
             elif item_id in ['4318623001']:
                 limit_hour = 16
+                start_hour = '18:00'
 
             delevery_date = datetime.now(timezone('Asia/Seoul'))
 
@@ -224,7 +232,7 @@ class SmartstoreTalktalk(Crawler):
                 else:
                     break
 
-            delevery_date = str(delevery_date.year) + '년 ' + str(delevery_date.month) + '월 ' + str(delevery_date.day) + '일 (' + week_text[delevery_date.weekday()] + ')'
+            delevery_date = str(delevery_date.year) + '년 ' + str(delevery_date.month) + '월 ' + str(delevery_date.day) + '일 (' + week_text[delevery_date.weekday()] + ') ' + start_hour
             destination_date = str(destination_date.year) + '년 ' + str(destination_date.month) + '월 ' + str(destination_date.day) + '일 (' + week_text[destination_date.weekday()] + ')'
 
             # print(delevery_date)
@@ -265,8 +273,9 @@ class SmartstoreTalktalk(Crawler):
                 if data and data['response']['body']['items']:
                     for key, item in data['response']['body']['items'].items():
                         for it in item:
-                            log.logger.info(it['locdate'], exc_info=True)
                             reddays.append(it['locdate'])
+
+            log.logger.info(','.join(reddays))
             return reddays
         except Exception as e:
             log.logger.error(e, exc_info=True)
