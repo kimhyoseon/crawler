@@ -189,7 +189,7 @@ class SmartstoreTalktalk(Crawler):
             week_text = ['월', '화', '수', '목', '금', '토', '일']
 
             # 발송 상세 시간
-            start_hour = '16:00'
+            start_hour = '오후 4시'
 
             # 상품별 발송 제한시간 (기본)
             limit_hour = 7
@@ -197,11 +197,11 @@ class SmartstoreTalktalk(Crawler):
             # 짐볼 (오후 2시)
             if item_id in ['4324723046']:
                 limit_hour = 14
-                start_hour = '18:00'
+                start_hour = '오후 6시'
             # 폼롤러 (오후 4시)
             elif item_id in ['4318623001']:
                 limit_hour = 16
-                start_hour = '18:00'
+                start_hour = '오후 6시'
 
             delevery_date = datetime.now(timezone('Asia/Seoul'))
 
