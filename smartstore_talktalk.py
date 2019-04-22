@@ -110,11 +110,13 @@ class SmartstoreTalktalk(Crawler):
                             # 메시지 입력
                             self.driver.execute_script('document.getElementsByClassName("_messageText")[0].value = "' + message + '";')
 
+                            sleep(1)
+
                             # 메세지 전송
                             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'class', 'name': '_sendBtn'}) is False:
                                 raise Exception('selenium_click_by_xpath fail. submit')
 
-                            sleep(1)
+                            sleep(2)
 
                             message = message.replace('\\n', '\n')
 
