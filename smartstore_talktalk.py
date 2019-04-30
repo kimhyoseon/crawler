@@ -125,7 +125,7 @@ class SmartstoreTalktalk(Crawler):
                             self.send_messge_and_save(item_order_id, message, 'dev')
                             # telegrambot.send_message(message, 'dev')
 
-                            # 창 닫고 복귀
+                            # 창 닫ㅎ고 복귀
                             self.driver.close()
                             self.driver.switch_to.window(window_before)
                             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
@@ -249,7 +249,8 @@ class SmartstoreTalktalk(Crawler):
     def get_reddays(self):
         try:
             urls = []
-            reddays = []
+            #  수동 입력
+            reddays = ['20190501']
             service_key = 'N5FupqoyFxqwcuyheudquznCCBi6IjOliKOT5DpHhTmomTde1WgpW4EkXwCZQ777CmYfcBbtgf%2FBuUqFwbEg2Q%3D%3D'
             now = datetime.now(timezone('Asia/Seoul'))
             next = now + relativedelta(months=1)
