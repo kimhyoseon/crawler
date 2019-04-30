@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 class InstagramCollectTag (Crawler):
 
     DETAIL_URL = 'http://startag.io/search.php?mode=0&q='
-    KEYWORD = '맞팔'
+    KEYWORD = '주름'
     ADD_COUNT = 0;
     DEL_COUNT = 0;
 
@@ -44,7 +44,7 @@ class InstagramCollectTag (Crawler):
 
             # 제외 단어 정리
             for tag in self.log:
-                if any(word in tag for word in ['화장품','남자','남성','피부','운동화','태그']):
+                if any(word in tag for word in ['화장품','남자','남성','피부','운동화','태그','가방','치마','스커트']):
                     self.log.remove(tag)
                     self.DEL_COUNT = self.DEL_COUNT + 1
 
