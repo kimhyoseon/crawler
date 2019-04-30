@@ -249,8 +249,11 @@ class SmartstoreTalktalk(Crawler):
     def get_reddays(self):
         try:
             urls = []
-            #  수동 입력
-            reddays = ['20190501']
+            reddays = []
+
+            #  공휴일 수동 입력
+            reddays.append('20190501')
+
             service_key = 'N5FupqoyFxqwcuyheudquznCCBi6IjOliKOT5DpHhTmomTde1WgpW4EkXwCZQ777CmYfcBbtgf%2FBuUqFwbEg2Q%3D%3D'
             now = datetime.now(timezone('Asia/Seoul'))
             next = now + relativedelta(months=1)
