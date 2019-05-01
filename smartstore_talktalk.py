@@ -278,15 +278,19 @@ class SmartstoreTalktalk(Crawler):
 
                 if data and data['response']['body']['items']:
                     for key, item in data['response']['body']['items'].items():
+                        if item and isinstance(item, list) is False:
+                            item = [item]
+
                         for it in item:
-                            reddays.append(it['locdate'])
+                            if it and isinstance(it, dict) is True:
+                                reddays.append(it['locdate'])
 
             log.logger.info(','.join(reddays))
             return reddays
         except Exception as e:
             log.logger.error(e, exc_info=True)
 
-        return []
+        return reddays
 
     def login(self):
         try:
