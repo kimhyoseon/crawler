@@ -252,7 +252,7 @@ class SmartstoreTalktalk(Crawler):
             reddays = []
 
             #  공휴일 수동 입력
-            reddays.append('20190501')
+            # reddays.append('20190501')
 
             service_key = 'N5FupqoyFxqwcuyheudquznCCBi6IjOliKOT5DpHhTmomTde1WgpW4EkXwCZQ777CmYfcBbtgf%2FBuUqFwbEg2Q%3D%3D'
             now = datetime.now(timezone('Asia/Seoul'))
