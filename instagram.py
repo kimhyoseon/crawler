@@ -204,6 +204,18 @@ class Instagram (Crawler):
             # self.driver.save_screenshot('screenshot_error.png')
             self.CRITICAL_CNT = self.CRITICAL_CNT + 1
             log.logger.error(e, exc_info=True)
+
+            # 태그 삭제
+            tag_copy = filewriter.get_log_file('instagramcollecttag_copied')
+            if tag_copy:
+                tag_copy.remove(self.tag[0])
+                filewriter.save_log_file('instagramcollecttag_copied', tag_copy)
+
+            tag = filewriter.get_log_file('instagramcollecttag')
+            if tag:
+                tag.remove(self.tag[0])
+                filewriter.save_log_file('instagramcollecttag', tag)
+
             self.end_report()
 
     # 팔로우
