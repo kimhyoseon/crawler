@@ -81,8 +81,8 @@ class SmartstoreTalktalk(Crawler):
 
                             # 수동 발송제한
                             # 2019-05-03 리프팅밴드, 샴푸브러쉬 품절
-                            if item_id in ['4269217982', '4423398036']:
-                                continue
+                            # if item_id in ['4269217982', '4423398036']:
+                            #     continue
 
                             # 발송내역에 없는지 확인
                             if not item_order_id or item_order_id in self.log:
