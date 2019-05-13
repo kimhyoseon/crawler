@@ -22,6 +22,8 @@ class Instagram (Crawler):
     REPLY_CNT = 0;
     FAIL_CNT = 0;
     CRITICAL_CNT = 0;
+    FOLLOWER_CNT = 0;
+    FOLLOWING_CNT = 0;
     REPLY = [];
     FOLLOWERS = [];
     FOLLOWINGS = [];
@@ -30,6 +32,12 @@ class Instagram (Crawler):
 
     def start(self):
         try:
+            # if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            #     raise Exception('site connect fail')
+            #
+            # self.following()
+            # exit()
+
             # 복사된 태그 가져오기
             self.tag = filewriter.get_log_file('instagramcollecttag_copied')
 
@@ -51,7 +59,7 @@ class Instagram (Crawler):
             # 작업 시작
             self.scan_page()
 
-            # 팔로워 정리            
+            # 팔로워 정리
             if self.follower() is True:
                 # 팔로윙 정리
                 self.following()
@@ -64,10 +72,10 @@ class Instagram (Crawler):
 
     def end_report(self):
         duration = int((datetime.now() - self.starttime).total_seconds() / 60)
-        log.logger.info('[durations %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT))
+        log.logger.info('[durations %d min] Instagram process has completed. FOLLOWER_CNT (%d),FOLLOWING_CNT (%d),FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOWER_CNT, self.FOLLOWING_CNT, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT))
 
         # 당분간 텔레그램으로 결과알림을 받자
-        telegrambot.send_message('[durations %d min] Instagram process has completed. FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT), 'dev')
+        telegrambot.send_message('[durations %d min] Instagram process has completed. FOLLOWER_CNT (%d),FOLLOWING_CNT (%d),FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOWER_CNT, self.FOLLOWING_CNT, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT), 'dev')
 
         self.FOLLOW_CNT = 0;
         self.LIKE_CNT = 0;
@@ -222,9 +230,9 @@ class Instagram (Crawler):
     def follow(self):
         try:
             # follow은 like 5회당 1회씩 적자 (5min)
-	    if self.LIKE_CNT % 5 != 0:
+            if self.LIKE_CNT % 5 != 0:
                 return True
-            
+
             btn_follow = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[2]/button')
 
             if btn_follow:
@@ -271,7 +279,7 @@ class Instagram (Crawler):
     def reply_send(self):
         try:
             # 댓글은 like 6회당 1회씩 적자 (6min)
-	    if self.LIKE_CNT % 6 != 0:
+            if self.LIKE_CNT % 6 != 0:
                 return True
 
             # 댓글 달기
@@ -429,6 +437,22 @@ class Instagram (Crawler):
     # 팔로윙 정리
     def following(self):
         try:
+            # 현재 팔로워, 팔로윙 숫자
+            follower = self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a/span')
+            if follower:
+                soup_follewer = BeautifulSoup(follower.get_attribute('innerHTML'), 'html.parser')
+                self.FOLLOWER_CNT = soup_follewer.getText().strip()
+
+            following = self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a/span')
+            if following:
+                soup_following = BeautifulSoup(following.get_attribute('innerHTML'), 'html.parser')
+                self.FOLLOWING_CNT = soup_following.getText().strip()
+
+            gap_follow = self.FOLLOWING_CNT - self.FOLLOWER_CNT - 100;
+
+            if gap_follow < 0:
+                return True
+
             if self.selenium_click_by_xpath(
                     xpath='//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a') is False:
                 raise Exception('selenium_extract_by_xpath fail.')
@@ -446,8 +470,9 @@ class Instagram (Crawler):
                 try:
                     # 15분동안 30회 취소 후 종료
                     # if self.FOLLOWING_CANCEL_CNT >= self.FOLLOW_CNT + 1:
-                    if self.FOLLOWING_CANCEL_CNT >= self.FOLLOW_CNT + self.FOLLOW_ACCEPT_CNT:
-                        break;
+                    # if self.FOLLOWING_CANCEL_CNT >= self.FOLLOW_CNT + self.FOLLOW_ACCEPT_CNT:
+                    if gap_follow < 0:
+                        break
 
                     elem_following = li.find_element_by_xpath('.//a[contains(@class,"FPmhX")]')
                     if elem_following:
@@ -459,9 +484,11 @@ class Instagram (Crawler):
                                 self.selenium_click_by_xpath(xpath='/html/body/div[4]/div/div/div[3]/button[1]')
                                 self.FOLLOWING_CANCEL_CNT = self.FOLLOWING_CANCEL_CNT + 1
                                 log.logger.info('following canceled. (%s)' % (id_following))
+                                gap_follow = gap_follow - 1
                                 sleep(30)
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
+                    gap_follow = gap_follow - 1
                     continue
 
             return True
