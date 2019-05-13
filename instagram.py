@@ -442,11 +442,13 @@ class Instagram (Crawler):
             if follower:
                 soup_follewer = BeautifulSoup(follower.get_attribute('innerHTML'), 'html.parser')
                 self.FOLLOWER_CNT = soup_follewer.getText().strip()
+                self.FOLLOWER_CNT = int(self.FOLLOWER_CNT)
 
             following = self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a/span')
             if following:
                 soup_following = BeautifulSoup(following.get_attribute('innerHTML'), 'html.parser')
                 self.FOLLOWING_CNT = soup_following.getText().strip()
+                self.FOLLOWING_CNT = int(self.FOLLOWING_CNT)
 
             gap_follow = self.FOLLOWING_CNT - self.FOLLOWER_CNT - 100;
 
