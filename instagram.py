@@ -32,11 +32,11 @@ class Instagram (Crawler):
 
     def start(self):
         try:
-            if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-
-            self.following()
-            exit()
+            # if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            #     raise Exception('site connect fail')
+            #
+            # self.following()
+            # exit()
 
             # 복사된 태그 가져오기
             self.tag = filewriter.get_log_file('instagramcollecttag_copied')
@@ -451,12 +451,6 @@ class Instagram (Crawler):
                 self.FOLLOWING_CNT = int(self.FOLLOWING_CNT)
 
             gap_follow = self.FOLLOWING_CNT - self.FOLLOWER_CNT - 100;
-
-            print(self.FOLLOWING_CNT)
-            print(self.FOLLOWER_CNT)
-            print(gap_follow)
-            self.destroy()
-            exit()
 
             if gap_follow < 0:
                 return True
