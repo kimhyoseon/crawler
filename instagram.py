@@ -452,6 +452,10 @@ class Instagram (Crawler):
 
             gap_follow = self.FOLLOWING_CNT - self.FOLLOWER_CNT - 100;
 
+            log.logger.info('FOLLOWER_CNT (%d)' % (self.FOLLOWER_CNT))
+            log.logger.info('FOLLOWING_CNT (%d)' % (self.FOLLOWING_CNT))
+            log.logger.info('gap_follow (%d)' % (gap_follow))
+
             if gap_follow < 0:
                 return True
 
