@@ -160,7 +160,9 @@ class Instagram (Crawler):
                         raise Exception('selenium_extract_by_xpath fail.')
 
                     # 채널명
-                    self.TARGET_NAME = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[1]/h2/a')
+                    target_name = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[1]/h2/a')
+                    if target_name:
+                        self.TARGET_NAME = target_name.text
 
                     # 사용할 댓글이 없다면 수집만 먼저
                     if len(self.REPLY) == 0:
