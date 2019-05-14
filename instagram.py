@@ -27,6 +27,7 @@ class Instagram (Crawler):
     REPLY = [];
     FOLLOWERS = [];
     FOLLOWINGS = [];
+    TARGET_NAME = ''
 
     starttime = datetime.now()
 
@@ -159,10 +160,7 @@ class Instagram (Crawler):
                         raise Exception('selenium_extract_by_xpath fail.')
 
                     # 채널명
-                    # channel_name = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[1]/h2/a')
-                    #
-                    # if channel_name:
-                    #     print(channel_name.text)
+                    self.TARGET_NAME = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[1]/h2/a')
 
                     # 사용할 댓글이 없다면 수집만 먼저
                     if len(self.REPLY) == 0:
@@ -241,6 +239,9 @@ class Instagram (Crawler):
                     self.selenium_click_by_xpath(xpath='//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[2]/button')
                     self.FOLLOW_CNT = self.FOLLOW_CNT + 1
                     self.is_need_sleep = True
+
+                    if self.TARGET_NAME:
+                        log.logger.info('follow. (%s)' % (self.TARGET_NAME))
 
                     #             # 사진분석
                     #             try:
@@ -399,8 +400,13 @@ class Instagram (Crawler):
                     accept_follow = li.find_element_by_xpath('.//button[text() = "Follow"]')
                     if accept_follow:
                         accept_follow.click()
+
+                        channel_follow = li.find_element_by_xpath('.//a[contains(@class,"FPmhX")]')
+                        if channel_follow:
+                            id_following_accepted = channel_follow.text
+                            log.logger.info('following accepted. (%s)' % (id_following_accepted))
+
                         self.FOLLOW_ACCEPT_CNT = self.FOLLOW_ACCEPT_CNT + 1
-                        log.logger.info('New follower accepted.')
                         sleep(2)
                 except Exception as e:
                     continue
