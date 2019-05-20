@@ -392,7 +392,7 @@ class Instagram (Crawler):
                 raise Exception('selenium_extract_by_xpath fail.')
 
             # 스크롤 내려서 모두 불러오기
-            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]')
+            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]', limit_page=50)
 
             # 맞팔이 아닌 경우 팔로우 클릭
             list = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div[2]/ul/div/li')
@@ -475,7 +475,7 @@ class Instagram (Crawler):
                 raise Exception('selenium_extract_by_xpath fail.')
 
             # 스크롤 내려서 모두 불러오기
-            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]', limit_page=15)
+            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]', limit_page=25)
 
             # 아래부터 팔로우 취소
             list = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div[2]/ul/div/li')
