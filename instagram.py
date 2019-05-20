@@ -178,7 +178,7 @@ class Instagram (Crawler):
                     # 작업이 있었다면 block을 피하기 위해 sleep
                     if self.is_need_sleep is True:
                         #sleep_second = random.randint(180, 200)
-                        sleep_second = random.randint(60, 70)
+                        sleep_second = random.randint(50, 60)
                         #log.logger.info('sleeping.. %d' % (sleep_second))
                         sleep(sleep_second)
                         self.is_need_sleep = True
@@ -499,7 +499,7 @@ class Instagram (Crawler):
                                 self.FOLLOWING_CANCEL_CNT = self.FOLLOWING_CANCEL_CNT + 1
                                 log.logger.info('following canceled. (%s)' % (id_following))
                                 gap_follow = gap_follow - 1
-                                sleep(30)
+                                sleep(25)
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     gap_follow = gap_follow - 1
