@@ -525,8 +525,8 @@ class Instagram (Crawler):
 
             while True:
                 try:
-                    if limit > 20:
-                        break;
+                    # if limit > 20:
+                    #     break;
 
                     # Scroll down to bottom
                     self.driver.execute_script(selectorParent+".scrollTo(0, "+selectorDom+".scrollHeight);")
