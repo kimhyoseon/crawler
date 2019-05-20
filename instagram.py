@@ -392,7 +392,8 @@ class Instagram (Crawler):
                 raise Exception('selenium_extract_by_xpath fail.')
 
             # 스크롤 내려서 모두 불러오기
-            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]', limit_page=50)
+            if self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]', limit_page=40) is False:
+                raise Exception('scroll bottom fail.')
 
             # 맞팔이 아닌 경우 팔로우 클릭
             list = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div[2]/ul/div/li')
@@ -475,7 +476,8 @@ class Instagram (Crawler):
                 raise Exception('selenium_extract_by_xpath fail.')
 
             # 스크롤 내려서 모두 불러오기
-            self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]', limit_page=25)
+            if self.scroll_bottom(selectorParent='document.getElementsByClassName("isgrP")[0]', selectorDom='document.getElementsByClassName("_6xe7A")[0]', limit_page=20) is False:
+                raise Exception('scroll bottom fail.')
 
             # 아래부터 팔로우 취소
             list = self.driver.find_elements_by_xpath('/html/body/div[3]/div/div[2]/ul/div/li')
@@ -544,12 +546,16 @@ class Instagram (Crawler):
                         break
                     last_height = new_height
                 except Exception as e:
+                    return False
                     log.logger.error(e, exc_info=True)
                     break
+
+            return True
 
             # log.logger.info('last_height: %d' % (last_height))
         except Exception as e:
             log.logger.error(e, exc_info=True)
+            return False
 
 if __name__ == "__main__":
     cgv = Instagram()
