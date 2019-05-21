@@ -459,7 +459,7 @@ class Instagram (Crawler):
                 self.FOLLOWING_CNT = soup_following.getText().strip()
                 self.FOLLOWING_CNT = int(self.FOLLOWING_CNT)
 
-            gap_follow = self.FOLLOWING_CNT - self.FOLLOWER_CNT - 100;
+            gap_follow = self.FOLLOWING_CNT - self.FOLLOWER_CNT - 150;
 
             log.logger.info('FOLLOWER_CNT (%d)' % (self.FOLLOWER_CNT))
             log.logger.info('FOLLOWING_CNT (%d)' % (self.FOLLOWING_CNT))
