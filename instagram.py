@@ -520,6 +520,7 @@ class Instagram (Crawler):
             if selectorParent is None or selectorDom is None:
                 return False
 
+            is_success = True
             limit = 1
 
             # Get scroll height
@@ -546,11 +547,11 @@ class Instagram (Crawler):
                         break
                     last_height = new_height
                 except Exception as e:
-                    return False
+                    is_success = False
                     log.logger.error(e, exc_info=True)
                     break
 
-            return True
+            return is_success
 
             # log.logger.info('last_height: %d' % (last_height))
         except Exception as e:
