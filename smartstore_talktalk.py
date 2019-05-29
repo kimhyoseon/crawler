@@ -201,8 +201,8 @@ class SmartstoreTalktalk(Crawler):
             # 상품별 발송 제한시간 (기본)
             limit_hour = 7
 
-            # 짐볼 (오후 2시)
-            if item_id in ['4324723046']:
+            # 짐볼, 요가매트 (오후 2시)
+            if item_id in ['4324723046','4529428871']:
                 limit_hour = 14
                 start_hour = '오후 6시'
             # 폼롤러 (오후 4시)
