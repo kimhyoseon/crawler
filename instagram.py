@@ -57,6 +57,12 @@ class Instagram (Crawler):
 
             self.login()
 
+            # 비정상적인 로그인 시도
+            try:
+                self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/div[2]/span/button')
+            except:
+                pass
+
             # 작업 시작
             self.scan_page()
 
