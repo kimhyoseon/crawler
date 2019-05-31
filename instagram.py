@@ -56,8 +56,8 @@ class Instagram (Crawler):
             random.shuffle(self.tag)
 
             self.login()
-
-            # 비정상적인 로그인 시도
+            
+            # 비정상적인 로그인 시도 처리
             try:
                 self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/div[2]/span/button')
             except:
