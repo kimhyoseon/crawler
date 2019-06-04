@@ -81,8 +81,8 @@ class SmartstoreTalktalk(Crawler):
 
                             # 수동 발송제한
                             # 2019-06-02 3d 롤러 품절
-                            if item_id in ['4405984101']:
-                                continue
+                            # if item_id in ['4405984101']:
+                            #     continue
 
                             # 발송내역에 없는지 확인
                             if not item_order_id or item_order_id in self.log:
