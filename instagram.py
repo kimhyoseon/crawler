@@ -107,6 +107,9 @@ class Instagram (Crawler):
 
     def login(self):
         try:
+            sleep_second = random.randint(30, 60)
+            sleep(sleep_second)
+
             if self.connect(site_url=self.LOGIN_URL, is_proxy=False,
                             default_driver='selenium',
                             is_chrome=True) is False:
@@ -145,6 +148,9 @@ class Instagram (Crawler):
 
     def scan_page(self):
         try:
+            if self.FAIL_CNT > 3:
+                raise Exception('Block error')
+
             if self.connect(site_url=self.TAG_URL + self.tag[0] + '/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
@@ -195,8 +201,8 @@ class Instagram (Crawler):
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     self.FAIL_CNT = self.FAIL_CNT + 1
+                    self.driver.save_screenshot('instagram_screenshot_error.png')
                     break
-                    # self.driver.save_screenshot('screenshot_error.png')
 
             self.tag.pop(0)
             filewriter.save_log_file('instagramcollecttag_copied', self.tag)
@@ -215,7 +221,6 @@ class Instagram (Crawler):
                 self.scan_page()
 
         except Exception as e:
-            # self.driver.save_screenshot('screenshot_error.png')
             self.CRITICAL_CNT = self.CRITICAL_CNT + 1
             log.logger.error(e, exc_info=True)
 
