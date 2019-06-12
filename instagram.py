@@ -39,6 +39,15 @@ class Instagram (Crawler):
             # self.following()
             # exit()
 
+            # 보안 블럭 관련 데이터 가져오기
+            self.security_code = filewriter.get_log_file('instagram_security_code')
+
+            # 블럭 상태라면 security_code가 입력될 때 까지는 종료
+            if self.security_code[0] == 'blocked':
+                log.logger.info('Instagram is blocked.')
+                self.destroy()
+                exit()
+
             # 복사된 태그 가져오기
             self.tag = filewriter.get_log_file('instagramcollecttag_copied')
 
@@ -137,15 +146,26 @@ class Instagram (Crawler):
                 # 보안코드
                 try:
                     if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button') is True:
+
+                        # 보안코드가 없다면 block 처리해서 인스타그램 프로세스를 중지
+                        if self.security_code[0] == '':
+                            self.security_code[0] = 'blocked'
+                            filewriter.save_log_file('instagram_security_code', self.security_code)
+                            log.logger.info('Instagram has just blocked.')
+                            telegrambot.send_message('Instagram has just blocked.', 'dev')
+                            self.destroy()
+                            exit()
+
                         # 발송하기
                         self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button')
 
                         # 텔레그램 알림
-                        telegrambot.send_message('Please check instagram security code from your email in 5 minutes.', 'dev')
+                        telegrambot.send_message('Please check instagram security code from your email in 1 minutes.', 'dev')
 
-                        # 수정될 때 까지 5분 대기
-                        sleep(300)
+                        # 수정될 때 까지 50초 대기
+                        sleep(50)
 
+                        # 새롭게 입력된 데이터를 가져옵니다.
                         self.security_code = filewriter.get_log_file('instagram_security_code')
 
                         # 보안코드 입력
@@ -155,11 +175,21 @@ class Instagram (Crawler):
                         # 제출
                         self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[2]/form/span/button')
 
-                        log.logger.info('Please check instagram security code from your email in 5 minutes.')
+                        log.logger.info('security_code. (%s)' % (self.security_code[0]))
+
+                        # 사용한 코드는 제거
+                        self.security_code[0] = ''
+                        filewriter.save_log_file('instagram_security_code', self.security_code)
+
                         self.destroy()
                         exit()
-                except:
+                except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     pass
+
+                self.driver.save_screenshot('instagram_screenshot_error.png')
+                self.destroy()
+                exit()
 
                 log.logger.info('login success')
 
