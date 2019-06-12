@@ -189,9 +189,6 @@ class Instagram (Crawler):
                     log.logger.error(e, exc_info=True)
                     pass
 
-                self.destroy()
-                exit()
-
                 log.logger.info('login success')
 
                 return True
