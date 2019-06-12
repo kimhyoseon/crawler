@@ -145,46 +145,47 @@ class Instagram (Crawler):
 
                 # 보안코드
                 try:
-                    if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button') is True:
+                    if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[1]/div/p') is True:
+                        if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button') is True:
 
-                        # 보안코드가 없다면 block 처리해서 인스타그램 프로세스를 중지
-                        if self.security_code[0] == '':
-                            self.security_code[0] = 'blocked'
+                            # 보안코드가 없다면 block 처리해서 인스타그램 프로세스를 중지
+                            if self.security_code[0] == '':
+                                self.security_code[0] = 'blocked'
+                                filewriter.save_log_file('instagram_security_code', self.security_code)
+                                log.logger.info('Instagram has just blocked.')
+                                telegrambot.send_message('Instagram has just blocked.', 'dev')
+                                self.destroy()
+                                exit()
+
+                            # 발송하기
+                            self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button')
+
+                            # 텔레그램 알림
+                            telegrambot.send_message('Please check instagram security code from your email in 1 minutes.', 'dev')
+                            log.logger.info('Please check instagram security code from your email in 1 minutes.')
+
+                            # 수정될 때 까지 50초 대기
+                            sleep(50)
+
+                            # 새롭게 입력된 데이터를 가져옵니다.
+                            self.security_code = filewriter.get_log_file('instagram_security_code')
+
+                            # 보안코드 입력
+                            if self.selenium_input_text_by_xpath(text=self.security_code[0], xpath='//*[@id="security_code"]') is False:
+                                raise Exception('selenium_input_text_by_xpath fail. security_code')
+
+                            # 제출
+                            self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[2]/form/span/button')
+
+                            log.logger.info('security_code. (%s)' % (self.security_code[0]))
+
+                            # 사용한 코드는 제거
+                            self.security_code[0] = ''
                             filewriter.save_log_file('instagram_security_code', self.security_code)
-                            log.logger.info('Instagram has just blocked.')
-                            telegrambot.send_message('Instagram has just blocked.', 'dev')
-                            self.destroy()
-                            exit()
 
-                        # 발송하기
-                        self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button')
+                            sleep(5)
 
-                        # 텔레그램 알림
-                        telegrambot.send_message('Please check instagram security code from your email in 1 minutes.', 'dev')
-                        log.logger.info('Please check instagram security code from your email in 1 minutes.')
-
-                        # 수정될 때 까지 50초 대기
-                        sleep(50)
-
-                        # 새롭게 입력된 데이터를 가져옵니다.
-                        self.security_code = filewriter.get_log_file('instagram_security_code')
-
-                        # 보안코드 입력
-                        if self.selenium_input_text_by_xpath(text=self.security_code[0], xpath='//*[@id="security_code"]') is False:
-                            raise Exception('selenium_input_text_by_xpath fail. security_code')
-
-                        # 제출
-                        self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[2]/form/span/button')
-
-                        log.logger.info('security_code. (%s)' % (self.security_code[0]))
-
-                        # 사용한 코드는 제거
-                        self.security_code[0] = ''
-                        filewriter.save_log_file('instagram_security_code', self.security_code)
-
-                        sleep(5)
-
-                        self.driver.save_screenshot('instagram_screenshot_error.png')
+                            self.driver.save_screenshot('instagram_screenshot_error.png')
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     pass
