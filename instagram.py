@@ -160,6 +160,10 @@ class Instagram (Crawler):
             # 상단의 인기게시글 (최대 9개)
             list = self.driver.find_element_by_xpath("//div[@class='EZdmt']").find_elements_by_xpath('.//div[contains(@class,"v1Nh3")]/a')
 
+            self.driver.save_screenshot('instagram_screenshot_error.png')
+            self.destroy()
+            exit()
+
             for li in list:
                 try:
                     self.is_need_sleep = False
