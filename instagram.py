@@ -132,38 +132,42 @@ class Instagram (Crawler):
 
                 # 비정상적인 로그인 시도 처리 (내가 맞습니다)
                 try:
-                    self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/div[2]/span/button')
+                    if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/div[2]/span/button') is True:
+                        self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/div[2]/span/button')
                 except:
                     pass
 
                 # 보안코드
                 try:
-                    self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button')
+                    if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button') is True:
+                        # 발송하기
+                        self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button')
 
-                    telegrambot.send_message('Please check instagram security code from your email.', 'dev')
+                        # 텔레그램 알림
+                        telegrambot.send_message('Please check instagram security code from your email in 5 minutes.', 'dev')
 
-                    # 수정될 때 까지 5분 대기
-                    sleep(300)
+                        # 수정될 때 까지 5분 대기
+                        sleep(300)
 
-                    self.security_code = filewriter.get_log_file('instagram_security_code')
+                        self.security_code = filewriter.get_log_file('instagram_security_code')
 
-                    print(self.security_code)
+                        # 보안코드 입력
+                        if self.selenium_input_text_by_xpath(text=self.security_code[0], xpath='//*[@id="security_code"]') is False:
+                            raise Exception('selenium_input_text_by_xpath fail. security_code')
 
-                    if self.selenium_input_text_by_xpath(text=self.security_code[0], xpath='//*[@id="security_code"]') is False:
-                        raise Exception('selenium_input_text_by_xpath fail. security_code')
+                        # 제출
+                        self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[2]/form/span/button')
+
+                        self.destroy()
+                        exit()
                 except:
                     pass
-
-                self.driver.save_screenshot('instagram_screenshot_error.png')
-                self.destroy()
-                exit()
 
                 log.logger.info('login success')
 
                 return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
-            self.CRITICAL_CNT = self.CRITICAL_CNT + 1
             self.end_report()
 
         return False

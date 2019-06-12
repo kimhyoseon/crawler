@@ -99,10 +99,10 @@ class Crawler:
 
             if is_chrome is True:
                 options = webdriver.ChromeOptions()
-                options.add_argument("--headless");
-                options.add_argument("--no-sandbox");
-                options.add_argument("--disable-gpu");
-                options.add_argument("--window-size=1920,1080");
+                # options.add_argument("--headless");
+                # options.add_argument("--no-sandbox");
+                # options.add_argument("--disable-gpu");
+                # options.add_argument("--window-size=1920,1080");
                 if is_proxy is True:
                     options.add_argument('--proxy-server=' + proxy_ip)
                 self.driver = webdriver.Chrome(executable_path=self.PATH_CHROME_DRIVER, chrome_options=options)
@@ -199,6 +199,18 @@ class Crawler:
             return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
+            return False
+
+    def selenium_exist_by_xpath(self, tag = None, etc=None, xpath=None, second=1):
+        try:
+            if xpath is None:
+                xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+                if etc is not None:
+                    xpath = xpath + etc
+            element_present = EC.visibility_of_element_located((By.XPATH, xpath))
+            WebDriverWait(self.driver, second).until(element_present)
+            return True
+        except:
             return False
 
     def selenium_is_alert_exist(self):
