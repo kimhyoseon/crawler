@@ -182,13 +182,13 @@ class Instagram (Crawler):
                         self.security_code[0] = ''
                         filewriter.save_log_file('instagram_security_code', self.security_code)
 
-                        self.destroy()
-                        exit()
+                        sleep(5)
+
+                        self.driver.save_screenshot('instagram_screenshot_error.png')
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     pass
 
-                self.driver.save_screenshot('instagram_screenshot_error.png')
                 self.destroy()
                 exit()
 
