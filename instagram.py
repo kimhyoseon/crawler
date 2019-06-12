@@ -101,9 +101,6 @@ class Instagram (Crawler):
 
     def login(self):
         try:
-            sleep_second = random.randint(30, 60)
-            sleep(sleep_second)
-
             if self.connect(site_url=self.LOGIN_URL, is_proxy=False,
                             default_driver='selenium',
                             is_chrome=True) is False:
