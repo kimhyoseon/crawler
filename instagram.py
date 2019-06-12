@@ -161,6 +161,7 @@ class Instagram (Crawler):
 
                         # 텔레그램 알림
                         telegrambot.send_message('Please check instagram security code from your email in 1 minutes.', 'dev')
+                        log.logger.info('Please check instagram security code from your email in 1 minutes.')
 
                         # 수정될 때 까지 50초 대기
                         sleep(50)
