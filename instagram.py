@@ -155,6 +155,7 @@ class Instagram (Crawler):
                         # 제출
                         self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[2]/form/span/button')
 
+                        log.logger.info('Please check instagram security code from your email in 5 minutes.')
                         self.destroy()
                         exit()
                 except:
