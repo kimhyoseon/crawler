@@ -66,6 +66,8 @@ class Instagram (Crawler):
 
             self.login()
 
+            exit()
+
             # 작업 시작
             self.scan_page()
 
@@ -110,9 +112,19 @@ class Instagram (Crawler):
 
     def login(self):
         try:
-            if self.connect(site_url=self.LOGIN_URL, is_proxy=False,
-                            default_driver='selenium',
-                            is_chrome=True) is False:
+            # 로그인 여부 체크
+            if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            try:
+                if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/main/div/header/section/div[1]/a/button') is True:
+                    log.logger.info('Already loggined.')
+                    return True
+            except:
+                pass
+
+            # 로그인 되어있지 않다면 로그인 페이지로 이동
+            if self.connect(site_url=self.LOGIN_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
             # 계정정보 가져오기
@@ -191,9 +203,6 @@ class Instagram (Crawler):
                     pass
 
                 log.logger.info('login success')
-
-                self.destroy()
-                exit()
 
                 return True
         except Exception as e:

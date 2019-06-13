@@ -17,7 +17,7 @@ from selenium.webdriver.common.keys import Keys
 
 class Crawler:
     PATH_NAME = os.path.dirname(os.path.realpath(__file__))
-    PATH_USER_DATA = os.path.join(PATH_NAME, 'driver')
+    PATH_USER_DATA = os.path.join(PATH_NAME, 'driver/userdata')
     PATH_CHROME_DRIVER = os.path.join(PATH_NAME, 'driver/chromedriver')
     PATH_PHANTOMJS_DRIVER = os.path.join(PATH_NAME, 'driver/phantomjs')
     SITE_CONNECT_TIMEOUT = 30
@@ -100,10 +100,12 @@ class Crawler:
 
             if is_chrome is True:
                 options = webdriver.ChromeOptions()
+
                 options.add_argument("--headless");
                 options.add_argument("--no-sandbox");
                 options.add_argument("--disable-gpu");
                 options.add_argument("--window-size=1920,1080");
+
                 options.add_argument("user-data-dir=" + self.PATH_USER_DATA)
 
                 if is_proxy is True:
