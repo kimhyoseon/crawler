@@ -66,6 +66,7 @@ class Instagram (Crawler):
 
             self.login()
 
+            self.destroy()
             exit()
 
             # 작업 시작
