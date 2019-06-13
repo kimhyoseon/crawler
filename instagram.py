@@ -116,9 +116,10 @@ class Instagram (Crawler):
             if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
+            self.driver.save_screenshot('instagram_screenshot_error.png')
+
             try:
                 if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/span/a[1]/button') is False:
-                    self.driver.save_screenshot('instagram_screenshot_error.png')
                     log.logger.info('Already loggined.')
                     return True
             except:
@@ -198,7 +199,6 @@ class Instagram (Crawler):
 
                             sleep(5)
 
-                            self.driver.save_screenshot('instagram_screenshot_error.png')
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     pass
@@ -267,7 +267,7 @@ class Instagram (Crawler):
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     self.FAIL_CNT = self.FAIL_CNT + 1
-                    self.driver.save_screenshot('instagram_screenshot_error.png')
+                    # self.driver.save_screenshot('instagram_screenshot_error.png')
                     break
 
             self.tag.pop(0)
@@ -451,7 +451,7 @@ class Instagram (Crawler):
                 return True
 
         except Exception as e:
-            self.driver.save_screenshot('instagram_screenshot_error.png')
+            # self.driver.save_screenshot('instagram_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             # return False
 
