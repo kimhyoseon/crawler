@@ -66,9 +66,6 @@ class Instagram (Crawler):
 
             self.login()
 
-            self.destroy()
-            exit()
-
             # 작업 시작
             self.scan_page()
 
@@ -95,6 +92,9 @@ class Instagram (Crawler):
         self.REPLY_CNT = 0;
         self.FAIL_CNT = 0;
         self.REPLY = [];
+
+        self.destroy()
+        exit()
 
         # log.logger.info('Waiting browser rebooting.... (2 min)')
         #
