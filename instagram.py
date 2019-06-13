@@ -117,7 +117,7 @@ class Instagram (Crawler):
                 raise Exception('site connect fail')
 
             try:
-                if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/main/div/header/section/div[1]/a/button') is True:
+                if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/span/a[1]/button') is False:
                     self.driver.save_screenshot('instagram_screenshot_error.png')
                     log.logger.info('Already loggined.')
                     return True
