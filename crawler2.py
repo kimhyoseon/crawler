@@ -2,6 +2,7 @@
 
 import os
 import log
+import pickle
 import requests
 import filewriter
 from time import sleep
@@ -101,15 +102,15 @@ class Crawler:
             if is_chrome is True:
                 options = webdriver.ChromeOptions()
 
-                # options.add_argument("--headless");
+                options.add_argument("--user-data-dir=" + self.PATH_USER_DATA)
+                options.add_argument("--headless");
                 options.add_argument("--no-sandbox");
                 options.add_argument("--disable-gpu");
                 options.add_argument("--window-size=1920,1080");
 
-                options.add_argument("user-data-dir=" + self.PATH_USER_DATA)
-
                 if is_proxy is True:
                     options.add_argument('--proxy-server=' + proxy_ip)
+
                 self.driver = webdriver.Chrome(executable_path=self.PATH_CHROME_DRIVER, chrome_options=options)
             else:
                 if is_proxy is True:
@@ -357,5 +358,19 @@ class Crawler:
         try:
             self.driver = None
             self.driver.quit()
+        except:
+            return False
+
+    def set_cookie(self):
+        try:
+            pickle.dump(self.driver.get_cookies(), open("cookies.pkl", "wb"))
+        except:
+            return False
+
+    def get_cookie(self):
+        try:
+            cookies = pickle.load(open("cookies.pkl", "rb"))
+            for cookie in cookies:
+                self.driver.add_cookie(cookie)
         except:
             return False

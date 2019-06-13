@@ -117,6 +117,12 @@ class Instagram (Crawler):
             if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
+            self.get_cookie()
+
+            if self.connect(site_url=self.UNFOLLOW_URL, is_proxy=False, default_driver='selenium',
+                            is_chrome=True) is False:
+                raise Exception('site connect fail')
+
             self.driver.save_screenshot('instagram_screenshot_error.png')
 
             try:
@@ -205,6 +211,8 @@ class Instagram (Crawler):
                     pass
 
                 log.logger.info('login success')
+
+                self.set_cookie()
 
                 return True
         except Exception as e:
