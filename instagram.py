@@ -96,9 +96,6 @@ class Instagram (Crawler):
         self.FAIL_CNT = 0;
         self.REPLY = [];
 
-        self.destroy()
-        exit()
-
         # log.logger.info('Waiting browser rebooting.... (2 min)')
         #
         # # 2분 대기
@@ -123,7 +120,7 @@ class Instagram (Crawler):
                             is_chrome=True) is False:
                 raise Exception('site connect fail')
 
-            self.driver.save_screenshot('instagram_screenshot_error.png')
+            # self.driver.save_screenshot('instagram_screenshot_error.png')
 
             try:
                 if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/span/a[1]/button') is False:
