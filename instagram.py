@@ -66,7 +66,8 @@ class Instagram (Crawler):
 
             self.login()
 
-            self.end_report()
+            # 테스트로 종료 처리
+            # self.end_report()
 
             # # 작업 시작
             # self.scan_page()
