@@ -87,6 +87,8 @@ class Instagram (Crawler):
         # 당분간 텔레그램으로 결과알림을 받자
         telegrambot.send_message('[durations %d min] Instagram process has completed. FOLLOWER_CNT (%d),FOLLOWING_CNT (%d),FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOWER_CNT, self.FOLLOWING_CNT, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT), 'dev')
 
+        self.set_cookie()
+
         self.FOLLOW_CNT = 0;
         self.LIKE_CNT = 0;
         self.REPLY_CNT = 0;
@@ -120,7 +122,7 @@ class Instagram (Crawler):
                             is_chrome=True) is False:
                 raise Exception('site connect fail')
 
-            # self.driver.save_screenshot('instagram_screenshot_error.png')
+            self.driver.save_screenshot('instagram_screenshot_login_before.png')
 
             try:
                 if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/span/a[1]/button') is False:
@@ -153,6 +155,8 @@ class Instagram (Crawler):
                     raise Exception('selenium_click_by_xpath fail. submit')
 
                 sleep(3)
+
+                self.driver.save_screenshot('instagram_screenshot_login_after.png')
 
                 # 비정상적인 로그인 시도 처리 (내가 맞습니다)
                 try:
@@ -208,8 +212,6 @@ class Instagram (Crawler):
                     pass
 
                 log.logger.info('login success')
-
-                self.set_cookie()
 
                 return True
         except Exception as e:
