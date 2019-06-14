@@ -69,15 +69,15 @@ class Instagram (Crawler):
             # 테스트로 종료 처리
             # self.end_report()
 
-            # # 작업 시작
-            # self.scan_page()
-            #
-            # # 팔로워 정리
-            # if self.follower() is True:
-            #     # 팔로윙 정리
-            #     self.following()
-            #
-            # self.end_report()
+            # 작업 시작
+            self.scan_page()
+
+            # 팔로워 정리
+            if self.follower() is True:
+                # 팔로윙 정리
+                self.following()
+
+            self.end_report()
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
