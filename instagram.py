@@ -92,11 +92,11 @@ class Instagram (Crawler):
 
         self.set_cookie()
 
-        self.FOLLOW_CNT = 0;
-        self.LIKE_CNT = 0;
-        self.REPLY_CNT = 0;
-        self.FAIL_CNT = 0;
-        self.REPLY = [];
+        self.FOLLOW_CNT = 0
+        self.LIKE_CNT = 0
+        self.REPLY_CNT = 0
+        self.FAIL_CNT = 0
+        self.REPLY = []
 
         self.destroy()
         exit()
@@ -369,8 +369,8 @@ class Instagram (Crawler):
     # 댓글 달기
     def reply_send(self):
         try:
-            # 댓글은 like 6회당 1회씩 적자 (6min)
-            if self.LIKE_CNT % 6 != 0:
+            # 댓글은 like 5회당 1회씩 적자 (5min)
+            if self.LIKE_CNT % 5 != 0:
                 return True
 
             # 댓글 달기
@@ -417,6 +417,7 @@ class Instagram (Crawler):
                     self.selenium_click_by_xpath(xpath='//article[contains(@class,"M9sTE")]/div[2]/section[1]/span[1]/button')
                     self.LIKE_CNT = self.LIKE_CNT + 1
                     self.is_need_sleep = True
+                    log.logger.info('Liked.')
 
                     return True
 
@@ -540,13 +541,13 @@ class Instagram (Crawler):
             if follower:
                 soup_follewer = BeautifulSoup(follower.get_attribute('innerHTML'), 'html.parser')
                 self.FOLLOWER_CNT = soup_follewer.getText().strip()
-                self.FOLLOWER_CNT = int(self.FOLLOWER_CNT)
+                self.FOLLOWER_CNT = int(self.FOLLOWER_CNT.replace(',', ''))
 
             following = self.driver.find_element_by_xpath('//*[@id="react-root"]/section/main/div/header/section/ul/li[3]/a/span')
             if following:
                 soup_following = BeautifulSoup(following.get_attribute('innerHTML'), 'html.parser')
                 self.FOLLOWING_CNT = soup_following.getText().strip()
-                self.FOLLOWING_CNT = int(self.FOLLOWING_CNT)
+                self.FOLLOWING_CNT = int(self.FOLLOWING_CNT.replace(',', ''))
 
             gap_follow = self.FOLLOWING_CNT - self.FOLLOWER_CNT - 150;
 
