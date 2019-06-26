@@ -74,6 +74,8 @@ class SmartstoreTalktalk(Crawler):
                             item_id = tds[17].getText()
                             item_name = tds[18].getText()
                             item_kind = tds[19].getText()
+                            item_option = tds[20].getText()
+                            item_amount = tds[21].getText()
                             destination = tds[44].getText()
 
                             # 테스트
@@ -92,6 +94,12 @@ class SmartstoreTalktalk(Crawler):
                             # 발송내역에 없는지 확인
                             if not item_order_id or item_order_id in self.log:
                                 continue
+
+                            if item_option:
+                                item_name = item_name + ' (' + item_option + ')'
+
+                            if item_amount:
+                                item_name = item_name + ' ' + item_amount + '개'
 
                             talktalklink = li.find_element_by_xpath('.//td[10]/a')
 
