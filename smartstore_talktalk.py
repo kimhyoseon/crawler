@@ -73,6 +73,7 @@ class SmartstoreTalktalk(Crawler):
                             buyer = tds[12].getText()
                             item_id = tds[17].getText()
                             item_name = tds[18].getText()
+                            item_kind = tds[19].getText()
                             destination = tds[44].getText()
 
                             # 테스트
@@ -83,6 +84,10 @@ class SmartstoreTalktalk(Crawler):
                             # 2019-06-10 샴푸브러쉬 품절
                             # if item_id in ['4423398036']:
                                 # continue
+
+                            # 추가상품 발송제한
+                            if item_kind == '추가구성상품':
+                                continue
 
                             # 발송내역에 없는지 확인
                             if not item_order_id or item_order_id in self.log:
