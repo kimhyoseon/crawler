@@ -390,6 +390,8 @@ class SmartstoreTalktalk(Crawler):
                 return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
+            self.destroy()
+            exit()
 
         return False
 
