@@ -170,7 +170,7 @@ class Crawler:
             element_found.send_keys(text)
             return True
         except Exception as e:
-            # log.logger.error(e, exc_info=True)
+            log.logger.error(e, exc_info=True)
             return False
 
     # 키누름
