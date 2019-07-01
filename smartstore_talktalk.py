@@ -120,8 +120,9 @@ class SmartstoreTalktalk(Crawler):
 
                             # 레이어가 있다면 닫기
                             try:
-                                if self.driver.find_element_by_xpath('//*[@id="content"]/div[10]/a').is_displayed():
-                                    self.selenium_click_by_xpath(xpath='//*[@id="content"]/div[10]/a')
+                                if self.selenium_exist_by_xpath(xpath='//*[@id="layer-root"]/div/div/div/div/div[3]/button') is True:
+                                # if self.driver.find_element_by_xpath('//*[@id="content"]/div[10]/a').is_displayed():
+                                    self.selenium_click_by_xpath(xpath='//*[@id="layer-root"]/div/div/div/div/div[3]/button')
                             except:
                                 pass
 
@@ -136,6 +137,9 @@ class SmartstoreTalktalk(Crawler):
 
                             sleep(1)
 
+                            # print(message)
+                            # exit()
+
                             # 메세지 전송
                             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'class', 'name': 'chat_write_btn'}) is False:
                                 raise Exception('selenium_click_by_xpath fail. submit')
@@ -149,7 +153,7 @@ class SmartstoreTalktalk(Crawler):
                             self.send_messge_and_save(item_order_id, message, 'dev')
                             # telegrambot.send_message(message, 'dev')
 
-                            # 창 닫ㅎ고 복귀
+                            # 창 닫고 복귀
                             self.driver.close()
                             self.driver.switch_to.window(window_before)
                             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
@@ -349,11 +353,13 @@ class SmartstoreTalktalk(Crawler):
 
                 try:
                     # 기기등록 함
-                    self.selenium_click_by_xpath(xpath='//*[@id="frmNIDLogin"]/fieldset/span[1]/a')
+                    if self.selenium_exist_by_xpath(xpath='//*[@id="frmNIDLogin"]/fieldset/span[1]/a') is True:
+                        self.selenium_click_by_xpath(xpath='//*[@id="frmNIDLogin"]/fieldset/span[1]/a')
 
                     # 로그인 상태유지
-                    if self.selenium_click_by_xpath(xpath='//*[@id="login_maintain"]/span[1]/a') is False:
-                        raise Exception('selenium_click_by_xpath fail. submit')
+                    if self.selenium_exist_by_xpath(xpath='//*[@id="login_maintain"]/span[1]/a') is True:
+                        if self.selenium_click_by_xpath(xpath='//*[@id="login_maintain"]/span[1]/a') is False:
+                            raise Exception('selenium_click_by_xpath fail. submit')
                 except:
                     pass
 
