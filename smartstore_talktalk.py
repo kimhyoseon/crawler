@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 
+import os
 import log
 import filewriter
 import xmltodict
@@ -19,11 +20,6 @@ class SmartstoreTalktalk(Crawler):
         try:
             self.log = filewriter.get_log_file(self.name)
 
-            if self.connect(site_url=self.DETAIL_URL, is_proxy=False,
-                            default_driver='selenium',
-                            is_chrome=False) is False:
-                raise Exception('site connect fail')
-
             self.login()
 
             self.scan_page()
@@ -38,20 +34,21 @@ class SmartstoreTalktalk(Crawler):
         try:
             # 레이어가 있다면 닫기
             try:
-                self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
             except:
                 pass
 
             # 신규주문 페이지로 이동
-            if self.selenium_click_by_xpath(
-                    tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
                 raise Exception('selenium_click_by_xpath fail. submit')
 
             sleep(2)
 
             # 레이어가 있다면 닫기
             try:
-                self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
             except:
                 pass
 
@@ -69,8 +66,8 @@ class SmartstoreTalktalk(Crawler):
                         tds = soup_order_info.find_all('td')
 
                         if tds:
-                            item_order_id = tds[1].getText()
-                            buyer = tds[12].getText()
+                            item_order_id = tds[1].getText().strip()
+                            buyer = tds[12].getText().strip()
                             item_id = tds[17].getText()
                             item_name = tds[18].getText()
                             item_kind = tds[19].getText()
@@ -79,7 +76,7 @@ class SmartstoreTalktalk(Crawler):
                             destination = tds[44].getText()
 
                             # 테스트
-                            # if buyer != '이재은':
+                            # if buyer != '서미숙':
                             #     continue
 
                             # 수동 발송제한
@@ -105,7 +102,8 @@ class SmartstoreTalktalk(Crawler):
                             # print(item_amount)
                             # print(item_kind)
                             # print(item_name)
-                            # continue
+                            # print(buyer)
+                            # exit()
 
                             talktalklink = li.find_element_by_xpath('.//td[10]/a')
 
@@ -121,7 +119,6 @@ class SmartstoreTalktalk(Crawler):
                             # 레이어가 있다면 닫기
                             try:
                                 if self.selenium_exist_by_xpath(xpath='//*[@id="layer-root"]/div/div/div/div/div[3]/button') is True:
-                                # if self.driver.find_element_by_xpath('//*[@id="content"]/div[10]/a').is_displayed():
                                     self.selenium_click_by_xpath(xpath='//*[@id="layer-root"]/div/div/div/div/div[3]/button')
                             except:
                                 pass
@@ -133,12 +130,11 @@ class SmartstoreTalktalk(Crawler):
                                 raise Exception('messageText genarating fail.')
 
                             # 메시지 입력
-                            self.driver.execute_script('document.getElementsByClassName("chat_write_from")[0].value = "' + message + '";')
+                            self.driver.execute_script('document.getElementById("partner_chat_write").value = "' + message + '";')
+                            if self.selenium_input_text_by_xpath(text=' ', xpath='//*[@id="partner_chat_write"]', clear=False) is False:
+                                raise Exception('selenium_input_text_by_xpath fail. chat_write')
 
                             sleep(1)
-
-                            # print(message)
-                            # exit()
 
                             # 메세지 전송
                             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'class', 'name': 'chat_write_btn'}) is False:
@@ -170,10 +166,14 @@ class SmartstoreTalktalk(Crawler):
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
+                    self.destroy()
+                    log.logger.error(e, exc_info=True)
 
             return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
+            self.destroy()
+            exit()
 
         return False
 
@@ -311,6 +311,11 @@ class SmartstoreTalktalk(Crawler):
 
                         for it in item:
                             if it and isinstance(it, dict) is True:
+                                try:
+                                    if it['isHoliday'] == 'N':
+                                        continue
+                                except:
+                                    pass
                                 reddays.append(it['locdate'])
 
             log.logger.info(','.join(reddays))
@@ -322,6 +327,20 @@ class SmartstoreTalktalk(Crawler):
 
     def login(self):
         try:
+            self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
+
+            self.get_cookie()
+
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            # 로그인 여부 체크
+            try:
+                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is True:
+                    log.logger.info('Alreday logined.')
+                    return True
+            except:
+                pass
 
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account')
@@ -364,6 +383,7 @@ class SmartstoreTalktalk(Crawler):
                     pass
 
                 log.logger.info('login success')
+                self.set_cookie()
 
                 sleep(2)
 
