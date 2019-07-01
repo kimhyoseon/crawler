@@ -218,6 +218,7 @@ class Instagram (Crawler):
 
                 return True
         except Exception as e:
+            self.driver.save_screenshot('instagram_screenshot_login_error.png')
             log.logger.error(e, exc_info=True)
             self.end_report()
 
