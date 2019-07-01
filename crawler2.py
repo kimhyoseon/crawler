@@ -157,7 +157,7 @@ class Crawler:
             return False
 
     # 텍스트 입력
-    def selenium_input_text_by_xpath(self, text=None, tag=None, etc=None, xpath=None):
+    def selenium_input_text_by_xpath(self, text=None, tag=None, etc=None, xpath=None, clear=True):
         try:
             if xpath is None:
                 xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
@@ -165,7 +165,8 @@ class Crawler:
                     xpath = xpath + etc
             element_present = EC.element_to_be_clickable((By.XPATH, xpath))
             element_found = WebDriverWait(self.driver, 10).until(element_present)
-            element_found.clear()
+            if clear is True:
+                element_found.clear()
             element_found.send_keys(text)
             return True
         except Exception as e:

@@ -267,7 +267,7 @@ class Instagram (Crawler):
                     # 작업이 있었다면 block을 피하기 위해 sleep
                     if self.is_need_sleep is True:
                         #sleep_second = random.randint(180, 200)
-                        sleep_second = random.randint(50, 60)
+                        sleep_second = random.randint(25, 30)
                         #log.logger.info('sleeping.. %d' % (sleep_second))
                         sleep(sleep_second)
                         self.is_need_sleep = True
@@ -290,7 +290,7 @@ class Instagram (Crawler):
             duration = int((datetime.now() - self.starttime).total_seconds() / 60)
             # print(duration)
             # 20분 동안 작업 했다면 종료
-            if duration > 20:
+            if duration > 10:
             # if (self.FOLLOW_CNT > 5):
                 return True
 
