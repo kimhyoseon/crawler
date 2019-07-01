@@ -165,8 +165,8 @@ class SmartstoreTalktalk(Crawler):
                             #     print(idx, td.getText())
 
                 except Exception as e:
-                    log.logger.error(e, exc_info=True)
                     self.destroy()
+                    exit()
                     log.logger.error(e, exc_info=True)
 
             return True
@@ -342,8 +342,6 @@ class SmartstoreTalktalk(Crawler):
             except:
                 pass
 
-            self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
-
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account')
 
@@ -391,6 +389,7 @@ class SmartstoreTalktalk(Crawler):
 
                 return True
         except Exception as e:
+            self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
