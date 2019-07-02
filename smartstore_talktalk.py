@@ -32,10 +32,19 @@ class SmartstoreTalktalk(Crawler):
 
     def scan_page(self):
         try:
+            # 레이어가 있다면 닫기 (에스크로, 임시)
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
+            except:
+                pass
+
             # 레이어가 있다면 닫기
             try:
-                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
-                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
+                if self.selenium_exist_by_xpath(
+                        tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
+                    self.selenium_click_by_xpath(
+                        tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
             except:
                 pass
 
