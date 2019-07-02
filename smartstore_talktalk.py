@@ -50,12 +50,10 @@ class SmartstoreTalktalk(Crawler):
             #     pass
 
             # 신규주문 페이지로 이동
-            if self.connect(site_url=self.SALE_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-            # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
-            #     raise Exception('selenium_click_by_xpath fail. submit')
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
+                raise Exception('selenium_click_by_xpath fail. submit')
 
-            sleep(15)
+            sleep(2)
 
             # 레이어가 있다면 닫기
             try:
@@ -176,12 +174,14 @@ class SmartstoreTalktalk(Crawler):
                             #     print(idx, td.getText())
 
                 except Exception as e:
+                    self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
                     self.destroy()
                     exit()
                     log.logger.error(e, exc_info=True)
 
             return True
         except Exception as e:
+            self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
