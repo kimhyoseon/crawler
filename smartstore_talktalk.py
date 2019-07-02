@@ -33,21 +33,19 @@ class SmartstoreTalktalk(Crawler):
 
     def scan_page(self):
         try:
-            # # 레이어가 있다면 닫기 (에스크로, 임시)
-            # try:
-            #     if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
-            #         self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
-            # except:
-            #     pass
-            #
-            # # 레이어가 있다면 닫기
-            # try:
-            #     if self.selenium_exist_by_xpath(
-            #             tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
-            #         self.selenium_click_by_xpath(
-            #             tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
-            # except:
-            #     pass
+            # 레이어가 있다면 닫기 (에스크로, 임시)
+            try:
+                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label') is True:
+                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label')
+            except:
+                pass
+
+            # 레이어가 있다면 닫기
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
+            except:
+                pass
 
             # 신규주문 페이지로 이동
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
