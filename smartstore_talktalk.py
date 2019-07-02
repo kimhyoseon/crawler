@@ -55,7 +55,7 @@ class SmartstoreTalktalk(Crawler):
             # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
             #     raise Exception('selenium_click_by_xpath fail. submit')
 
-            sleep(2)
+            sleep(15)
 
             # 레이어가 있다면 닫기
             try:
@@ -64,12 +64,7 @@ class SmartstoreTalktalk(Crawler):
             except:
                 pass
 
-            # 주문 데이터 가져오기
-            if self.selenium_extract_by_xpath(xpath='//iframe[@id="__naverpay"]') is False:
-                self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
-                raise Exception('site connect fail')
-
-            # iframe으로 변경
+            # 주문 데이터 가져오기 iframe으로 변경
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
             list = self.driver.find_element_by_xpath('//*[@id="gridbox"]/div[2]/div[2]/table').find_elements_by_xpath('.//tbody/tr')
 
