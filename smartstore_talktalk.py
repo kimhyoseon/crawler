@@ -65,6 +65,9 @@ class SmartstoreTalktalk(Crawler):
                 pass
 
             # 주문 데이터 가져오기
+            if self.selenium_extract_by_xpath(xpath='//iframe[@id="__naverpay"]') is False:
+                raise Exception('site connect fail')
+
             # iframe으로 변경
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
             list = self.driver.find_element_by_xpath('//*[@id="gridbox"]/div[2]/div[2]/table').find_elements_by_xpath('.//tbody/tr')
