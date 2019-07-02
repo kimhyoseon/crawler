@@ -379,8 +379,8 @@ class SmartstoreTalktalk(Crawler):
                     raise Exception('selenium_input_text_by_xpath fail. password')
 
                 # 로그인 유지
-                if self.selenium_click_by_xpath(tag={'tag': 'input', 'attr': 'id', 'name': 'login_chk'}) is False:
-                    raise Exception('selenium_click_by_xpath fail. submit')
+                if self.selenium_click_by_xpath(xpath='//*[@id="login_chk"]') is False:
+                    raise Exception('selenium_click_by_xpath fail. login_chk')
 
                 # 로그인 버튼 클릭
                 if self.selenium_click_by_xpath(tag={'tag': 'input', 'attr': 'type', 'name': 'submit'}) is False:
