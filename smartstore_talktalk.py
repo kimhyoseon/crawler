@@ -66,6 +66,7 @@ class SmartstoreTalktalk(Crawler):
 
             # 주문 데이터 가져오기
             if self.selenium_extract_by_xpath(xpath='//iframe[@id="__naverpay"]') is False:
+                self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
                 raise Exception('site connect fail')
 
             # iframe으로 변경
@@ -408,7 +409,6 @@ class SmartstoreTalktalk(Crawler):
 
                 return True
         except Exception as e:
-            # self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
