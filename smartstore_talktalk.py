@@ -398,7 +398,7 @@ class SmartstoreTalktalk(Crawler):
 
                 return True
         except Exception as e:
-            self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
+            # self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
