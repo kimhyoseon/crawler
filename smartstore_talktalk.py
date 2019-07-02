@@ -33,10 +33,18 @@ class SmartstoreTalktalk(Crawler):
 
     def scan_page(self):
         try:
+            sleep(5)
+
             # 레이어가 있다면 닫기 (에스크로, 임시)
             try:
                 if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label') is True:
                     self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label')
+            except:
+                pass
+
+            try:
+                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input') is True:
+                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input')
             except:
                 pass
 
@@ -47,11 +55,11 @@ class SmartstoreTalktalk(Crawler):
             except:
                 pass
 
+            sleep(10)
+
             # 신규주문 페이지로 이동
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
                 raise Exception('selenium_click_by_xpath fail. submit')
-
-            sleep(2)
 
             # 레이어가 있다면 닫기
             try:
