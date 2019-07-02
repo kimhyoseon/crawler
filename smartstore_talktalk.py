@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 class SmartstoreTalktalk(Crawler):
 
     DETAIL_URL = 'http://sell.storefarm.naver.com'
+    SALE_URL = 'https://sell.smartstore.naver.com/#/naverpay/sale/delivery'
 
     def start(self):
         try:
@@ -32,25 +33,27 @@ class SmartstoreTalktalk(Crawler):
 
     def scan_page(self):
         try:
-            # 레이어가 있다면 닫기 (에스크로, 임시)
-            try:
-                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
-                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
-            except:
-                pass
-
-            # 레이어가 있다면 닫기
-            try:
-                if self.selenium_exist_by_xpath(
-                        tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
-                    self.selenium_click_by_xpath(
-                        tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
-            except:
-                pass
+            # # 레이어가 있다면 닫기 (에스크로, 임시)
+            # try:
+            #     if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
+            #         self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
+            # except:
+            #     pass
+            #
+            # # 레이어가 있다면 닫기
+            # try:
+            #     if self.selenium_exist_by_xpath(
+            #             tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
+            #         self.selenium_click_by_xpath(
+            #             tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
+            # except:
+            #     pass
 
             # 신규주문 페이지로 이동
-            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
-                raise Exception('selenium_click_by_xpath fail. submit')
+            if self.connect(site_url=self.SALE_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+            # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
+            #     raise Exception('selenium_click_by_xpath fail. submit')
 
             sleep(2)
 
@@ -375,7 +378,11 @@ class SmartstoreTalktalk(Crawler):
                 if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. password')
 
-                # 로그인버튼
+                # 로그인 유지
+                if self.selenium_click_by_xpath(tag={'tag': 'input', 'attr': 'id', 'name': 'login_chk'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. submit')
+
+                # 로그인 버튼 클릭
                 if self.selenium_click_by_xpath(tag={'tag': 'input', 'attr': 'type', 'name': 'submit'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
