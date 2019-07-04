@@ -145,13 +145,13 @@ class Instagram (Crawler):
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'username'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
 
-                # 아이디 입력
-                if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'username'}) is False:
-                    raise Exception('selenium_input_text_by_xpath fail. username')
-
                 # 비번 입력
                 if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'password'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. password')
+
+                # 아이디 입력
+                if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'username'}) is False:
+                    raise Exception('selenium_input_text_by_xpath fail. username')
 
                 # 로그인하기 선택
                 if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'type', 'name': 'submit'}) is False:
