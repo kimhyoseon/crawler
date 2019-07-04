@@ -15,7 +15,6 @@ from bs4 import BeautifulSoup
 class SmartstoreTalktalk(Crawler):
 
     DETAIL_URL = 'http://sell.storefarm.naver.com'
-    SALE_URL = 'https://sell.smartstore.naver.com/#/naverpay/sale/delivery'
 
     def start(self):
         try:
@@ -410,6 +409,7 @@ class SmartstoreTalktalk(Crawler):
 
                 return True
         except Exception as e:
+            self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
