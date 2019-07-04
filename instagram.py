@@ -151,13 +151,13 @@ class Instagram (Crawler):
                 if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'password'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. password')
 
+                self.driver.save_screenshot('instagram_screenshot_login_after.png')
+
                 # 로그인하기 선택
                 if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'type', 'name': 'submit'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
                 sleep(3)
-
-                self.driver.save_screenshot('instagram_screenshot_login_after.png')
 
                 # 비정상적인 로그인 시도 처리 (내가 맞습니다)
                 try:
