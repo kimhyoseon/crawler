@@ -453,7 +453,7 @@ class Instagram (Crawler):
 
                                     # 공백 제거
                                     reply_text = re.sub(' +', ' ', reply_text)
-                                    # log.logger.info('%s' % (reply_text))
+                                    log.logger.info('%s' % (reply_text))
 
                                     # 댓글 목록에 추가
                                     if reply_text not in self.REPLY:
