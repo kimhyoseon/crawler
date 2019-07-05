@@ -235,6 +235,9 @@ class Instagram (Crawler):
 
                 self.set_cookie()
 
+                self.destroy()
+                exit()
+
                 return True
         except Exception as e:
             self.driver.save_screenshot('instagram_screenshot_login_error.png')
