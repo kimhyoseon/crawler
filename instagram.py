@@ -167,6 +167,8 @@ class Instagram (Crawler):
 
                 sleep(3)
 
+                self.driver.save_screenshot('instagram_screenshot_login_after.png')
+
                 # 비정상적인 로그인 시도 처리 (내가 맞습니다)
                 try:
                     if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/div[2]/span/button') is True:
@@ -227,6 +229,8 @@ class Instagram (Crawler):
                 except:
                     pass
 
+                self.destroy()
+                exit()
 
                 log.logger.info('login success')
 
