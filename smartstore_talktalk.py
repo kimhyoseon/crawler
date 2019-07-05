@@ -22,6 +22,10 @@ class SmartstoreTalktalk(Crawler):
 
             self.login()
 
+            self.driver.save_screenshot('smartstore_screenshot.png')
+            self.destroy()
+            exit()
+
             self.scan_page()
 
             self.destroy()
@@ -179,14 +183,12 @@ class SmartstoreTalktalk(Crawler):
                             #     print(idx, td.getText())
 
                 except Exception as e:
-                    self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
                     self.destroy()
                     exit()
                     log.logger.error(e, exc_info=True)
 
             return True
         except Exception as e:
-            self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
@@ -354,9 +356,7 @@ class SmartstoreTalktalk(Crawler):
             try:
                 if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is True:
                     log.logger.info('Alreday logined.')
-                    self.destroy()
-                    exit()
-                    return True
+                    # return True
             except:
                 pass
 
@@ -407,14 +407,10 @@ class SmartstoreTalktalk(Crawler):
                 log.logger.info('login success')
                 self.set_cookie()
 
-                self.destroy()
-                exit()
-
                 sleep(2)
 
                 return True
         except Exception as e:
-            self.driver.save_screenshot('smartstoretalktalk_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()

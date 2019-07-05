@@ -66,6 +66,10 @@ class Instagram (Crawler):
 
             self.login()
 
+            self.driver.save_screenshot('instagram_screenshot.png')
+            self.destroy()
+            exit()
+
             # 테스트로 종료 처리
             # self.end_report()
 
@@ -123,13 +127,9 @@ class Instagram (Crawler):
                             is_chrome=True) is False:
                 raise Exception('site connect fail')
 
-            self.driver.save_screenshot('instagram_screenshot_login_before.png')
-
             try:
                 if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/span/a[1]/button') is False:
                     log.logger.info('Already loggined.')
-                    self.destroy()
-                    exit()
                     return True
             except:
                 pass
@@ -161,17 +161,11 @@ class Instagram (Crawler):
                 if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'password'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. password')
 
-                self.driver.save_screenshot('instagram_screenshot_login_after.png')
-
                 # 로그인하기 선택
                 if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'type', 'name': 'submit'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                self.driver.save_screenshot('instagram_screenshot_login_after.png')
-
                 sleep(3)
-
-                self.driver.save_screenshot('instagram_screenshot_login_after2.png')
 
                 # 비정상적인 로그인 시도 처리 (내가 맞습니다)
                 try:
@@ -237,12 +231,10 @@ class Instagram (Crawler):
 
                 self.set_cookie()
 
-                self.destroy()
-                exit()
+                sleep(2)
 
                 return True
         except Exception as e:
-            self.driver.save_screenshot('instagram_screenshot_login_error.png')
             log.logger.error(e, exc_info=True)
             self.end_report()
 
@@ -303,7 +295,6 @@ class Instagram (Crawler):
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     self.FAIL_CNT = self.FAIL_CNT + 1
-                    # self.driver.save_screenshot('instagram_screenshot_error.png')
                     break
 
             self.tag.pop(0)
@@ -488,7 +479,6 @@ class Instagram (Crawler):
                 return True
 
         except Exception as e:
-            self.driver.save_screenshot('instagram_screenshot_error.png')
             log.logger.error(e, exc_info=True)
             # return False
 
