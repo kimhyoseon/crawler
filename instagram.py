@@ -128,6 +128,8 @@ class Instagram (Crawler):
             try:
                 if self.selenium_exist_by_xpath(xpath='//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/span/a[1]/button') is False:
                     log.logger.info('Already loggined.')
+                    self.destroy()
+                    exit()
                     return True
             except:
                 pass

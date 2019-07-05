@@ -354,6 +354,8 @@ class SmartstoreTalktalk(Crawler):
             try:
                 if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is True:
                     log.logger.info('Alreday logined.')
+                    self.destroy()
+                    exit()
                     return True
             except:
                 pass
@@ -404,6 +406,9 @@ class SmartstoreTalktalk(Crawler):
 
                 log.logger.info('login success')
                 self.set_cookie()
+
+                self.destroy()
+                exit()
 
                 sleep(2)
 
