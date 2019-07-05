@@ -66,12 +66,9 @@ class Instagram (Crawler):
 
             self.login()
 
-            self.driver.save_screenshot('instagram_screenshot.png')
-            self.destroy()
-            exit()
-
-            # 테스트로 종료 처리
-            # self.end_report()
+            # self.driver.save_screenshot('instagram_screenshot.png')
+            # self.destroy()
+            # exit()
 
             # 작업 시작
             self.scan_page()

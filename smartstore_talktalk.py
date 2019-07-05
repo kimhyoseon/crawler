@@ -22,9 +22,9 @@ class SmartstoreTalktalk(Crawler):
 
             self.login()
 
-            self.driver.save_screenshot('smartstore_screenshot.png')
-            self.destroy()
-            exit()
+            # self.driver.save_screenshot('smartstore_screenshot.png')
+            # self.destroy()
+            # exit()
 
             self.scan_page()
 
