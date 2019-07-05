@@ -29,6 +29,7 @@ class SmartstoreTalktalk(Crawler):
             self.scan_page()
 
             self.destroy()
+            exit()
 
         except Exception as e:
             self.destroy()
