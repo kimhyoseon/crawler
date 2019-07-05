@@ -165,9 +165,11 @@ class Instagram (Crawler):
                 if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'type', 'name': 'submit'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
+                self.driver.save_screenshot('instagram_screenshot_login_after.png')
+
                 sleep(3)
 
-                self.driver.save_screenshot('instagram_screenshot_login_after.png')
+                self.driver.save_screenshot('instagram_screenshot_login_after2.png')
 
                 # 비정상적인 로그인 시도 처리 (내가 맞습니다)
                 try:
@@ -228,9 +230,6 @@ class Instagram (Crawler):
                         raise Exception('login fail error')
                 except:
                     pass
-
-                self.destroy()
-                exit()
 
                 log.logger.info('login success')
 
