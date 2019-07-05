@@ -364,13 +364,14 @@ class Crawler:
 
     def set_cookie(self):
         try:
-            pickle.dump(self.driver.get_cookies(), open("cookies.pkl", "wb"))
+
+            pickle.dump(self.driver.get_cookies(), open(self.name + "_cookies.pkl", "wb"))
         except:
             return False
 
     def get_cookie(self):
         try:
-            cookies = pickle.load(open("cookies.pkl", "rb"))
+            cookies = pickle.load(open(self.name + "_cookies.pkl", "rb"))
             for cookie in cookies:
                 self.driver.add_cookie(cookie)
         except:
