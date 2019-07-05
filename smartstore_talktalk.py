@@ -359,7 +359,7 @@ class SmartstoreTalktalk(Crawler):
             try:
                 if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is True:
                     log.logger.info('Alreday logined.')
-                    # return True
+                    return True
             except:
                 pass
 
