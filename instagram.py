@@ -231,7 +231,7 @@ class Instagram (Crawler):
                 except:
                     pass
 
-                log.logger.info('login success')
+                log.logger.info('login success!')
 
                 self.set_cookie()
 
