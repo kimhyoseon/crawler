@@ -267,6 +267,13 @@ class SmartstoreTalktalk(Crawler):
                 else:
                     break
 
+            # 사정 상 배송이 어려운 날인 경우 +1
+            while 1:
+                if delevery_date.strftime('%Y%m%d') in ['20190722']:
+                    delevery_date = delevery_date + timedelta(days=1)
+                else:
+                    break
+
             # 도착예정일
             destination_date = delevery_date + timedelta(days=1)
 
