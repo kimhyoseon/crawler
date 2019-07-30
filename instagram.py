@@ -72,12 +72,14 @@ class Instagram (Crawler):
             # exit()
 
             # 작업 시작
-            # self.scan_page()
 
             # 팔로워 정리
             if self.follower() is True:
                 # 팔로윙 정리
                 self.following()
+
+            # 작업 시작
+            self.scan_page()
 
             self.end_report()
 
