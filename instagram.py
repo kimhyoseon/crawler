@@ -15,6 +15,7 @@ class Instagram (Crawler):
     LOGIN_URL = 'https://www.instagram.com/accounts/login/?source=auth_switcher'
     TAG_URL = 'https://www.instagram.com/explore/tags/'
     UNFOLLOW_URL = 'https://www.instagram.com/kuhitlove/'
+    FOLLOW_PER_LIKE = 3;
     FOLLOW_CNT = 0;
     FOLLOW_ACCEPT_CNT = 0;
     FOLLOWING_CANCEL_CNT = 0;
@@ -71,7 +72,7 @@ class Instagram (Crawler):
             # exit()
 
             # 작업 시작
-            self.scan_page()
+            # self.scan_page()
 
             # 팔로워 정리
             if self.follower() is True:
@@ -302,8 +303,8 @@ class Instagram (Crawler):
             # 팔로우 100개 마다 브라우저 리셋
             duration = int((datetime.now() - self.starttime).total_seconds() / 60)
             # print(duration)
-            # 15분 동안 작업 했다면 종료
-            if duration > 15:
+            # 10분 동안 작업 했다면 종료
+            if duration > 10:
             # if (self.FOLLOW_CNT > 5):
                 return True
 
@@ -330,8 +331,8 @@ class Instagram (Crawler):
     # 팔로우
     def follow(self):
         try:
-            # follow은 like 5회당 1회씩 적자 (5min)
-            if self.LIKE_CNT % 5 != 0:
+            # follow는 like n회당 1회씩
+            if self.LIKE_CNT % self.FOLLOW_PER_LIKE != 0:
                 return True
 
             btn_follow = self.driver.find_element_by_xpath('//article[contains(@class,"M9sTE")]/header/div[2]/div[1]/div[2]/button')
@@ -382,8 +383,8 @@ class Instagram (Crawler):
     # 댓글 달기
     def reply_send(self):
         try:
-            # 댓글은 like 5회당 1회씩 적자 (5min)
-            if self.LIKE_CNT % 5 != 0:
+            # 댓글은 like n회당 1회씩
+            if self.LIKE_CNT % self.FOLLOW_PER_LIKE != 0:
                 return True
 
             # 댓글 달기
