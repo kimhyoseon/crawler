@@ -20,9 +20,16 @@ BOT_LIST = {
     'lowdeal': {
         'token': '478859546:AAHyBspDwCBJ8abuPRKn9d7Gjk6ryuExjVE',
         'chat_id': '@lowdeal' # 최저가 알리미 채널의 id
+    },
+    'instagram': {
+        'token': '962167832:AAGGSaPbqnG5pmKy7WswO5sohjrqCnYQ1P0',
+        'chat_id': '49249214' # 봇 -> 나한테
+    },
+    'kuhit': {
+        'token': '849472688:AAFUFMwcs_KAhiyMZl2LvF6r_38jVnB3bwE',
+        'chat_id': '49249214' # 봇 -> 나한테
     }
 }
-
 # 메세지 전송
 def send_message(message=None, bot_name=None):
 

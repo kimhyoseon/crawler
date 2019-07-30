@@ -165,8 +165,8 @@ class SmartstoreTalktalk(Crawler):
 
                             self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
 
-                            self.send_messge_and_save(item_order_id, message, 'dev')
-                            # telegrambot.send_message(message, 'dev')
+                            self.send_messge_and_save(item_order_id, message, 'kuhit')
+                            # telegrambot.send_message(message, 'kuhit')
 
                             # 창 닫고 복귀
                             self.driver.close()

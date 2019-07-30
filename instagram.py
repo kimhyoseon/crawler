@@ -92,7 +92,7 @@ class Instagram (Crawler):
         log.logger.info('[durations %d min] Instagram process has completed. FOLLOWER_CNT (%d),FOLLOWING_CNT (%d),FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOWER_CNT, self.FOLLOWING_CNT, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT))
 
         # 당분간 텔레그램으로 결과알림을 받자
-        telegrambot.send_message('[durations %d min] Instagram process has completed. FOLLOWER_CNT (%d),FOLLOWING_CNT (%d),FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOWER_CNT, self.FOLLOWING_CNT, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT), 'dev')
+        telegrambot.send_message('[durations %d min] Instagram process has completed. FOLLOWER_CNT (%d),FOLLOWING_CNT (%d),FOLLOW_CNT (%d), LIKE_CNT (%d), REPLY_CNT (%d), FOLLOW_ACCEPT_CNT (%d), FOLLOWING_CANCEL_CNT (%d), FAIL_CNT (%d)' % (duration, self.FOLLOWER_CNT, self.FOLLOWING_CNT, self.FOLLOW_CNT, self.LIKE_CNT, self.REPLY_CNT, self.FOLLOW_ACCEPT_CNT, self.FOLLOWING_CANCEL_CNT, self.FAIL_CNT), 'instagram')
 
         self.FOLLOW_CNT = 0
         self.LIKE_CNT = 0
@@ -110,7 +110,7 @@ class Instagram (Crawler):
         #
         # # 오류가 반복되면 텔레그램 메세지 보내고 종료
         # if self.CRITICAL_CNT > 2:
-        #     telegrambot.send_message('Instagram bot has just stopoed!!!!', 'dev')
+        #     telegrambot.send_message('Instagram bot has just stopoed!!!!', 'instagram')
         #     exit();
         #
         # self.start()
@@ -184,7 +184,7 @@ class Instagram (Crawler):
                                 self.security_code[0] = 'blocked'
                                 filewriter.save_log_file('instagram_security_code', self.security_code)
                                 log.logger.info('Instagram has just blocked.')
-                                telegrambot.send_message('Instagram has just blocked.', 'dev')
+                                telegrambot.send_message('Instagram has just blocked.', 'instagram')
                                 self.destroy()
                                 exit()
 
@@ -192,7 +192,7 @@ class Instagram (Crawler):
                             self.selenium_click_by_xpath(xpath='//*[@id="react-root"]/section/div/div/div[3]/form/span/button')
 
                             # 텔레그램 알림
-                            telegrambot.send_message('Please check instagram security code from your email in 1 minutes.', 'dev')
+                            telegrambot.send_message('Please check instagram security code from your email in 1 minutes.', 'instagram')
                             log.logger.info('Please check instagram security code from your email in 1 minutes.')
 
                             # 수정될 때 까지 50초 대기
