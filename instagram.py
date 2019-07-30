@@ -295,6 +295,12 @@ class Instagram (Crawler):
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     self.FAIL_CNT = self.FAIL_CNT + 1
+
+                    # 테스트 스크린샷
+                    self.driver.save_screenshot('instagram_screenshot.png')
+                    self.destroy()
+                    exit()
+
                     break
 
             self.tag.pop(0)
