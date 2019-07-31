@@ -234,21 +234,32 @@ class SmartstoreTalktalk(Crawler):
             week_text = ['월', '화', '수', '목', '금', '토', '일']
 
             # 발송 상세 시간
-            start_hour = '오후 4시'
+            start_hour = '오후 8시'
 
             # 상품별 발송 제한시간 (기본)
             limit_hour = 7
+
+            # 배송일 (오늘)
+            delevery_date = datetime.now(timezone('Asia/Seoul'))
 
             # 짐볼, 요가매트 (오후 2시)
             if item_id in ['4324723046','4529428871']:
                 limit_hour = 14
                 start_hour = '오후 6시'
-            # 폼롤러 (오후 4시)
+            # 폼롤러 (오후 3시)
             elif item_id in ['4318623001']:
-                limit_hour = 16
+                limit_hour = 15
                 start_hour = '오후 6시'
+            # 그 외 집배송
+            else:
+                # 오후 배송일 (기사님이 오후에 오시는 날)
+                if delevery_date.strftime('%Y%m%d') in ['20190802']:
+                    limit_hour = 19
 
-            delevery_date = datetime.now(timezone('Asia/Seoul'))
+                # # 휴가 배송일
+                # if delevery_date.strftime('%Y%m%d') in ['20190722']:
+                #     limit_hour = 14
+                #     start_hour = '오후 6시'
 
             # 시간이 지났다면 익일발송
             if delevery_date.hour >= limit_hour:
@@ -263,12 +274,13 @@ class SmartstoreTalktalk(Crawler):
                 else:
                     break
 
-            # 사정 상 배송이 어려운 날인 경우 +1 처리
-            while 1:
-                if delevery_date.strftime('%Y%m%d') in ['20190722']:
-                    delevery_date = delevery_date + timedelta(days=1)
-                else:
-                    break
+            # 기사님이 안오거나 사정 상 배송이 어려운 날인 경우 +1 처리
+            if item_id not in ['4324723046', '4529428871','4318623001']:
+                while 1:
+                    if delevery_date.strftime('%Y%m%d') in ['20190801']:
+                        delevery_date = delevery_date + timedelta(days=1)
+                    else:
+                        break
 
             # 도착예정일
             destination_date = delevery_date + timedelta(days=1)
