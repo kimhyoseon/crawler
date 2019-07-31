@@ -28,7 +28,6 @@ class SmartstoreTalktalk(Crawler):
             exit()
 
         except Exception as e:
-            self.driver.save_screenshot('smartstore_screenshot.png')
             self.destroy()
             log.logger.error(e, exc_info=True)
 
@@ -359,6 +358,8 @@ class SmartstoreTalktalk(Crawler):
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
+
+            self.driver.save_screenshot('smartstore_screenshot.png')
 
             # 로그인 여부 체크
             try:
