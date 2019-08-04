@@ -27,7 +27,11 @@ BOT_LIST = {
     },
     'kuhit': {
         'token': '849472688:AAFUFMwcs_KAhiyMZl2LvF6r_38jVnB3bwE',
-        'chat_id': '49249214' # 봇 -> 나한테
+        'chat_id': '49249214' # 봇 -> 나한테 (쿠힛 배송)
+    },
+    'kuhit_review': {
+        'token': '906837133:AAH2CvSKqdcI_Jqq6eOFedFQRirQU79GYwQ',
+        'chat_id': '49249214' # 봇 -> 나한테 (쿠힛 리뷰)
     }
 }
 # 메세지 전송

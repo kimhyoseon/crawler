@@ -15,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 
 class Crawler:
     PATH_NAME = os.path.dirname(os.path.realpath(__file__))
@@ -220,6 +221,23 @@ class Crawler:
         except:
             return False
 
+    def selenium_focus_by_xpath(self, tag = None, etc=None, xpath=None, element=None):
+        try:
+            if element is not None:
+                element_found = element
+            else:
+                if xpath is None:
+                    xpath = '//%s[@%s="%s"]' % (tag['tag'], tag['attr'], tag['name'])
+                    if etc is not None:
+                        xpath = xpath + etc
+                element_present = EC.visibility_of_element_located((By.XPATH, xpath))
+                element_found = WebDriverWait(self.driver, 15).until(element_present)
+
+            ActionChains(self.driver).move_to_element(element_found).perform()
+            return True
+        except:
+            return False
+
     def selenium_is_alert_exist(self):
         try:
             alert_element = Alert(self.driver)
@@ -264,7 +282,7 @@ class Crawler:
 
             return False
         except Exception as e:
-            return False   
+            return False
     
 
     # 프록시 서버 IP 1개 획득
