@@ -237,7 +237,7 @@ class SmartstoreTalktalk(Crawler):
             start_hour = '오후 8시'
 
             # 상품별 발송 제한시간 (기본)
-            limit_hour = 7
+            limit_hour = 19
 
             # 배송일 (오늘)
             delevery_date = datetime.now(timezone('Asia/Seoul'))
@@ -251,12 +251,12 @@ class SmartstoreTalktalk(Crawler):
                 limit_hour = 15
                 start_hour = '오후 6시'
             # 그 외 집배송
-            else:
+            # else:
                 # 오후 배송일 (기사님이 오후에 오시는 날)
-                if delevery_date.strftime('%Y%m%d') in ['20190802']:
-                    limit_hour = 19
+                # if delevery_date.strftime('%Y%m%d') in ['20190802']:
+                #     limit_hour = 19
 
-                # # 휴가 배송일
+                # 휴가 배송일
                 # if delevery_date.strftime('%Y%m%d') in ['20190722']:
                 #     limit_hour = 14
                 #     start_hour = '오후 6시'
@@ -267,20 +267,20 @@ class SmartstoreTalktalk(Crawler):
 
             reddays = self.get_reddays()
 
-            # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다
+            # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다 /// 화, 목, 토, 일은 배송안하는 날
             while 1:
-                if delevery_date.weekday() in [5, 6] or delevery_date.strftime('%Y%m%d') in reddays:
+                if delevery_date.weekday() in [1, 3, 5, 6] or delevery_date.strftime('%Y%m%d') in reddays:
                     delevery_date = delevery_date + timedelta(days=1)
                 else:
                     break
 
             # 기사님이 안오거나 사정 상 배송이 어려운 날인 경우 +1 처리
-            if item_id not in ['4324723046', '4529428871','4318623001']:
-                while 1:
-                    if delevery_date.strftime('%Y%m%d') in ['20190801']:
-                        delevery_date = delevery_date + timedelta(days=1)
-                    else:
-                        break
+            # if item_id not in ['4324723046', '4529428871','4318623001']:
+            #     while 1:
+            #         if delevery_date.strftime('%Y%m%d') in ['20190801']:
+            #             delevery_date = delevery_date + timedelta(days=1)
+            #         else:
+            #             break
 
             # 도착예정일
             destination_date = delevery_date + timedelta(days=1)
