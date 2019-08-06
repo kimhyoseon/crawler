@@ -153,6 +153,9 @@ class SmartstoreReview(Crawler):
                             if answer:
                                 message += '\n'
                                 message += '답변: %s' % (answer)
+                            else:
+                                message += '\n'
+                                message += '실패: %s' % (self.reason)
 
                             self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
                             self.send_messge_and_save(review_id, message, 'kuhit_review')
@@ -208,6 +211,8 @@ class SmartstoreReview(Crawler):
             if not review_text or not item_name:
                 return False
 
+            self.reason = ''
+
             # 리뷰 답글
             delevery_message = []
 
@@ -220,7 +225,29 @@ class SmartstoreReview(Crawler):
 
 
             # 부정문구가 있는 리뷰 패스
-            if '?' in review_text or '하면' in review_text or '좀' in review_text or '그래도' in review_text or '보단' in review_text or '는데' in review_text in review_text or 'ㅜ' in review_text in review_text or 'ㅠ' in review_text:
+            if '?' in review_text:
+                self.reason = '?'
+                return False
+            elif '하면' in review_text:
+                self.reason = '하면'
+                return False
+            elif '좀' in review_text:
+                self.reason = '좀'
+                return False
+            elif '그래도' in review_text:
+                self.reason = '그래도'
+                return False
+            elif '보단' in review_text:
+                self.reason = '보단'
+                return False
+            elif '는데' in review_text:
+                self.reason = '는데'
+                return False
+            elif 'ㅜ' in review_text:
+                self.reason = 'ㅜ'
+                return False
+            elif 'ㅠ' in review_text:
+                self.reason = 'ㅠ'
                 return False
 
 
@@ -255,6 +282,7 @@ class SmartstoreReview(Crawler):
 
             # 문구가 없다면 기본 문구로
             if len(delevery_message) == 0:
+                self.reason = '케이스 없음'
                 return False
 
             # 마지막 추가 인사문구
