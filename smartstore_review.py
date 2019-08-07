@@ -220,7 +220,8 @@ class SmartstoreReview(Crawler):
             log.logger.info('리뷰: %s' % (' '.join(review_text)))
 
             # 100자가 넘는 정성스런 후기 패스 (베스트일 가능성이 있음)
-            if len(review_text) > 80:
+            if len(review_text) > 100:
+                self.reason = '정성리뷰'
                 return False
 
 
@@ -239,9 +240,6 @@ class SmartstoreReview(Crawler):
                 return False
             elif '보단' in review_text:
                 self.reason = '보단'
-                return False
-            elif '는데' in review_text:
-                self.reason = '는데'
                 return False
             elif 'ㅜ' in review_text:
                 self.reason = 'ㅜ'
