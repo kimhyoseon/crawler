@@ -244,6 +244,9 @@ class SmartstoreReview(Crawler):
             elif '보단' in review_text:
                 self.reason = '보단'
                 return False
+            elif '듯' in review_text:
+                self.reason = '듯'
+                return False
             elif 'ㅜ' in review_text and '감동' not in review_text:
                 self.reason = 'ㅜ'
                 return False
@@ -267,20 +270,26 @@ class SmartstoreReview(Crawler):
                 delevery_message.append('유용하게 사용하고 계시니 저희도 기분이 좋습니다^^')
             elif '짱' in review_text and '짱짱' not in review_text:
                 delevery_message.append('남겨주신 리뷰도 짱!')
-            elif '보여' in review_text or '보이' in review_text or '듯' in review_text or '같' in review_text:
-                delevery_message.append('꾸준히 사용하시면 원하시는 효과가 나타나실꺼예요~')
             elif '굿' in review_text:
                 delevery_message.append('남겨주신 리뷰도 굿굿입니다!')
             elif '임신' in review_text or '순산' in review_text or '출산' in review_text:
                 delevery_message.append('안전하고 조심히 사용해주시기구 꼭 효과 보시기 바랄께요~')
-            elif '잘' in review_text and ('쓰' in review_text or '사' in review_text):
+            elif '보여' in review_text or '보이' in review_text or '듯' in review_text:
+                delevery_message.append('자주 사용하시면서 제품의 효과를 보시길 응원하겠습니다!')
+            elif '잘' in review_text and ('쓰고' in review_text or '사용하고' in review_text):
+                delevery_message.append('잘 쓰고 계신다니 한결 마음이 편해지네요^^')
+            elif '잘' in review_text and ('께요' in review_text or '습니다' in review_text):
                 delevery_message.append('제품 자주자주 사용하셔서 효과보시길 빌께요!')
+            elif '확실' in review_text and ('효과' in review_text or '느낌' in review_text):
+                delevery_message.append('눈에 보이는 효과를 경험하고 계시니 저도 기분이 좋아지네요~ ')
+            elif '재구매' in review_text or ('입' in review_text or '했' in review_text):
+                delevery_message.append('재구매 너무너무 감사드려요~!')
+            elif '주문했어' in review_text or '주문했습' in review_text:
+                delevery_message.append('주문하신 제품 꾸준히 잘 사용하셔서 효과 보시길 바래요~')
             elif '좋' in review_text or '기뻐' in review_text or '잘쓰' in review_text or '만족' in review_text or '조아' in review_text or '쁘' in review_text or '뻐' in review_text or '괜찮' in review_text or '잘샀' in review_text:
                 delevery_message.append('받아보신 제품이 맘에 드신다니 다행이예요~')
             elif '배송' in review_text and '배송비' not in review_text:
                 delevery_message.append('로켓배송을 따라잡는 그날까지 더 힘내겠습니다!')
-            elif '주문했어' in review_text or '주문했습' in review_text:
-                delevery_message.append('주문하신 제품 꾸준히 잘 사용하셔서 효과 보시길 바래요~')
             elif len(review_text) < 15:
                 delevery_message.append('소중하고 정성스런 후기 감사합니다~')
 
