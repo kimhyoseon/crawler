@@ -262,8 +262,6 @@ class SmartstoreReview(Crawler):
                 delevery_message.append('남겨주신 리뷰에 저도 감동..ㅠ')
             elif '선물' in review_text or '효도' in review_text:
                 delevery_message.append('다른 분들도 선물 용으로 많이 구매하세요~ 선물용으로 괜찮은 제품인듯 합니다!')
-            elif '효과' in review_text or '도움' in review_text or '시원' in review_text and '아직' not in review_text  and '더' not in review_text and '면' not in review_text:
-                delevery_message.append('저희 제품을 잘 사용해주시고 효과를 보신다니 감사합니다~')
             elif '편해' in review_text or '편하' in review_text or '편리' in review_text:
                 delevery_message.append('편하고 쉽게 사용하고 계시니 저희도 기분이 좋습니다^^')
             elif '유용' in review_text:
@@ -282,6 +280,8 @@ class SmartstoreReview(Crawler):
                 delevery_message.append('제품 자주자주 사용하셔서 효과보시길 빌께요!')
             elif '확실' in review_text and ('효과' in review_text or '느낌' in review_text):
                 delevery_message.append('눈에 보이는 효과를 경험하고 계시니 저도 기분이 좋아지네요~ ')
+            elif '효과' in review_text or '도움' in review_text or '시원' in review_text and '아직' not in review_text and '더' not in review_text and '면' not in review_text and '보고' not in review_text:
+                delevery_message.append('저희 제품을 잘 사용해주시고 효과를 보신다니 감사합니다~')
             elif '재구매' in review_text or ('입' in review_text or '했' in review_text):
                 delevery_message.append('재구매 너무너무 감사드려요~!')
             elif '주문했어' in review_text or '주문했습' in review_text:
