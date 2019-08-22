@@ -259,7 +259,19 @@ class SmartstoreReview(Crawler):
             elif '결국' in review_text:
                 self.reason = '결국'
                 return False
-            elif '후회' in review_text:
+            elif '조금' in review_text:
+                self.reason = '조금'
+                return False
+            elif '차이' in review_text:
+                self.reason = '차이'
+                return False
+            elif '소리' in review_text:
+                self.reason = '소리'
+                return False
+            elif '불편' in review_text:
+                self.reason = '불편'
+                return False
+            elif '후회' in review_text and '안' not in review_text  and '없' not in review_text:
                 self.reason = '후회'
                 return False
 
@@ -277,7 +289,7 @@ class SmartstoreReview(Crawler):
                 delevery_message.append('남겨주신 리뷰도 짱!')
             elif '굿' in review_text:
                 delevery_message.append('남겨주신 리뷰도 굿굿입니다!')
-            elif '임신' in review_text or '순산' in review_text or '출산' in review_text:
+            elif '임신' in review_text or '순산' in review_text or '출산' in review_text and '후' not in review_text and '하고' not in review_text:
                 delevery_message.append('안전하고 조심히 사용해주시구 꼭 효과 보시기 바랄께요~')
             elif '보여' in review_text or '보이' in review_text or '듯' in review_text:
                 delevery_message.append('자주 사용하시면서 제품의 효과를 보시길 응원하겠습니다!')
@@ -308,7 +320,7 @@ class SmartstoreReview(Crawler):
             elif len(review_text) < 15:
                 delevery_message.append('소중하고 정성스런 후기 감사합니다~')
 
-            if '냄새' in review_text and '없' not in review_text and '안나' not in review_text and '날라' not in review_text and '않' not in review_text and '정도' not in review_text and '거의' not in review_text and '크게' not in review_text and '그닥' not in review_text:
+            if '냄새' in review_text and '없' not in review_text and '안나' not in review_text and '안났' not in review_text and '날라' not in review_text and '않' not in review_text and '정도' not in review_text and '거의' not in review_text and '크게' not in review_text and '그닥' not in review_text and '편' not in review_text and '괜' not in review_text and '빠' not in review_text:
                 delevery_message.append('냄새는 불편하시겠지만 몇 일만 바람이 잘 부는 곳에 보관해주시면 좋아질꺼예요ㅠ')
 
             # 문구가 없다면 기본 문구로
