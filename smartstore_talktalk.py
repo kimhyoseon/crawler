@@ -35,6 +35,8 @@ class SmartstoreTalktalk(Crawler):
         try:
             sleep(5)
 
+            self.driver.save_screenshot('smartstore_screenshot.png')
+
             # 레이어가 있다면 닫기 (에스크로, 임시)
             try:
                 if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label') is True:
