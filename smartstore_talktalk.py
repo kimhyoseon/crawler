@@ -133,8 +133,8 @@ class SmartstoreTalktalk(Crawler):
 
                             # 레이어가 있다면 닫기
                             try:
-                                if self.selenium_exist_by_xpath(xpath='//*[@id="layer-root"]/div/div/div/div/div[3]/button') is True:
-                                    self.selenium_click_by_xpath(xpath='//*[@id="layer-root"]/div/div/div/div/div[3]/button')
+                                if self.selenium_exist_by_xpath(xpath='//button[contains(@class,"btn_negative")]') is True:
+                                    self.selenium_click_by_xpath(xpath='//button[contains(@class,"btn_negative")]')
                             except:
                                 pass
 
