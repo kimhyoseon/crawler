@@ -180,9 +180,9 @@ class SmartstoreTalktalk(Crawler):
                             #     print(idx, td.getText())
 
                 except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     self.destroy()
                     exit()
-                    log.logger.error(e, exc_info=True)
 
             return True
         except Exception as e:
