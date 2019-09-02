@@ -81,6 +81,8 @@ class SmartstoreReview(Crawler):
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[3]') is False:
                 raise Exception('selenium_click_by_xpath fail. 미답글')
 
+            sleep(1)
+
             # 구매자평점 (전체)
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[1]/div[2]/div/label[1]') is False:
                 raise Exception('selenium_click_by_xpath fail. 미구매자평점 (전체)')
