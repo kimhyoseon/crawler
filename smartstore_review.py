@@ -62,7 +62,7 @@ class SmartstoreReview(Crawler):
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-lnb"]/div/div[1]/ul/li[4]/ul/li[3]/a') is False:
                 raise Exception('selenium_click_by_xpath fail. 리뷰관리')
 
-            sleep(2)
+            sleep(10)
 
             # 레이어가 있다면 닫기
             try:
