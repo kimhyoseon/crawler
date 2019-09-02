@@ -73,6 +73,12 @@ class SmartstoreReview(Crawler):
 
             # 리뷰 검색 세팅
 
+            sleep(3)
+
+            # 오늘리뷰
+            if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[1]/div/div/ncp-datetime-range-picker2/div[1]/div/div/button[1]') is False:
+                raise Exception('selenium_click_by_xpath fail. 오늘')
+
             # 답글여부
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[2]/div[2]/div') is False:
                 raise Exception('selenium_click_by_xpath fail. 답글여부')
@@ -80,8 +86,6 @@ class SmartstoreReview(Crawler):
             # 미답글
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[2]/div[2]/div/div[2]/div/div[3]') is False:
                 raise Exception('selenium_click_by_xpath fail. 미답글')
-
-            sleep(1)
 
             # 구매자평점 (전체)
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[1]/div[2]/div/label[1]') is False:
