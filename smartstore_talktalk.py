@@ -234,10 +234,10 @@ class SmartstoreTalktalk(Crawler):
             week_text = ['월', '화', '수', '목', '금', '토', '일']
 
             # 발송 상세 시간
-            start_hour = '오후 4시'
+            start_hour = '오후 5시'
 
             # 상품별 발송 제한시간 (기본)
-            limit_hour = 16
+            limit_hour = 17
 
             # 배송일 (오늘)
             delevery_date = datetime.now(timezone('Asia/Seoul'))
@@ -266,6 +266,9 @@ class SmartstoreTalktalk(Crawler):
                 delevery_date = delevery_date + timedelta(days=1)
 
             reddays = self.get_reddays()
+
+            # 추석연휴
+            reddays.append('20190911')
 
             # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다 /// 토, 일은 배송안하는 날
             while 1:
