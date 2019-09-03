@@ -277,6 +277,11 @@ class SmartstoreReview(Crawler):
             elif '불편' in review_text:
                 self.reason = '불편'
                 return False
+            elif '의문' in review_text:
+                self.reason = '의문'
+            elif '알' in review_text and '빠' in review_text:
+                self.reason = '알+빠'
+                return False
             elif '후회' in review_text and '안' not in review_text  and '없' not in review_text:
                 self.reason = '후회'
                 return False
