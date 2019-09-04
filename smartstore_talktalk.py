@@ -268,6 +268,7 @@ class SmartstoreTalktalk(Crawler):
             reddays = self.get_reddays()
 
             # 추석연휴
+            reddays.append('20190910')
             reddays.append('20190911')
 
             # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다 /// 토, 일은 배송안하는 날
