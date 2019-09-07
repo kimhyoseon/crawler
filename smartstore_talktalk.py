@@ -293,6 +293,10 @@ class SmartstoreTalktalk(Crawler):
             if destination in '제주특별자치도':
                 destination_date = delevery_date + timedelta(days=1)
 
+            # 추석연휴는 도착일에서 제거
+            reddays.remove('20190910')
+            reddays.remove('20190911')
+
             # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다
             while 1:
                 if destination_date.weekday() in [6] or destination_date.strftime('%Y%m%d') in reddays:
