@@ -244,11 +244,11 @@ class SmartstoreTalktalk(Crawler):
 
             # 짐볼, 요가매트 (오후 2시)
             if item_id in ['4324723046','4529428871']:
-                limit_hour = 14
+                limit_hour = 13
                 start_hour = '오후 6시'
             # 폼롤러 (오후 3시)
             elif item_id in ['4318623001']:
-                limit_hour = 15
+                limit_hour = 14
                 start_hour = '오후 6시'
             # 그 외 집배송
             # else:
@@ -268,8 +268,8 @@ class SmartstoreTalktalk(Crawler):
             reddays = self.get_reddays()
 
             # 추석연휴
-            reddays.append('20190910')
-            reddays.append('20190911')
+            # reddays.append('20190910')
+            # reddays.append('20190911')
 
             # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다 /// 토, 일은 배송안하는 날
             while 1:
@@ -294,8 +294,8 @@ class SmartstoreTalktalk(Crawler):
                 destination_date = delevery_date + timedelta(days=1)
 
             # 추석연휴는 도착일에서 제거
-            reddays.remove('20190910')
-            reddays.remove('20190911')
+            # reddays.remove('20190910')
+            # reddays.remove('20190911')
 
             # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다
             while 1:
