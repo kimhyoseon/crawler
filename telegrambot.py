@@ -32,6 +32,10 @@ BOT_LIST = {
     'kuhit_review': {
         'token': '906837133:AAH2CvSKqdcI_Jqq6eOFedFQRirQU79GYwQ',
         'chat_id': '49249214' # 봇 -> 나한테 (쿠힛 리뷰)
+    },
+    'jshk': {
+        'token': '889211522:AAGnvkAM1o-_R22LM5zOPClj9i9HS9yYmcA',
+        'chat_id': '49249214' # 봇 -> 나한테 (정성한끼 배송)
     }
 }
 # 메세지 전송
