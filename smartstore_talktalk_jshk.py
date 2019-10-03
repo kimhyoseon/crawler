@@ -208,24 +208,40 @@ class SmartstoreTalktalkJshk(Crawler):
             if not delevery_date or not destination_date:
                 return False
 
-            delevery_message = ''
-            delevery_message += '[배송 안내]'
-            delevery_message += '\\n\\n'
-            delevery_message += '안녕하세요^^'
-            delevery_message += '\\n\\n'
-            delevery_message += '정성한끼에서 구매하신 반찬의 배송 일정 안내 드립니다~'
-            delevery_message += '\\n\\n'
-            delevery_message += '배송출발 : '
-            delevery_message += delevery_date
-            delevery_message += '\\n'
-            delevery_message += '도착예정 : '
-            delevery_message += destination_date
-            delevery_message += '\\n\\n'
-            delevery_message += '최대한 빨리 고객님에게 제품이 전달되도록 최선을 다하겠습니다.'
-            delevery_message += '\\n\\n'
-            delevery_message += '주문해주셔서 감사합니다^^'
-            # delevery_message += '\\n\\n'
-            # delevery_message += '※ 수령 위치 또는 택배사의 사정에 따라 1~2일정도 더 소요될 수 있습니다.​'
+            if delevery_date == '제주특별자치도':
+                delevery_message = ''
+                delevery_message += '[배송 안내]'
+                delevery_message += '\\n\\n'
+                delevery_message += '안녕하세요^^'
+                delevery_message += '\\n\\n'
+                delevery_message += '정성한끼를 믿고 구매해주셔서 감사합니다.'
+                delevery_message += '\\n\\n'
+                delevery_message += '주문해주신 ' + delevery_date + ' 지역은 익일 배송이 불가한 지역으로'
+                delevery_message += '\\n\\n'
+                delevery_message += '2일 이상의 배송기간으로 인해 신선한 상태의 반찬을 보내드릴 수 없습니다.'
+                delevery_message += '\\n\\n'
+                delevery_message += '따라서 부득이하게 판매를 할 수 없는 점 양해를 부탁드립니다.'
+                delevery_message += '\\n\\n'
+                delevery_message += '주문은 자동으로 취소될 예정입니다.'
+                delevery_message += '\\n\\n'
+                delevery_message += '감사합니다.'
+            else:
+                delevery_message = ''
+                delevery_message += '[배송 안내]'
+                delevery_message += '\\n\\n'
+                delevery_message += '안녕하세요^^'
+                delevery_message += '\\n\\n'
+                delevery_message += '정성한끼에서 구매하신 반찬의 배송 일정 안내 드립니다~'
+                delevery_message += '\\n\\n'
+                delevery_message += '배송출발 : '
+                delevery_message += delevery_date
+                delevery_message += '\\n'
+                delevery_message += '도착예정 : '
+                delevery_message += destination_date
+                delevery_message += '\\n\\n'
+                delevery_message += '최대한 빨리 고객님에게 제품이 전달되도록 최선을 다하겠습니다.'
+                delevery_message += '\\n\\n'
+                delevery_message += '주문해주셔서 감사합니다^^'
 
             log.logger.info(delevery_message)
 
@@ -238,10 +254,11 @@ class SmartstoreTalktalkJshk(Crawler):
 
     def get_delevery_date(self, item_id=None, destination=None):
         try:
-            week_text = ['월', '화', '수', '목', '금', '토', '일']
+            # 제주도인 경우 +1
+            if destination in '제주특별자치도':
+                return '제주특별자치도', '제주특별자치도'
 
-            # 발송 상세 시간
-            start_hour = '오후 6시'
+            week_text = ['월', '화', '수', '목', '금', '토', '일']
 
             # 상품별 발송 제한시간 (기본)
             limit_hour = 9
@@ -249,32 +266,28 @@ class SmartstoreTalktalkJshk(Crawler):
             # 배송일 (오늘)
             delevery_date = datetime.now(timezone('Asia/Seoul'))
 
-            # 짐볼, 요가매트 (오후 2시)
-            if item_id in ['4324723046','4529428871']:
-                limit_hour = 13
-                start_hour = '오후 6시'
-            # 폼롤러 (오후 3시)
-            elif item_id in ['4318623001']:
-                limit_hour = 14
-                start_hour = '오후 6시'
-            # 그 외 집배송
-            # else:
-                # 오후 배송일 (기사님이 오후에 오시는 날)
-                # if delevery_date.strftime('%Y%m%d') in ['20190802']:
-                #     limit_hour = 19
-
-                # 휴가 배송일
-                # if delevery_date.strftime('%Y%m%d') in ['20190722']:
-                #     limit_hour = 14
-                #     start_hour = '오후 6시'
+            # 배송테스트
+            # delevery_date = datetime.strptime('20191002', '%Y%m%d')
 
             # 시간이 지났다면 익일발송
             if delevery_date.hour >= limit_hour:
                 delevery_date = delevery_date + timedelta(days=1)
 
             reddays = self.get_reddays()
+            reddays_before = []
 
-            # 추석연휴
+            # 연휴에는 도착이 불가능 하므로 연휴의 전날까지 휴일로 취급
+            if len(reddays) > 0:
+                for redday in reddays:
+                    redday = datetime.strptime(redday, '%Y%m%d').date()
+                    before_redday = redday - timedelta(days=1)
+                    before_redday = before_redday.strftime('%Y%m%d')
+                    if before_redday not in reddays:
+                        reddays_before.append(before_redday)
+
+                reddays = reddays + reddays_before
+
+            # 추석연휴 또는 배송 안하는 날
             # reddays.append('20190910')
             # reddays.append('20190911')
 
@@ -285,31 +298,12 @@ class SmartstoreTalktalkJshk(Crawler):
                 else:
                     break
 
-            # 기사님이 안오거나 사정 상 배송이 어려운 날인 경우 +1 처리
-            # if item_id not in ['4324723046', '4529428871','4318623001']:
-            #     while 1:
-            #         if delevery_date.strftime('%Y%m%d') in ['20190801']:
-            #             delevery_date = delevery_date + timedelta(days=1)
-            #         else:
-            #             break
-
-            # 도착예정일
+            # 도착예정일 신선식품이므로 다음 날
             destination_date = delevery_date + timedelta(days=1)
-
-            # 제주도인 경우 +1
-            if destination in '제주특별자치도':
-                destination_date = delevery_date + timedelta(days=1)
 
             # 추석연휴는 도착일에서 제거
             # reddays.remove('20190910')
             # reddays.remove('20190911')
-
-            # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다
-            while 1:
-                if destination_date.weekday() in [6] or destination_date.strftime('%Y%m%d') in reddays:
-                    destination_date = destination_date + timedelta(days=1)
-                else:
-                    break
 
             delevery_date = str(delevery_date.year) + '년 ' + str(delevery_date.month) + '월 ' + str(delevery_date.day) + '일 (' + week_text[delevery_date.weekday()] + ')'
             destination_date = str(destination_date.year) + '년 ' + str(destination_date.month) + '월 ' + str(destination_date.day) + '일 (' + week_text[destination_date.weekday()] + ')'
