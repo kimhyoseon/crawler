@@ -20,7 +20,7 @@ class SmartstoreReview(Crawler):
     def start(self):
         try:
             self.log = filewriter.get_log_file(self.name)
-            self.channels = ['스마트스토어정성한끼']
+            self.channels = ['스마트스토어정성한끼', '스마트스토어쿠힛마트']
 
             self.login()
 
@@ -84,8 +84,7 @@ class SmartstoreReview(Crawler):
             sleep(2)
 
             # 채널선택버튼 클릭
-            # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
-            if self.selenium_click_by_xpath(xpath='//*[@id="_gnb_nav"]/ul/li[2]/a') is False:
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
                 raise Exception('selenium_click_by_xpath fail. channel-select')
 
             sleep(1)
