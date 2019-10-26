@@ -230,6 +230,7 @@ class SmartstoreTalktalk(Crawler):
             # 현재 상점이 진행 전이라면 진행
             if channel_current not in self.channels:
                 self.channels.append(channel_current)
+                log.logger.info(channel_current)
                 self.remove_layer()
                 self.scan_page()
                 self.select_channel()
@@ -245,6 +246,7 @@ class SmartstoreTalktalk(Crawler):
                         # 선택할 상점이 진행 전이라면 진행
                         if channel_name not in self.channels:
                             self.channels.append(channel_name)
+                            log.logger.info(channel_name)
                             li.find_element_by_xpath('.//label').click()
                             self.scan_page()
                             self.select_channel()
