@@ -135,8 +135,6 @@ class SmartstoreReview(Crawler):
 
             sleep(1)
 
-            return True
-
             # 리뷰관리
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-lnb"]/div/div[1]/ul/li[4]/ul/li[3]/a') is False:
                 raise Exception('selenium_click_by_xpath fail. 리뷰관리')
