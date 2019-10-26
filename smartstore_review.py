@@ -77,6 +77,8 @@ class SmartstoreReview(Crawler):
 
     def select_channel(self):
         try:
+            sleep(5)
+
             self.remove_layer()
 
             # 채널선택버튼 클릭
