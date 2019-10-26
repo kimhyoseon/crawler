@@ -20,10 +20,11 @@ class SmartstoreReview(Crawler):
     def start(self):
         try:
             self.log = filewriter.get_log_file(self.name)
+            self.channels = ['스마트스토어정성한끼']
 
             self.login()
 
-            self.scan_page()
+            self.select_channel()
 
             self.destroy()
             exit()
@@ -32,14 +33,18 @@ class SmartstoreReview(Crawler):
             self.destroy()
             log.logger.error(e, exc_info=True)
 
-    def scan_page(self):
+    def remove_layer(self):
         try:
-            sleep(2)
-
             # 레이어가 있다면 닫기 (에스크로, 임시)
             try:
-                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
-                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
+                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label') is True:
+                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label')
+            except:
+                pass
+
+            try:
+                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input') is True:
+                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input')
             except:
                 pass
 
@@ -50,13 +55,80 @@ class SmartstoreReview(Crawler):
             except:
                 pass
 
-            sleep(2)
+            # 레이어가 있다면 닫기
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.blockPopupNoticeToday()'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.blockPopupNoticeToday()'})
+            except:
+                pass
+
+            # 채널 레이어 닫기
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
+                    sleep(1)
+            except:
+                pass
+
+            sleep(1)
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+    def select_channel(self):
+        try:
+            self.remove_layer()
+
+            # 채널선택버튼 클릭
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
+                raise Exception('selenium_click_by_xpath fail. channel-select')
+
+            sleep(1)
+
+            # 현재 상점명 가져오기
+            channel_current = self.driver.find_element_by_xpath('.//div[contains(@class,"search-area")]').find_element_by_xpath('.//span[@class="text-title"]').text
+
+            # 현재 상점이 진행 전이라면 진행
+            if channel_current not in self.channels:
+                self.channels.append(channel_current)
+                self.remove_layer()
+                self.scan_page()
+                self.select_channel()
+
+            # 현재 상점이 진행 후라면 채널 변경
+            channel_list = self.driver.find_elements_by_xpath('.//li[contains(@ng-repeat,"vm.channelList")]')
+
+            for li in channel_list:
+                try:
+                    if li:
+                        channel_name = li.find_element_by_xpath('.//span[@class="text-title"]').text
+
+                        # 선택할 상점이 진행 전이라면 진행
+                        if channel_name not in self.channels:
+                            self.channels.append(channel_name)
+                            li.find_element_by_xpath('.//label').click()
+                            self.scan_page()
+                            self.select_channel()
+                            return True
+                except:
+                    pass
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+    def scan_page(self):
+        try:
+            sleep(5)
+
+            self.remove_layer()
 
             # 문의/리뷰관리
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-lnb"]/div/div[1]/ul/li[4]/a') is False:
                 raise Exception('selenium_click_by_xpath fail. 문의/리뷰관리')
 
             sleep(1)
+
+            return True
 
             # 리뷰관리
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-lnb"]/div/div[1]/ul/li[4]/ul/li[3]/a') is False:
