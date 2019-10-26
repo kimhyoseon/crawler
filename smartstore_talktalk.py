@@ -19,10 +19,11 @@ class SmartstoreTalktalk(Crawler):
     def start(self):
         try:
             self.log = filewriter.get_log_file(self.name)
+            self.channels = ['스마트스토어정성한끼']
 
             self.login()
 
-            self.scan_page()
+            self.select_channel()
 
             self.destroy()
             exit()
@@ -35,38 +36,15 @@ class SmartstoreTalktalk(Crawler):
         try:
             sleep(5)
 
-            # 레이어가 있다면 닫기 (에스크로, 임시)
-            try:
-                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label') is True:
-                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label')
-            except:
-                pass
-
-            try:
-                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input') is True:
-                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input')
-            except:
-                pass
-
-            # 레이어가 있다면 닫기
-            try:
-                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
-                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
-            except:
-                pass
+            self.remove_layer()
 
             # 신규주문 페이지로 이동
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
-                raise Exception('selenium_click_by_xpath fail. submit')
+                raise Exception('selenium_click_by_xpath fail. ord.new')
 
             sleep(10)
 
-            # 레이어가 있다면 닫기
-            try:
-                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
-                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
-            except:
-                pass
+            self.remove_layer()
 
             # 주문 데이터 가져오기 iframe으로 변경
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
@@ -191,6 +169,89 @@ class SmartstoreTalktalk(Crawler):
             exit()
 
         return False
+
+    def remove_layer(self):
+        try:
+            # 레이어가 있다면 닫기 (에스크로, 임시)
+            try:
+                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label') is True:
+                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label')
+            except:
+                pass
+
+            try:
+                if self.selenium_exist_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input') is True:
+                    self.selenium_click_by_xpath(xpath='/html/body/div[1]/div/div/div[3]/div/div/label/input')
+            except:
+                pass
+
+            # 레이어가 있다면 닫기
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-dismiss', 'name': 'mySmallModalLabel'})
+            except:
+                pass
+
+            # 레이어가 있다면 닫기
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.blockPopupNoticeToday()'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.blockPopupNoticeToday()'})
+            except:
+                pass
+
+            # 채널 레이어 닫기
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
+                    sleep(1)
+            except:
+                pass
+
+            sleep(1)
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
+
+    def select_channel(self):
+        try:
+            self.remove_layer()
+
+            # 채널선택버튼 클릭
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
+                raise Exception('selenium_click_by_xpath fail. channel-select')
+
+            sleep(1)
+
+            # 현재 상점명 가져오기
+            channel_current = self.driver.find_element_by_xpath('.//div[contains(@class,"search-area")]').find_element_by_xpath('.//span[@class="text-title"]').text
+
+            # 현재 상점이 진행 전이라면 진행
+            if channel_current not in self.channels:
+                self.channels.append(channel_current)
+                self.remove_layer()
+                self.scan_page()
+                self.select_channel()
+
+            # 현재 상점이 진행 후라면 채널 변경
+            channel_list = self.driver.find_elements_by_xpath('.//li[contains(@ng-repeat,"vm.channelList")]')
+
+            for li in channel_list:
+                try:
+                    if li:
+                        channel_name = li.find_element_by_xpath('.//span[@class="text-title"]').text
+
+                        # 선택할 상점이 진행 전이라면 진행
+                        if channel_name not in self.channels:
+                            self.channels.append(channel_name)
+                            li.find_element_by_xpath('.//label').click()
+                            self.scan_page()
+                            self.select_channel()
+                            return True
+                except:
+                    pass
+
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
 
     def get_delevery_message(self, item_id, item_name, destination):
         try:
