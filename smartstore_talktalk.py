@@ -214,11 +214,19 @@ class SmartstoreTalktalk(Crawler):
 
     def select_channel(self):
         try:
-            sleep(5)
+            sleep(3)
 
             self.remove_layer()
 
             sleep(2)
+
+            # 홈으로
+            try:
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'home'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. home')
+                sleep(5)
+            except:
+                pass
 
             # 채널선택버튼 클릭
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
