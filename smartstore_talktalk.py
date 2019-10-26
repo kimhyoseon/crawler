@@ -216,6 +216,8 @@ class SmartstoreTalktalk(Crawler):
         try:
             sleep(5)
 
+            self.driver.save_screenshot('smartstore_screenshot.png')
+
             self.remove_layer()
 
             # 채널선택버튼 클릭
