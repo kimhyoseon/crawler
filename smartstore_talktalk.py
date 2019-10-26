@@ -216,9 +216,9 @@ class SmartstoreTalktalk(Crawler):
         try:
             sleep(5)
 
-            self.driver.save_screenshot('smartstore_screenshot.png')
-
             self.remove_layer()
+
+            sleep(2)
 
             # 채널선택버튼 클릭
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
@@ -257,6 +257,7 @@ class SmartstoreTalktalk(Crawler):
                     pass
 
         except Exception as e:
+            self.driver.save_screenshot('smartstore_screenshot.png')
             log.logger.error(e, exc_info=True)
 
     def get_delevery_message(self, item_id, item_name, destination):
