@@ -227,7 +227,7 @@ class SmartstoreTalktalk(Crawler):
             sleep(1)
 
             # 현재 상점명 가져오기
-            channel_current = self.driver.find_element_by_xpath('.//div[contains(@class,"search-area")]').find_element_by_xpath('.//span[@class="text-title"]').text
+            channel_current = self.driver.find_element_by_xpath('//div[contains(@class,"search-area")]').find_element_by_xpath('.//span[@class="text-title"]').text
 
             # 현재 상점이 진행 전이라면 진행
             if channel_current not in self.channels:
@@ -238,7 +238,7 @@ class SmartstoreTalktalk(Crawler):
                 self.select_channel()
 
             # 현재 상점이 진행 후라면 채널 변경
-            channel_list = self.driver.find_elements_by_xpath('.//li[contains(@ng-repeat,"vm.channelList")]')
+            channel_list = self.driver.find_elements_by_xpath('//li[contains(@ng-repeat,"vm.channelList")]')
 
             for li in channel_list:
                 try:
