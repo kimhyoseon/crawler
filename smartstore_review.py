@@ -177,8 +177,8 @@ class SmartstoreReview(Crawler):
                 raise Exception('selenium_click_by_xpath fail. 미구매자평점 (2점)')
 
             # 구매자평점 (3점)
-            if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[1]/div[2]/div/label[4]') is False:
-                raise Exception('selenium_click_by_xpath fail. 미구매자평점 (3점)')
+            # if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[1]/div[2]/div/label[4]') is False:
+            #     raise Exception('selenium_click_by_xpath fail. 미구매자평점 (3점)')
 
             # 검색
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[2]/div/button[1]') is False:
@@ -224,11 +224,13 @@ class SmartstoreReview(Crawler):
                             review_text = review_link.text.strip()
                             review_id = li.find_element_by_xpath('.//div[contains(@colid, "id")]').text.strip()
                             item_name = li.find_element_by_xpath('.//div[contains(@colid, "productName")]').text.strip()
+                            photo_empty_dash = li.find_element_by_xpath('.//div[contains(@colid, "reviewAttach")]').text.strip()
+                            # score = li.find_element_by_xpath('.//div[contains(@colid, "reviewScore")]').text.strip()
 
                             if not review_id or review_id in self.log:
                                 continue
 
-                            answer = self.get_review_message(review_text, item_name)
+                            answer = self.get_review_message(review_text, item_name, photo_empty_dash)
 
                             message = ''
                             message += '\n\n'
@@ -239,6 +241,9 @@ class SmartstoreReview(Crawler):
                             else:
                                 message += '\n'
                                 message += '실패: %s' % (self.reason)
+
+                            # 테스트 로그보기
+                            # continue
 
                             self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
                             self.send_messge_and_save(review_id, message, 'kuhit_review')
@@ -283,18 +288,20 @@ class SmartstoreReview(Crawler):
                             sleep(1)
 
                 except Exception as e:
+                    log.logger.error(e, exc_info=True)
                     continue
                     return False
         except Exception as e:
             log.logger.error(e, exc_info=True)
             return False
 
-    def get_review_message(self, review_text, item_name):
+    def get_review_message(self, review_text, item_name, photo_empty_dash):
         try:
             if not review_text or not item_name:
                 return False
 
             self.reason = ''
+            self.nagative = False
 
             # 리뷰 답글
             delevery_message = []
@@ -302,66 +309,69 @@ class SmartstoreReview(Crawler):
             log.logger.info('--------------')
             log.logger.info('리뷰: %s' % (' '.join(review_text)))
 
-            # 100자가 넘는 정성스런 후기 패스 (베스트일 가능성이 있음)
-            if len(review_text) > 100:
-                self.reason = '정성리뷰'
+            # 100자가 넘고 사진이 있는 후기 패스 (베스트일 가능성이 있음)
+            if len(review_text) > 100 and photo_empty_dash != '-':
+                self.reason = '베스트후보'
                 return False
-
 
             # 부정문구가 있는 리뷰 패스
             if '?' in review_text:
                 self.reason = '?'
-                return False
+                self.nagative = True
             elif '하면' in review_text:
                 self.reason = '하면'
-                return False
+                self.nagative = True
             elif '한데' in review_text:
                 self.reason = '한데'
-                return False
+                self.nagative = True
             elif '좀' in review_text and '냄새' not in review_text:
                 self.reason = '좀'
-                return False
+                self.nagative = True
             elif '그래도' in review_text:
                 self.reason = '그래도'
-                return False
+                self.nagative = True
             elif '보단' in review_text:
                 self.reason = '보단'
-                return False
+                self.nagative = True
             elif '듯' in review_text:
                 self.reason = '듯'
-                return False
+                self.nagative = True
             elif 'ㅜ' in review_text and '감동' not in review_text:
                 self.reason = 'ㅜ'
-                return False
+                self.nagative = True
             elif 'ㅠ' in review_text and '감동' not in review_text:
                 self.reason = 'ㅠ'
-                return False
+                self.nagative = True
             elif '다만' in review_text:
                 self.reason = '다만'
-                return False
+                self.nagative = True
             elif '결국' in review_text:
                 self.reason = '결국'
-                return False
+                self.nagative = True
             elif '조금' in review_text:
                 self.reason = '조금'
-                return False
+                self.nagative = True
             elif '차이' in review_text:
                 self.reason = '차이'
-                return False
+                self.nagative = True
             elif '소리' in review_text:
                 self.reason = '소리'
-                return False
+                self.nagative = True
             elif '불편' in review_text:
                 self.reason = '불편'
-                return False
+                self.nagative = True
             elif '의문' in review_text:
                 self.reason = '의문'
+                self.nagative = True
+            elif '근데' in review_text:
+                self.reason = '근데'
+                self.nagative = True
             elif '알' in review_text and '빠' in review_text:
                 self.reason = '알+빠'
-                return False
+                self.nagative = True
             elif '후회' in review_text and '안' not in review_text  and '없' not in review_text:
                 self.reason = '후회'
-                return False
+                self.nagative = True
 
 
             # 리뷰 케이스 분류
@@ -403,18 +413,16 @@ class SmartstoreReview(Crawler):
                 delevery_message.append('로켓배송을 따라잡는 그날까지 더 힘내겠습니다!')
             elif '주문했어' in review_text or '주문했습' in review_text or '시켰어' in review_text or '시켰습' in review_text or '샀네' in review_text or '샀습' in review_text or '시작' in review_text or '아직' in review_text:
                 delevery_message.append('주문하신 제품 꾸준히 잘 사용하셔서 효과 보시길 바래요~')
-            elif '쓸만' in review_text:
-                delevery_message.append('소중하고 정성스런 후기 감사합니다~')
-            elif len(review_text) < 15:
-                delevery_message.append('소중하고 정성스런 후기 감사합니다~')
 
-            if '냄새' in review_text and '없' not in review_text and '안나' not in review_text and '안났' not in review_text and '날라' not in review_text and '않' not in review_text and '정도' not in review_text and '거의' not in review_text and '크게' not in review_text and '그닥' not in review_text and '편' not in review_text and '괜' not in review_text and '빠' not in review_text:
-                delevery_message.append('냄새는 불편하시겠지만 몇 일만 바람이 잘 부는 곳에 보관해주시면 좋아질꺼예요ㅠ')
+            if '냄새' in review_text and '없' not in review_text and '안나' not in review_text and '안났' not in review_text and '날라' not in review_text and '않' not in review_text and '정도' not in review_text and '거의' not in review_text and '크게' not in review_text and '그닥' not in review_text and '편' not in review_text and '괜' not in review_text and '갠' not in review_text and '빠' not in review_text:
+                delevery_message.append('냄새는 불편하시겠지만 몇 일만 바람이 잘 부는 곳에 보관해주시면 좋아질꺼예요~')
 
             # 문구가 없다면 기본 문구로
             if len(delevery_message) == 0:
-                self.reason = '케이스 없음'
-                return False
+                if self.nagative is True:
+                    return False
+                else:
+                    delevery_message.append('소중하고 정성스런 후기 감사합니다~')
 
             # 마지막 추가 인사문구
             message_extra = self.get_review_message_extra(review_text, item_name)
@@ -442,8 +450,8 @@ class SmartstoreReview(Crawler):
 
             if '가성비' in review_text or '가격대비' in review_text or '저렴' in review_text:
                 return '앞으로도 저렴하고 가성비 좋은 제품들로 찾아뵙겠습니다!'
-            elif len(review_text) > 50:
-                return '정성스럽고 소중한 리뷰 감사해요~'
+            elif self.nagative == True:
+                return '더 좋은 제품들로 만족을 드릴 수 있도록 노력하는 쿠힛이 되겠습니다~'
             else:
                 return '앞으로도 더 만족하실 수 있는 좋은 제품들로 인사드릴께요!'
 
