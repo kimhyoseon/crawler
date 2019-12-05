@@ -305,7 +305,7 @@ class SmartstoreTalktalk(Crawler):
             start_hour = '오후 5시'
 
             # 상품별 발송 제한시간 (기본)
-            limit_hour = 17
+            limit_hour = 16
 
             # 배송일 (오늘)
             delevery_date = datetime.now(timezone('Asia/Seoul'))
