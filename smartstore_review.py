@@ -418,11 +418,8 @@ class SmartstoreReview(Crawler):
                 delevery_message.append('냄새는 불편하시겠지만 몇 일만 바람이 잘 부는 곳에 보관해주시면 좋아질꺼예요~')
 
             # 문구가 없다면 기본 문구로
-            if len(delevery_message) == 0:
-                if self.nagative is True:
-                    return False
-                else:
-                    delevery_message.append('소중하고 정성스런 후기 감사합니다~')
+            if len(delevery_message) == 0 or self.nagative is True:
+                delevery_message.append('더 만족을 드릴 수 있는 제품으로 인사드릴 수 있도록 노력하겠습니다! 소중하고 정성스런 후기 감사드려요~')
 
             # 마지막 추가 인사문구
             message_extra = self.get_review_message_extra(review_text, item_name)
