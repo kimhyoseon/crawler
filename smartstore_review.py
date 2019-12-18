@@ -421,12 +421,12 @@ class SmartstoreReview(Crawler):
             if len(delevery_message) == 0 or self.nagative is True:
                 delevery_message = []
                 delevery_message.append('더 만족을 드릴 수 있는 제품으로 인사드릴 수 있도록 노력하겠습니다! 소중하고 정성스런 후기 감사드려요~')
+            else:
+                # 마지막 추가 인사문구
+                message_extra = self.get_review_message_extra(review_text, item_name)
 
-            # 마지막 추가 인사문구
-            message_extra = self.get_review_message_extra(review_text, item_name)
-
-            if message_extra:
-                delevery_message.append(message_extra)
+                if message_extra:
+                    delevery_message.append(message_extra)
 
             log.logger.info('답변: %s' % (' '.join(delevery_message)))
 
