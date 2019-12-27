@@ -129,8 +129,6 @@ class SmartstoreTalktalk(Crawler):
 
                             sleep(1)
 
-                            exit()
-
                             # 메세지 전송
                             if self.selenium_click_by_xpath(xpath='//*[@id="chat_wrap"]/div/div[1]/div/div[3]/div[2]/button') is False:
                                 raise Exception('selenium_click_by_xpath fail. submit')
