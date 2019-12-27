@@ -57,7 +57,7 @@ class SmartstoreTalktalkJshk(Crawler):
                 pass
 
             # 신규주문 페이지로 이동
-            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
                 raise Exception('selenium_click_by_xpath fail. submit')
 
             sleep(10)
@@ -382,7 +382,7 @@ class SmartstoreTalktalkJshk(Crawler):
 
             # 로그인 여부 체크
             try:
-                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is True:
+                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
                     log.logger.info('Alreday logined.')
                     return True
             except:

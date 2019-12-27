@@ -39,8 +39,8 @@ class SmartstoreTalktalk(Crawler):
             self.remove_layer()
 
             # 신규주문 페이지로 이동
-            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is False:
-                raise Exception('selenium_click_by_xpath fail. ord.new')
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
+                raise Exception('selenium_click_by_xpath fail. orddel.new')
 
             sleep(10)
 
@@ -128,6 +128,8 @@ class SmartstoreTalktalk(Crawler):
                                 raise Exception('selenium_input_text_by_xpath fail. chat_write')
 
                             sleep(1)
+
+                            exit()
 
                             # 메세지 전송
                             if self.selenium_click_by_xpath(xpath='//*[@id="chat_wrap"]/div/div[1]/div/div[3]/div[2]/button') is False:
@@ -449,7 +451,7 @@ class SmartstoreTalktalk(Crawler):
 
             # 로그인 여부 체크
             try:
-                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'ord.new'}) is True:
+                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
                     log.logger.info('Alreday logined.')
                     return True
             except:
