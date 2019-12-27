@@ -459,8 +459,6 @@ class SmartstoreTalktalk(Crawler):
             account_data = filewriter.get_log_file('naver_account')
 
             if account_data:
-                self.driver.save_screenshot('smartstore_screenshot.png')
-
                 # 로그인 페이지로 이동
                 if self.selenium_click_by_xpath(
                         tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
@@ -508,6 +506,7 @@ class SmartstoreTalktalk(Crawler):
 
                 return True
         except Exception as e:
+            self.driver.save_screenshot('smartstore_screenshot.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
