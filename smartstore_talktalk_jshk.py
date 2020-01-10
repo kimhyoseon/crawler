@@ -6,6 +6,7 @@ import sys
 import filewriter
 import xmltodict
 import requests
+import telegrambot
 from time import sleep
 from pytz import timezone
 from crawler2 import Crawler
@@ -56,9 +57,28 @@ class SmartstoreTalktalkJshk(Crawler):
             except:
                 pass
 
+            # 문의체크 (2020-01-10)
+            try:
+                ask = self.driver.find_elements_by_xpath('//*[@name="inquery"]/div/div[2]/ul/li')
+
+                if ask:
+                    is_ask = False
+                    for ask_li in ask:
+                        ask_number = ask_li.find_element_by_xpath('.//p[@class="text-number"]').text
+                        ask_number = int(ask_number)
+                        if ask_number > 0:
+                            is_ask = True
+
+                    if is_ask == True:
+                        telegrambot.send_message('정성한끼 고객이 상담을 기다리고 있습니다.', 'jshk')
+            except:
+                pass
+
             # 신규주문 페이지로 이동
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
                 raise Exception('selenium_click_by_xpath fail. submit')
+            # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
+            #     raise Exception('selenium_click_by_xpath fail. submit')
 
             sleep(10)
 
@@ -76,37 +96,22 @@ class SmartstoreTalktalkJshk(Crawler):
             window_before = self.driver.window_handles[0]
 
             prev_order_id = None
+            no_messages = {}
 
-            for li in list:
+            for index, li in enumerate(list):
                 try:
                     if li:
                         soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
                         tds = soup_order_info.find_all('td')
 
                         if tds:
-                            item_order_id = tds[1].getText().strip()
                             order_id = tds[2].getText().strip()
-                            buyer = tds[12].getText().strip()
-                            item_id = tds[17].getText()
                             item_name = tds[18].getText()
                             item_kind = tds[19].getText()
                             item_option = tds[20].getText().strip()
                             item_amount = tds[22].getText().strip()
+                            item_id = tds[17].getText()
                             destination = tds[44].getText()
-
-                            # 이미 전송한 주문건에 대해서는 전송X
-                            if prev_order_id != order_id:
-                                prev_order_id = order_id
-                                continue
-
-                            # 테스트
-                            # if buyer != '서미숙':
-                            #     continue
-
-                            # 수동 발송제한
-                            # 2019-06-10 샴푸브러쉬 품절
-                            # if item_id in ['4423398036']:
-                                # continue
 
                             # 추가상품 발송제한
                             if item_kind == '추가구성상품':
@@ -114,6 +119,26 @@ class SmartstoreTalktalkJshk(Crawler):
 
                             # 발송내역에 없는지 확인
                             if not order_id or order_id in self.log:
+                                continue
+
+                            # *요일조리후발송 옵션인 경우 메세지에서 제외
+                            if '조리후발송' in item_option:
+                                no_messages[order_id] = True
+
+                            # 다음 주문이 같은 주문번호라면 continue
+                            try:
+                                if (list[index + 1]):
+                                    soup_order_info_next = BeautifulSoup(list[index + 1].get_attribute('innerHTML'), 'html.parser')
+                                    tds_next = soup_order_info_next.find_all('td')
+                                    order_id_next = tds_next[2].getText().strip()
+
+                                    if order_id == order_id_next:
+                                        continue
+                            except:
+                                pass
+
+                            # 메세지제외인 주문번호인 경우 제외
+                            if no_messages[order_id]:
                                 continue
 
                             if item_option:
@@ -171,7 +196,6 @@ class SmartstoreTalktalkJshk(Crawler):
                             self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
 
                             self.send_messge_and_save(order_id, message, 'jshk')
-                            # telegrambot.send_message(message, 'kuhit')
 
                             # 창 닫고 복귀
                             self.driver.close()
@@ -233,7 +257,7 @@ class SmartstoreTalktalkJshk(Crawler):
                 delevery_message += '\\n\\n'
                 delevery_message += '정성한끼에서 구매하신 반찬의 배송 일정 안내 드립니다~'
                 delevery_message += '\\n\\n'
-                delevery_message += '배송출발 : '
+                delevery_message += '조리 및 배송출발 : '
                 delevery_message += delevery_date
                 delevery_message += '\\n'
                 delevery_message += '도착예정 : '
@@ -288,8 +312,14 @@ class SmartstoreTalktalkJshk(Crawler):
                 reddays = reddays + reddays_before
 
             # 추석연휴 또는 배송 안하는 날
-            # reddays.append('20190910')
-            # reddays.append('20190911')
+            reddays.append('20200120')
+            reddays.append('20200121')
+            reddays.append('20200122')
+            reddays.append('20200123')
+            reddays.append('20200124')
+            reddays.append('20200125')
+            reddays.append('20200126')
+            reddays.append('20200127')
 
             # 휴일이라면 휴일이 아닐때까지 1일씩 미룬다 /// 토, 일은 배송안하는 날
             while 1:
