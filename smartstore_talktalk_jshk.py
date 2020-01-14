@@ -113,6 +113,8 @@ class SmartstoreTalktalkJshk(Crawler):
                             item_id = tds[17].getText()
                             destination = tds[44].getText()
 
+                            log.logger.info('order_id: %s' % (order_id))
+
                             # 추가상품 발송제한
                             if item_kind == '추가구성상품':
                                 continue
@@ -139,6 +141,7 @@ class SmartstoreTalktalkJshk(Crawler):
 
                             # 메세지제외인 주문번호인 경우 제외
                             if no_messages[order_id]:
+                                log.logger.info('no_messages: %s' % (order_id))
                                 continue
 
                             if item_option:
