@@ -36,6 +36,10 @@ BOT_LIST = {
     'jshk': {
         'token': '889211522:AAGnvkAM1o-_R22LM5zOPClj9i9HS9yYmcA',
         'chat_id': '49249214' # 봇 -> 나한테 (정성한끼 배송)
+    },
+    'yoona_azzi': {
+        'token': '1011849541:AAEGm-k-Abp1uiW6w_FG-fI1wB0jFap1koQ',
+        'chat_id': '49249214' # 봇 -> 나한테 (아찌알리미)
     }
 }
 # 메세지 전송
