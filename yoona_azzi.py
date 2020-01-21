@@ -16,51 +16,51 @@ class YoonaAzzi(Crawler):
     DETAIL_URL = {
         # 서울
         # 경기
-        '과천(래미안에코팰리스)' : 'https://new.land.naver.com/complexes/22779?ms=37.435103,126.993279,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '분당(정자동파크뷰)': 'https://new.land.naver.com/complexes/3621?ms=37.375122,127.106989,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '광명(철산래미안자이)': 'https://new.land.naver.com/complexes/25902?ms=37.471957,126.874532,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '안양(향촌롯데)': 'https://new.land.naver.com/complexes/1480?ms=37.3870621,126.9580029,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '산본(래미안하이어스)': 'https://new.land.naver.com/complexes/101283?ms=37.367926,126.9344305,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '안산(안산메트로타운푸르지오힐스테이트)': 'https://new.land.naver.com/complexes/111264?ms=37.349242,126.806166,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '구리(신명)': 'https://new.land.naver.com/complexes/3577?ms=37.58576,127.13688,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '의왕(인덕원푸르지오엘센트로)': 'https://new.land.naver.com/complexes/114329?ms=37.394849,126.983405,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '부천(중동리첸시아)': 'https://new.land.naver.com/complexes/27435?ms=37.494956,126.778913,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '수원(자연앤힐스테이트)': 'https://new.land.naver.com/complexes/101273?ms=37.2876875,127.0515751,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '용인(성복역롯데캐슬골드타운)': 'https://new.land.naver.com/complexes/111555?ms=37.312559,127.083225,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '고양(삼송2차아이파크)': 'https://new.land.naver.com/complexes/106995?ms=37.650636,126.8874,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '화성(시범우남퍼스트빌)': 'https://new.land.naver.com/complexes/105405?ms=37.203542,127.100877,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '김포(한강신도시반도유보라2차)': 'https://new.land.naver.com/complexes/103407?ms=37.654361,126.680649,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 광역시
-        '인천연수구(송도센트럴파크푸르지오)': 'https://new.land.naver.com/complexes/105037?ms=37.392635,126.6442,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '인천서구(청라푸르지오)': 'https://new.land.naver.com/complexes/100594?ms=37.5341587,126.6403646,16&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '울산남구(신정푸르지오)': 'https://new.land.naver.com/complexes/102946?ms=35.547078,129.315543,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '울산북구(울산송정반도유보라아이비파크)': 'https://new.land.naver.com/complexes/115848?ms=35.60241,129.367527,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '대전서구(크로바)': 'https://new.land.naver.com/complexes/5986?ms=36.352128,127.392725,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '대전유성구(도룡SK뷰)': 'https://new.land.naver.com/complexes/114293?ms=36.384888,127.375014,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '부산해운대구(해운대자이2차)': 'https://new.land.naver.com/complexes/110398?ms=35.1684326,129.1445628,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '대구수성구(범어SK뷰)': 'https://new.land.naver.com/complexes/25632?ms=35.8557724,128.6368092,18&a=APT:ABYG:JGC&e=RETAIL&h=99&i=132&ad=true',
-        '광주광산구(해솔마을현진에버빌1단지)': 'https://new.land.naver.com/complexes/101762?ms=35.1955652,126.8225117,16&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '세종(새뜸6단지힐스테이트메이저시티)': 'https://new.land.naver.com/complexes/109173?ms=36.4844937,127.2538593,16&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 강원도
-        '강릉(홍제동우미린)': 'https://new.land.naver.com/complexes/108396?ms=37.755976,128.867898,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '원주(무실우미린)': 'https://new.land.naver.com/complexes/107637?ms=37.326796,127.932406,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 충청북도
-        '청주(두산위브지웰시티)': 'https://new.land.naver.com/complexes/104637?ms=36.643547,127.429262,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 충청남도
-        '천안(천안불당지웰더샵)': 'https://new.land.naver.com/complexes/108766?ms=36.814875,127.105009,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 전라북도
-        '전주(서부신시가지아이파크)': 'https://new.land.naver.com/complexes/23720?ms=35.828118,127.107512,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 전라남도
-        '목포(한라비발디)': 'https://new.land.naver.com/complexes/24772?ms=34.806836,126.454859,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '여수(웅천지)': 'https://new.land.naver.com/complexes/101892?ms=34.748113,127.671499,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '순천(중흥S-클래스메가타운6단지)': 'https://new.land.naver.com/complexes/105572?ms=34.936236,127.54367,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 경상북도
-        '포항(포항자이)': 'https://new.land.naver.com/complexes/113172?ms=36.0092,129.341992,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '구미(옥계현진에버빌)': 'https://new.land.naver.com/complexes/25490?ms=36.1388272,128.4244144,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        # 경상남도
-        '창원(용지아이파크)': 'https://new.land.naver.com/complexes/109465?ms=35.230528,128.678886,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '김해(부원역푸르지오)': 'https://new.land.naver.com/complexes/104220?ms=35.224961,128.882874,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
-        '양산(양산대방노블랜드7차메가시티)': 'https://new.land.naver.com/complexes/109396?ms=35.316014,128.993835,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        '과천(래미안에코팰리스)' : 'https://new.land.naver.com/complexes/22779',
+        # '분당(정자동파크뷰)': 'https://new.land.naver.com/complexes/3621?ms=37.375122,127.106989,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '광명(철산래미안자이)': 'https://new.land.naver.com/complexes/25902?ms=37.471957,126.874532,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '안양(향촌롯데)': 'https://new.land.naver.com/complexes/1480?ms=37.3870621,126.9580029,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '산본(래미안하이어스)': 'https://new.land.naver.com/complexes/101283?ms=37.367926,126.9344305,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '안산(안산메트로타운푸르지오힐스테이트)': 'https://new.land.naver.com/complexes/111264?ms=37.349242,126.806166,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '구리(신명)': 'https://new.land.naver.com/complexes/3577?ms=37.58576,127.13688,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '의왕(인덕원푸르지오엘센트로)': 'https://new.land.naver.com/complexes/114329?ms=37.394849,126.983405,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '부천(중동리첸시아)': 'https://new.land.naver.com/complexes/27435?ms=37.494956,126.778913,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '수원(자연앤힐스테이트)': 'https://new.land.naver.com/complexes/101273?ms=37.2876875,127.0515751,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '용인(성복역롯데캐슬골드타운)': 'https://new.land.naver.com/complexes/111555?ms=37.312559,127.083225,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '고양(삼송2차아이파크)': 'https://new.land.naver.com/complexes/106995?ms=37.650636,126.8874,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '화성(시범우남퍼스트빌)': 'https://new.land.naver.com/complexes/105405?ms=37.203542,127.100877,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '김포(한강신도시반도유보라2차)': 'https://new.land.naver.com/complexes/103407?ms=37.654361,126.680649,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 광역시
+        # '인천연수구(송도센트럴파크푸르지오)': 'https://new.land.naver.com/complexes/105037?ms=37.392635,126.6442,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '인천서구(청라푸르지오)': 'https://new.land.naver.com/complexes/100594?ms=37.5341587,126.6403646,16&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '울산남구(신정푸르지오)': 'https://new.land.naver.com/complexes/102946?ms=35.547078,129.315543,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '울산북구(울산송정반도유보라아이비파크)': 'https://new.land.naver.com/complexes/115848?ms=35.60241,129.367527,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '대전서구(크로바)': 'https://new.land.naver.com/complexes/5986?ms=36.352128,127.392725,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '대전유성구(도룡SK뷰)': 'https://new.land.naver.com/complexes/114293?ms=36.384888,127.375014,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '부산해운대구(해운대자이2차)': 'https://new.land.naver.com/complexes/110398?ms=35.1684326,129.1445628,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '대구수성구(범어SK뷰)': 'https://new.land.naver.com/complexes/25632?ms=35.8557724,128.6368092,18&a=APT:ABYG:JGC&e=RETAIL&h=99&i=132&ad=true',
+        # '광주광산구(해솔마을현진에버빌1단지)': 'https://new.land.naver.com/complexes/101762?ms=35.1955652,126.8225117,16&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '세종(새뜸6단지힐스테이트메이저시티)': 'https://new.land.naver.com/complexes/109173?ms=36.4844937,127.2538593,16&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 강원도
+        # '강릉(홍제동우미린)': 'https://new.land.naver.com/complexes/108396?ms=37.755976,128.867898,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '원주(무실우미린)': 'https://new.land.naver.com/complexes/107637?ms=37.326796,127.932406,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 충청북도
+        # '청주(두산위브지웰시티)': 'https://new.land.naver.com/complexes/104637?ms=36.643547,127.429262,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 충청남도
+        # '천안(천안불당지웰더샵)': 'https://new.land.naver.com/complexes/108766?ms=36.814875,127.105009,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 전라북도
+        # '전주(서부신시가지아이파크)': 'https://new.land.naver.com/complexes/23720?ms=35.828118,127.107512,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 전라남도
+        # '목포(한라비발디)': 'https://new.land.naver.com/complexes/24772?ms=34.806836,126.454859,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '여수(웅천지)': 'https://new.land.naver.com/complexes/101892?ms=34.748113,127.671499,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '순천(중흥S-클래스메가타운6단지)': 'https://new.land.naver.com/complexes/105572?ms=34.936236,127.54367,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 경상북도
+        # '포항(포항자이)': 'https://new.land.naver.com/complexes/113172?ms=36.0092,129.341992,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '구미(옥계현진에버빌)': 'https://new.land.naver.com/complexes/25490?ms=36.1388272,128.4244144,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # # 경상남도
+        # '창원(용지아이파크)': 'https://new.land.naver.com/complexes/109465?ms=35.230528,128.678886,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '김해(부원역푸르지오)': 'https://new.land.naver.com/complexes/104220?ms=35.224961,128.882874,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        # '양산(양산대방노블랜드7차메가시티)': 'https://new.land.naver.com/complexes/109396?ms=35.316014,128.993835,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
     }
 
     def start(self):
