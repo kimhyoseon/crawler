@@ -72,10 +72,6 @@ class YoonaAzzi(Crawler):
             self.today = date_now.strftime('%Y-%m-%d')
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
 
-            print('1')
-            print(self.data)
-            exit()
-
             for apt, url in self.DETAIL_URL.items():
                 # 첫아파트라면 초기화
                 if apt not in self.data:
