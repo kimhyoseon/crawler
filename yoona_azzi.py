@@ -405,7 +405,7 @@ class YoonaAzzi(Crawler):
 
             # log.logger.info('last_height: %d' % (last_height))
         except Exception as e:
-            # log.logger.error(e, exc_info=True)
+            log.logger.error(e, exc_info=True)
             return False
 
 if __name__ == "__main__":
