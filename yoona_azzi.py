@@ -42,7 +42,9 @@ class YoonaAzzi(Crawler):
 
                 # 어제 데이터가 있다면 어제 데이터로 초기세팅 (0값을 없애기 위해)
                 if self.yesterday in self.data[apt]:
-                    self.prices_filter = self.data[apt][self.yesterday]
+                    if 'prices' in self.data[apt][self.yesterday]:
+                        # 데이터만 복사 (참조하지 않도록)
+                        self.prices_filter = self.data[apt][self.yesterday]['prices'].copy()
 
                 if self.connect(site_url=url, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                     raise Exception('site connect fail')
@@ -184,7 +186,8 @@ class YoonaAzzi(Crawler):
 
             if size in self.prices_filter:
                 yesterday_price = self.prices_filter[size][1]
-                increase = (avg_price - yesterday_price) / yesterday_price * 100
+                minus = avg_price - yesterday_price
+                increase = round((minus) / yesterday_price * 100, 1)
                 updown = ''
 
                 if increase > 0:
@@ -193,7 +196,7 @@ class YoonaAzzi(Crawler):
                     updown = '감소'
 
                 if updown:
-                    self.notice += '%s[%s] %d%% %s \n' % (apt, size, math.ceil(increase), updown)
+                    self.notice += '%s[%s] %d만원 (%.1f%%) %s \n' % (apt, size, minus, increase, updown)
 
             self.prices_filter[size] = [min(prices), avg_price, max(prices)]
 
