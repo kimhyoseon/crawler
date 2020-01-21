@@ -95,10 +95,10 @@ class YoonaAzzi(Crawler):
                         # 데이터만 복사 (참조하지 않도록)
                         self.prices_filter = self.data[apt][self.yesterday]['prices'].copy()
 
-                self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
-
                 if self.connect(site_url=url, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                     raise Exception('site connect fail')
+
+                sleep(5)
 
                 self.driver.save_screenshot('yoona_azzi.png')
                 self.destroy()
