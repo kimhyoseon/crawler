@@ -98,9 +98,8 @@ class YoonaAzzi(Crawler):
                 if self.connect(site_url=url, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                     raise Exception('site connect fail')
 
-                sleep(5)
-
                 self.driver.save_screenshot('yoona_azzi.png')
+                print(self.driver.current_url)
                 self.destroy()
                 exit()
 
