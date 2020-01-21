@@ -416,5 +416,5 @@ class YoonaAzzi(Crawler):
 
 if __name__ == "__main__":
     cgv = YoonaAzzi()
-    cgv.utf_8_reload()
+    # cgv.utf_8_reload()
     cgv.start()
