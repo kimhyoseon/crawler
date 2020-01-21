@@ -72,6 +72,7 @@ class YoonaAzzi(Crawler):
             self.today = date_now.strftime('%Y-%m-%d')
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
 
+            print('1')
             print(self.data)
             exit()
 
