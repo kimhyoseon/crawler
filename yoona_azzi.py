@@ -17,7 +17,7 @@ class YoonaAzzi(Crawler):
     DETAIL_URL = {
         # 서울
         # 경기
-        '과천(래미안에코팰리스)' : 'https://new.land.naver.com/complexes/22779?ms=37.435103,126.993279,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        '과천(래미안에코팰리스)' : 'https://new.land.naver.com/complexes/22779?ms=37.435103,126.993279,17&a=APT:ABYG:JGC&e=RETAIL&h=99&i=132&ad=true',
         # '분당(정자동파크뷰)': 'https://new.land.naver.com/complexes/3621?ms=37.375122,127.106989,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
         # '광명(철산래미안자이)': 'https://new.land.naver.com/complexes/25902?ms=37.471957,126.874532,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
         # '안양(향촌롯데)': 'https://new.land.naver.com/complexes/1480?ms=37.3870621,126.9580029,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
