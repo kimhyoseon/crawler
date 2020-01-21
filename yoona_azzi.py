@@ -387,7 +387,7 @@ class YoonaAzzi(Crawler):
                     self.driver.execute_script(selectorParent + ".scrollTo(0, " + selectorDom + ".scrollHeight);")
 
                     # Wait to load page
-                    # sleep(1)
+                    sleep(1)
 
                     # Calculate new scroll height and compare with last scroll height
                     new_height = self.driver.execute_script("return " + selectorDom + ".scrollHeight")
