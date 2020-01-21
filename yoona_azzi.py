@@ -6,6 +6,7 @@ import math
 import filewriter
 import telegrambot
 from time import sleep
+from pytz import timezone
 from datetime import datetime, date, timedelta
 from crawler2 import Crawler
 
@@ -67,8 +68,9 @@ class YoonaAzzi(Crawler):
             self.notice = ''
             self.log = filewriter.get_log_file(self.name)
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
-            self.today = datetime.today().strftime('%Y-%m-%d')
-            self.yesterday = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+            date_now = datetime.now(timezone('Asia/Seoul'))
+            self.today = date_now.strftime('%Y-%m-%d')
+            self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
 
             for apt, url in self.DETAIL_URL.items():
                 # 첫아파트라면 초기화
@@ -126,6 +128,9 @@ class YoonaAzzi(Crawler):
     # 계산
     def setLog(self, apt=''):
         try:
+            if self.total_prices == 0 and self.total_jeonses == 0:
+                return False
+
             self.data[apt][self.today] = {
                 'total_prices': self.total_prices,
                 'total_jeonses': self.total_jeonses,
@@ -134,7 +139,6 @@ class YoonaAzzi(Crawler):
             }
 
             self.data[apt] = filewriter.slice_json_by_max_len(self.data[apt], max_len=100)
-
             print(self.data[apt])
 
         except Exception as e:
