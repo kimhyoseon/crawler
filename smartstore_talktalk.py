@@ -367,7 +367,6 @@ class SmartstoreTalktalk(Crawler):
 
             # 추석연휴는 도착일에서 제거
             reddays.remove('20200122')
-            reddays.remove('20200123')
             # reddays.remove('20190910')
             # reddays.remove('20190911')
 
