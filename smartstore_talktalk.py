@@ -366,6 +366,7 @@ class SmartstoreTalktalk(Crawler):
                 destination_date = delevery_date + timedelta(days=1)
 
             # 추석연휴는 도착일에서 제거
+            reddays.append('20200122')
             # reddays.remove('20190910')
             # reddays.remove('20190911')
 
