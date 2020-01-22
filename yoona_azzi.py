@@ -110,9 +110,9 @@ class YoonaAzzi(Crawler):
                 # 오늘 데이터가 있다면 continue
                 try:
                     if self.today in self.data[apt].keys():
+                        log.logger.info('%s today exists.' % (apt))
                         continue
                 except:
-                    log.logger.info('%s today exists.' % (apt))
                     pass
 
                 log.logger.info('%s collecting start...($d/$d)' % (apt, count, len(self.DETAIL_URL)))
