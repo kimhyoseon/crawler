@@ -76,7 +76,10 @@ class YoonaAzzi(Crawler):
             tt = filewriter.get_log_file('yoonaazzi_data', is_json=True)
             print(tt)
             yy = list(tt.keys())
-            print(yy[0])
+
+            for qq in yy:
+                print(qq)
+
             exit()
 
             # 프록시
