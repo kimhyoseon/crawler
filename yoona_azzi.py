@@ -105,6 +105,11 @@ class YoonaAzzi(Crawler):
 
                 print(apt)
 
+                if apt in apts:
+                    print('O')
+                else:
+                    print('x')
+
                 if apt in self.data:
                     print('O')
                 else:
