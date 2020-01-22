@@ -124,7 +124,7 @@ class YoonaAzzi(Crawler):
                     # 로그 저장
                     self.setLog(apt=apt)
 
-                    sleep(round(uniform(0.5,1.5), 1))
+                    sleep(round(uniform(2,5), 1))
                 except:
                     pass
 
@@ -175,7 +175,7 @@ class YoonaAzzi(Crawler):
             self.proxy = Proxy("KR")
             self.cur_proxy = self.proxy.proxy
             log.logger.info('[%s] try proxy...' % (self.cur_proxy['http']))
-            sleep(round(uniform(1.0,3.0), 1))
+            sleep(round(uniform(2.0,5.0), 1))
             self.collect_price()
             return False
 
