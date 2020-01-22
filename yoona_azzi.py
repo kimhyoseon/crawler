@@ -83,8 +83,11 @@ class YoonaAzzi(Crawler):
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
 
             print(self.data)
+            print(self.data.keys())
 
             for apt, id in self.DETAIL_URL.items():
+                print(apt)
+
                 # 아파트별로 페이지 초기화
                 self.page = 1
                 
@@ -119,7 +122,9 @@ class YoonaAzzi(Crawler):
 
                 try:
                     # 가격 수집
-                    self.collect_price(id=id)
+                    while 1:
+                        if self.collect_price(id=id) == False:
+                            break
 
                     if self.total_prices == 0 and self.total_jeonses == 0:
                         continue
@@ -182,8 +187,7 @@ class YoonaAzzi(Crawler):
             self.cur_proxy = self.proxy.proxy
             log.logger.info('[%s] try proxy...' % (self.cur_proxy['http']))
             sleep(round(uniform(2.0,5.0), 1))
-            self.collect_price()
-            return False
+            return True
 
         try:
             if not data:
@@ -267,8 +271,8 @@ class YoonaAzzi(Crawler):
             # 남은 데이터가 있다면 재귀
             if data['isMoreData'] == True:
                 self.page = self.page + 1
-                sleep(0.5)
-                self.collect_price(id=id)
+                sleep(round(uniform(2.0,5.0), 1))
+                return True
 
         except:
             return False
