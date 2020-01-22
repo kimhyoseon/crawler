@@ -89,20 +89,23 @@ class YoonaAzzi(Crawler):
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
 
-            for aptd in self.data.keys():
-                print(aptd)
+            for apt in self.data.keys():
+                print(apt)
 
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
                 self.page = 1
 
+                print('------')
                 print(apt)
                 
                 # 첫아파트라면 초기화
                 try:
                     if apt not in self.data.keys():
+                        print('없음')
                         self.data[apt] = {}
                 except:
+                    print('에러로인해 없음')
                     self.data[apt] = {}
 
                 # 오늘 데이터가 있다면 continue
