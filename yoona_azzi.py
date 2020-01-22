@@ -4,6 +4,7 @@ import os
 import log
 import re
 import math
+import requests
 import filewriter
 import telegrambot
 from time import sleep
@@ -17,7 +18,7 @@ class YoonaAzzi(Crawler):
     DETAIL_URL = {
         # 서울
         # 경기
-        '과천(래미안에코팰리스)' : 'https://new.land.naver.com/complexes/22779?ms=37.435103,126.993279,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
+        '과천(래미안에코팰리스)' : '22779',
         # '분당(정자동파크뷰)': 'https://new.land.naver.com/complexes/3621?ms=37.375122,127.106989,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
         # '광명(철산래미안자이)': 'https://new.land.naver.com/complexes/25902?ms=37.471957,126.874532,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
         # '안양(향촌롯데)': 'https://new.land.naver.com/complexes/1480?ms=37.3870621,126.9580029,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
@@ -64,6 +65,9 @@ class YoonaAzzi(Crawler):
         # '양산(양산대방노블랜드7차메가시티)': 'https://new.land.naver.com/complexes/109396?ms=35.316014,128.993835,17&a=APT:ABYG:JGC&e=RETAIL&ad=true',
     }
 
+    URL = 'https://new.land.naver.com/api/articles/complex/%s?realEstateType=APT:ABYG:JGC&tradeType=&tag=::::::::&rentPriceMin=0&rentPriceMax=900000000&priceMin=0&priceMax=900000000&areaMin=0&areaMax=900000000&oldBuildYears&recentlyBuildYears&minHouseHoldCount&maxHouseHoldCount&showArticle=false&sameAddressGroup=true&minMaintenanceCost&maxMaintenanceCost&priceType=RETAIL&directions=&complexNo=22779&buildingNos=&areaNos=&type=list&order=rank&page=%s'
+    REQUEST_HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+
     def start(self):
         try:
             self.notice = ''
@@ -73,7 +77,10 @@ class YoonaAzzi(Crawler):
             self.today = date_now.strftime('%Y-%m-%d')
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
 
-            for apt, url in self.DETAIL_URL.items():
+            for apt, id in self.DETAIL_URL.items():
+                # 아파트별로 페이지 초기화
+                self.page = 1
+                
                 # 첫아파트라면 초기화
                 if apt not in self.data:
                     self.data[apt] = {}
@@ -95,20 +102,9 @@ class YoonaAzzi(Crawler):
                         # 데이터만 복사 (참조하지 않도록)
                         self.prices_filter = self.data[apt][self.yesterday]['prices'].copy()
 
-                if self.connect(site_url=url, is_proxy=False, default_driver='selenium', is_chrome=False) is False:
-                    raise Exception('site connect fail')
-
-                self.driver.save_screenshot('yoona_azzi.png')
-                print(self.driver.current_url)
-                self.destroy()
-                exit()
-
                 try:
                     # 가격 수집
-                    self.collect_price()
-                    
-                    # 전세 수집
-                    self.collect_jeonse()
+                    self.collect_price(id=id)
 
                     # 데이터 쌓기
                     self.setLog(apt)
@@ -151,7 +147,28 @@ class YoonaAzzi(Crawler):
             log.logger.error(e, exc_info=True)
 
     # 가격 수집
-    def collect_price(self):
+    def collect_price(self, id=''):
+        # url 생성 (아파트번호, 페이지)
+        url = self.URL % (id, self.page)
+        res = requests.get(url, headers=self.REQUEST_HEADER)
+
+        try:
+            data = res.json()
+
+            if not data:
+                return False
+
+            if not data['articleList']:
+                return False
+
+            print(data['isMoreData'])
+            print(data['articleList'])
+
+        except:
+            return False
+
+        exit()
+
         # 매매만 선택
         if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'data-nclk', 'name': 'TAA.fat'}) is False:
             raise Exception('selenium_click_by_xpath fail. 거래방식')
