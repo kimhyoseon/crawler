@@ -85,18 +85,14 @@ class YoonaAzzi(Crawler):
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
 
             print(self.data)
-            print(len(self.data))
 
             # 파이썬2.x 한글처리
             if len(self.data) > 0:
-                convert_data = {}
-                for key, value in self.data.items():
-                    print(key)
-                    convert_data[key] = value
+                apts = list(self.data.keys())
+                print(apts)
+                for apt_key in apts:
+                    print(apt_key)
 
-                self.data = convert_data.copy()
-
-            print(self.data)
             exit()
 
             for apt, id in self.DETAIL_URL.items():
