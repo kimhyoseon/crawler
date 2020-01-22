@@ -73,8 +73,8 @@ class YoonaAzzi(Crawler):
     def start(self):
         try:
             # 프록시
-            self.proxy = Proxy("KR")
-            self.cur_proxy = self.proxy.proxy
+            # self.proxy = Proxy("KR")
+            # self.cur_proxy = self.proxy.proxy
             self.notice = ''
             self.log = filewriter.get_log_file(self.name)
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
@@ -153,8 +153,8 @@ class YoonaAzzi(Crawler):
             exit()
 
         except Exception as e:
-            self.destroy()
             log.logger.error(e, exc_info=True)
+            exit()
 
     # 계산
     def setLog(self, apt=''):
