@@ -110,14 +110,12 @@ class YoonaAzzi(Crawler):
                     print('없음')
                     self.data[apt] = {}
 
-                print(self.data[apt])
-                exit()
-
                 # 오늘 데이터가 있다면 continue
                 try:
                     if self.today in self.data[apt].keys():
                         continue
                 except:
+                    log.logger.info('%s today exists.' % (apt))
                     pass
 
                 log.logger.info('%s collecting start...' % (apt))
