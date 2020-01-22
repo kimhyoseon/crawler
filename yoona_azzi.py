@@ -73,14 +73,14 @@ class YoonaAzzi(Crawler):
     def start(self):
         try:
             # 프록시
-            # proxy = Proxy()
-            # self.ips = proxy.get()
-            # self.ips_index = 0
-            #
-            # if self.ips == False:
-            #     log.logger.info('proxy ip empty')
-            #     exit()
-            # log.logger.info(', '.join(self.ips))
+            proxy = Proxy()
+            self.ips = proxy.get()
+            self.ips_index = 0
+
+            if self.ips == False:
+                log.logger.info('proxy ip empty')
+                exit()
+            log.logger.info(', '.join(self.ips))
 
             self.notice = ''
             self.log = filewriter.get_log_file(self.name)
@@ -89,16 +89,10 @@ class YoonaAzzi(Crawler):
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
 
-            for apt in self.data.keys():
-                print(apt)
-
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
                 self.page = 1
                 exists = False
-
-                print('------')
-                print(apt)
                 
                 # 첫아파트라면 초기화
                 for apted in self.data.keys():
