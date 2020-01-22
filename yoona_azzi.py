@@ -76,6 +76,7 @@ class YoonaAzzi(Crawler):
             proxy = Proxy()
             self.ips = proxy.get()
             self.ips_index = 0
+            count = 0
 
             if self.ips == False:
                 log.logger.info('proxy ip empty')
@@ -90,6 +91,8 @@ class YoonaAzzi(Crawler):
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
 
             for apt, id in self.DETAIL_URL.items():
+                count = count + 1
+
                 # 아파트별로 페이지 초기화
                 self.page = 1
                 exists = False
@@ -112,7 +115,7 @@ class YoonaAzzi(Crawler):
                     log.logger.info('%s today exists.' % (apt))
                     pass
 
-                log.logger.info('%s collecting start...' % (apt))
+                log.logger.info('%s collecting start...($d/$d)' % (apt, count, len(self.DETAIL_URL)))
 
                 self.total_prices_complete = 0
                 self.total_jeonses_complete = 0
