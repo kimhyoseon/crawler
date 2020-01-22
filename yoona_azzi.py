@@ -91,9 +91,10 @@ class YoonaAzzi(Crawler):
             if len(self.data) > 0:
                 convert_data = {}
                 for key, value in self.data.items():
+                    print(key)
                     convert_data[key] = value
 
-                self.data = convert_data
+                self.data = convert_data.copy()
 
             print(self.data)
             exit()
