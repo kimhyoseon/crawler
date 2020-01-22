@@ -21,8 +21,8 @@ class YoonaAzzi(Crawler):
         # 서울
         # 경기
         '과천(래미안에코팰리스)' : '22779',
-        # '분당(정자동파크뷰)': '3621',
-        # '광명(철산래미안자이)': '25902',
+        '분당(정자동파크뷰)': '3621',
+        '광명(철산래미안자이)': '25902',
         # '안양(향촌롯데)': '1480',
         # '산본(래미안하이어스)': '101283',
         # '안산(안산메트로타운푸르지오힐스테이트)': '111264',
@@ -75,9 +75,8 @@ class YoonaAzzi(Crawler):
             filewriter.save_log_file('yoonaazzi_data', self.DETAIL_URL)
             tt = filewriter.get_log_file('yoonaazzi_data', is_json=True)
             print(tt)
-            yy = list(tt.keys())[0]
+            yy = list(tt.keys())
             print(yy)
-            print(yy.encode("utf-8"))
             exit()
 
             # 프록시
