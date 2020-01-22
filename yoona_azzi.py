@@ -185,7 +185,7 @@ class YoonaAzzi(Crawler):
             log.logger.info('[%s %dpage] proxy:%s' % (apt, self.page, self.ips[self.ips_index]))
             url = self.URL % (id, self.page)
             proxy = {'http': 'http://' + self.ips[self.ips_index], 'https': 'https://' + self.ips[self.ips_index]}
-            res = requests.get(url, headers=self.REQUEST_HEADER, proxies=proxy)
+            res = requests.get(url, headers=self.REQUEST_HEADER, proxies=proxy, timeout=5)
             data = res.json()
         except Exception as e:
             log.logger.info('proxy %s failed.' % (self.ips[self.ips_index]))
@@ -284,7 +284,7 @@ class YoonaAzzi(Crawler):
             # 남은 데이터가 있다면 재귀
             if data['isMoreData'] == True:
                 self.page = self.page + 1
-                sleep(round(uniform(0.2, 0.5), 1))
+                sleep(round(uniform(0.3, 0.7), 1))
                 return True
 
             return False
