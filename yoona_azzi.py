@@ -94,6 +94,8 @@ class YoonaAzzi(Crawler):
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
                 self.page = 1
+
+                print(apt)
                 
                 # 첫아파트라면 초기화
                 try:
@@ -111,6 +113,7 @@ class YoonaAzzi(Crawler):
                 except:
                     pass
 
+                print(self.data[apt])
                 exit()
 
                 log.logger.info('%s collecting start...' % (apt))
