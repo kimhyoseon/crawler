@@ -91,7 +91,13 @@ class YoonaAzzi(Crawler):
                 apts = list(self.data.keys())
                 print(apts)
                 for apt_key in apts:
+                    # if apt_key == apt
                     print(apt_key)
+
+                    if apt_key in apts:
+                        print('O')
+                    else:
+                        print('x')
 
             exit()
 
