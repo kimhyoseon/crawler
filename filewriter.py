@@ -21,13 +21,12 @@ def save_log_file(filename, data):
 # 로그 가져오기
 def get_log_file(filename, is_json=False):
     if isinstance(filename, str):
-
             make_path(LOG_PATH)
             log_path = os.path.join(LOG_PATH, filename + '.json')
             if os.path.exists(log_path):
                 try:
                     with open(log_path) as f:
-                        return json.load(f)
+                        return json.load(f, encoding="utf-8")
                 except Exception as errorMessage:
                     remove_log_file(filename)
                     if is_json is False:
@@ -47,9 +46,13 @@ def remove_log_file(filename):
 
 # json 데이터 갯수 관리
 def slice_json_by_max_len(data, max_len=100):
-    if isinstance(data, list) or isinstance(data, dict):
+    if isinstance(data, list):
         for i in range(len(data)):
             if len(data) < max_len: break
             del data[0]
+    elif isinstance(data, dict):
+        for key in list(data):
+            if len(data) < max_len: break
+            del data[key]
 
     return data
