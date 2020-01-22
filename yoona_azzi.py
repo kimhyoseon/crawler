@@ -73,7 +73,11 @@ class YoonaAzzi(Crawler):
     def start(self):
         try:
             filewriter.save_log_file('yoonaazzi_data', self.DETAIL_URL)
-            print(filewriter.get_log_file('yoonaazzi_data', is_json=True))
+            tt = filewriter.get_log_file('yoonaazzi_data', is_json=True)
+            print(tt)
+            yy = list(tt.keys())[0]
+            print(yy)
+            print(yy.encode("utf-8"))
             exit()
 
             # 프록시
