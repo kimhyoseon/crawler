@@ -16,7 +16,7 @@ def save_log_file(filename, data):
     if isinstance(filename, str) and (isinstance(data, list) or isinstance(data, dict)):
         make_path(LOG_PATH)
         with open(os.path.join(LOG_PATH, filename + '.json'), 'w') as file:
-            json.dump(data, file)
+            json.dump(data, file, ensure_ascii=False)
 
 # 로그 가져오기
 def get_log_file(filename, is_json=False):
