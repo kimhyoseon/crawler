@@ -172,11 +172,12 @@ class YoonaAzzi(Crawler):
             data = res.json()
         except:
             # 데이터를 가져오지 못했다면 프록시 다시 생성
-            self.proxy.cycle()
+            self.proxy = Proxy("KR")
             self.cur_proxy = self.proxy.proxy
             log.logger.info('[%s] try proxy...' % (self.cur_proxy['http']))
-            sleep(round(uniform(0.5,1.5), 1))
+            sleep(round(uniform(1.0,3.0), 1))
             self.collect_price()
+            return False
 
         try:
             if not data:
