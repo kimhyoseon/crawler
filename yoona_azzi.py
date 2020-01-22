@@ -84,46 +84,50 @@ class YoonaAzzi(Crawler):
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
 
-            print(self.data)
-
-            # 파이썬2.x 한글처리
             if len(self.data) > 0:
                 apts = list(self.data.keys())
-                print(apts)
-                for apt_key in apts:
-                    # if apt_key == apt
-                    print(apt_key)
 
-                    if apt_key in apts:
-                        print('O')
-                    else:
-                        print('x')
+            print(apts)
+            print(self.data)
 
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
                 self.page = 1
 
-                print(apt)
-
-                if apt in apts:
-                    print('O')
-                else:
-                    print('x')
-
-                if apt in self.data:
-                    print('O')
-                else:
-                    print('x')
+                # print(apt)
+                #
+                # if apt in apts:
+                #     print('O')
+                # else:
+                #     print('x')
+                #
+                # if apt in self.data:
+                #     print('0O')
+                # else:
+                #     print('x')
                 
                 # 첫아파트라면 초기화
-                if apt not in self.data:
+                try:
+                    if apt not in self.data.keys():
+                        self.data[apt] = {}
+                        print('0')
+                    else:
+                        print('x')
+                except:
                     self.data[apt] = {}
 
-                continue
+
 
                 # 오늘 데이터가 있다면 continue
-                if self.today in self.data[apt]:
-                    continue
+                try:
+                    if self.today in self.data[apt].keys():
+                        print('0')
+                        continue
+                except:
+                    print('x')
+                    pass
+
+                continue
 
                 log.logger.info('%s collecting start...' % (apt))
 
