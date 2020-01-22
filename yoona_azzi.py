@@ -162,7 +162,7 @@ class YoonaAzzi(Crawler):
     def collect_price(self, id=''):
         # url 생성 (아파트번호, 페이지)
         url = self.URL % (id, self.page)
-        res = requests.get('https://new.land.naver.com/api/articles/complex/22779?realEstateType=APT%3AABYG%3AJGC&tradeType=&tag=%3A%3A%3A%3A%3A%3A%3A%3A&rentPriceMin=0&rentPriceMax=900000000&priceMin=0&priceMax=900000000&areaMin=0&areaMax=900000000&oldBuildYears&recentlyBuildYears&minHouseHoldCount&maxHouseHoldCount&showArticle=false&sameAddressGroup=true&minMaintenanceCost&maxMaintenanceCost&priceType=RETAIL&directions=&complexNo=22779&buildingNos=&areaNos=&type=list&order=rank&page=1', headers=self.REQUEST_HEADER)
+        res = requests.get('https://new.land.naver.com/api/articles/complex/22779?realEstateType=APT%3AABYG%3AJGC&tradeType=&tag=%3A%3A%3A%3A%3A%3A%3A%3A&rentPriceMin=0&rentPriceMax=900000000&priceMin=0&priceMax=900000000&areaMin=0&areaMax=900000000&oldBuildYears&recentlyBuildYears&minHouseHoldCount&maxHouseHoldCount&showArticle=false&sameAddressGroup=true&minMaintenanceCost&maxMaintenanceCost&priceType=RETAIL&directions=&complexNo=22779&buildingNos=&areaNos=&type=list&order=rank&page=1')
 
         print(url)
         print(res.content)
