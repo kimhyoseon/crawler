@@ -8,6 +8,7 @@ import requests
 import filewriter
 import telegrambot
 from time import sleep
+from proxy import Proxy
 from pytz import timezone
 from datetime import datetime, timedelta
 from crawler2 import Crawler
@@ -68,14 +69,36 @@ class YoonaAzzi(Crawler):
     URL = 'https://new.land.naver.com/api/articles/complex/%s?realEstateType=APT:ABYG:JGC&tradeType=&tag=::::::::&rentPriceMin=0&rentPriceMax=900000000&priceMin=0&priceMax=900000000&areaMin=0&areaMax=900000000&oldBuildYears&recentlyBuildYears&minHouseHoldCount&maxHouseHoldCount&showArticle=false&sameAddressGroup=true&minMaintenanceCost&maxMaintenanceCost&priceType=RETAIL&directions=&complexNo=22779&buildingNos=&areaNos=&type=list&order=rank&page=%s'
     REQUEST_HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
-    PROXY_HOST = '125.138.129.101:4145'
-    PROXIES = {
-        "https": 'https://%s' % PROXY_HOST,
-        "http": 'http://%s' % PROXY_HOST,
-    }
+    # PROXY_HOST = '125.138.129.101:4145'
+    # PROXIES = {
+    #     "https": 'https://%s' % PROXY_HOST,
+    #     "http": 'http://%s' % PROXY_HOST,
+    # }
 
     def start(self):
         try:
+            # 프록시
+            proxy = Proxy()
+
+            while 1:
+                # getting the current proxy
+                cur_proxy = proxy.proxy
+
+                print(cur_proxy)
+
+                # testing the current proxy
+                res = proxy.test_proxy(cur_proxy)
+
+                if res == 1:
+                    print("success!")
+                    break
+                else:
+                    print("failure!")
+                    proxy.cycle(valid_only=True)
+
+            exit()
+
+
             self.notice = ''
             self.log = filewriter.get_log_file(self.name)
             self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
