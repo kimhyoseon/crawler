@@ -68,6 +68,12 @@ class YoonaAzzi(Crawler):
     URL = 'https://new.land.naver.com/api/articles/complex/%s?realEstateType=APT:ABYG:JGC&tradeType=&tag=::::::::&rentPriceMin=0&rentPriceMax=900000000&priceMin=0&priceMax=900000000&areaMin=0&areaMax=900000000&oldBuildYears&recentlyBuildYears&minHouseHoldCount&maxHouseHoldCount&showArticle=false&sameAddressGroup=true&minMaintenanceCost&maxMaintenanceCost&priceType=RETAIL&directions=&complexNo=22779&buildingNos=&areaNos=&type=list&order=rank&page=%s'
     REQUEST_HEADER = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
 
+    PROXY_HOST = '125.138.129.101:4145'
+    PROXIES = {
+        "https": 'https://%s' % PROXY_HOST,
+        "http": 'http://%s' % PROXY_HOST,
+    }
+
     def start(self):
         try:
             self.notice = ''
@@ -162,7 +168,7 @@ class YoonaAzzi(Crawler):
     def collect_price(self, id=''):
         # url 생성 (아파트번호, 페이지)
         url = self.URL % (id, self.page)
-        res = requests.get('https://new.land.naver.com/api/articles/complex/22779?realEstateType=APT%3AABYG%3AJGC&tradeType=&tag=%3A%3A%3A%3A%3A%3A%3A%3A&rentPriceMin=0&rentPriceMax=900000000&priceMin=0&priceMax=900000000&areaMin=0&areaMax=900000000&oldBuildYears&recentlyBuildYears&minHouseHoldCount&maxHouseHoldCount&showArticle=false&sameAddressGroup=true&minMaintenanceCost&maxMaintenanceCost&priceType=RETAIL&directions=&complexNo=22779&buildingNos=&areaNos=&type=list&order=rank&page=1')
+        res = requests.get(url, headers=self.REQUEST_HEADER, proxies=self.PROXIES)
 
         print(url)
         print(res.content)
