@@ -73,24 +73,30 @@ class YoonaAzzi(Crawler):
     def start(self):
         try:
             filewriter.save_log_file('yoonaazzi_data', self.DETAIL_URL)
-            tt = filewriter.get_log_file('yoonaazzi_data', is_json=True)
-            print(tt)
-            yy = list(tt.keys())
-
-            for qq in yy:
-                print(qq)
-
-            exit()
 
             # 프록시
-            self.proxy = Proxy()
-            self.cur_proxy = self.proxy.proxy
+            # self.proxy = Proxy()
+            # self.cur_proxy = self.proxy.proxy
             self.notice = ''
             self.log = filewriter.get_log_file(self.name)
-            self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
             date_now = datetime.now(timezone('Asia/Seoul'))
             self.today = date_now.strftime('%Y-%m-%d')
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
+            self.data = filewriter.get_log_file('yoonaazzi_data', is_json=True)
+
+            print(self.data)
+            print(len(self.data))
+
+            # 파이썬2.x 한글처리
+            if len(self.data) > 0:
+                convert_data = {}
+                for key, value in self.data.items():
+                    convert_data[key] = value
+
+                self.data = convert_data
+
+            print(self.data)
+            exit()
 
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
