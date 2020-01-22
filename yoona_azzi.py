@@ -99,15 +99,22 @@ class YoonaAzzi(Crawler):
                     else:
                         print('x')
 
-            exit()
-
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
                 self.page = 1
+
+                print(apt)
+
+                if apt in self.data:
+                    print('O')
+                else:
+                    print('x')
                 
                 # 첫아파트라면 초기화
                 if apt not in self.data:
                     self.data[apt] = {}
+
+                continue
 
                 # 오늘 데이터가 있다면 continue
                 if self.today in self.data[apt]:
