@@ -83,7 +83,8 @@ class YoonaAzzi(Crawler):
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
 
             print(self.data)
-            print(self.data.keys())
+            print(filewriter.get_log_file('instagramcollecttag'))
+            exit()
 
             for apt, id in self.DETAIL_URL.items():
                 print(apt)
