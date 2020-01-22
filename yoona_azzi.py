@@ -82,17 +82,23 @@ class YoonaAzzi(Crawler):
             self.today = date_now.strftime('%Y-%m-%d')
             self.yesterday = (date_now - timedelta(days=1)).strftime('%Y-%m-%d')
 
+            print(self.data)
+
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
                 self.page = 1
                 
                 # 첫아파트라면 초기화
                 if apt not in self.data:
+                    print(apt)
                     self.data[apt] = {}
 
                 # 오늘 데이터가 있다면 continue
                 if self.today in self.data[apt]:
+                    print(self.today)
                     continue
+
+                exit()
 
                 log.logger.info('%s collecting start...' % (apt))
 
