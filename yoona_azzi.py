@@ -142,7 +142,7 @@ class YoonaAzzi(Crawler):
                         continue
                     
                     # 가격 필터
-                    self.filter_price(apt=apt)
+                    self.filter_price(apt=apt, id=id)
                     
                     # 로그 저장
                     self.set_log(apt=apt)
@@ -301,7 +301,7 @@ class YoonaAzzi(Crawler):
             return False
 
     # 가격 필터
-    def filter_price(self, apt=''):
+    def filter_price(self, apt='', id=''):
         try:
             # 매매
             for size, prices in self.prices.items():
@@ -327,7 +327,7 @@ class YoonaAzzi(Crawler):
                 # 급매알리미
                 if self.prices_filter[size][1] * 0.9 > self.prices_filter[size][0]:
                     sale_percent = self.prices_filter[size][0] / self.prices_filter[size][1] * 100
-                    uniqid = '%s%s%d' % (apt, size, self.prices_filter[size][0])
+                    uniqid = '%s%s%d' % (id, size, self.prices_filter[size][0])
                     if uniqid not in self.log:
                         message = '%s[%s] %d만원 (평균대비 %d%% 저렴)' % (apt, size, self.prices_filter[size][0], math.ceil(sale_percent))
                         self.log = filewriter.slice_json_by_max_len(self.log, max_len=100)
