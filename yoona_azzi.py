@@ -95,19 +95,19 @@ class YoonaAzzi(Crawler):
             for apt, id in self.DETAIL_URL.items():
                 # 아파트별로 페이지 초기화
                 self.page = 1
+                exists = False
 
                 print('------')
                 print(apt)
                 
                 # 첫아파트라면 초기화
-                try:
-                    if apt in self.data.keys():
-                        print('있음')
-                    if apt not in self.data.keys():
-                        print('없음')
-                        self.data[apt] = {}
-                except:
-                    print('에러로인해 없음')
+                for apted in self.data.keys():
+                    if apted == apt:
+                        apt = apted
+                        exists = True
+
+                if exists == False:
+                    print('없음')
                     self.data[apt] = {}
 
                 print(self.data[apt])
