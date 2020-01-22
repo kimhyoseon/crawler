@@ -94,7 +94,7 @@ class YoonaAzzi(Crawler):
                     break
                 else:
                     print("failure!")
-                    proxy.cycle(valid_only=True)
+                    proxy.cycle()
 
             exit()
 
