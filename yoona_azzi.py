@@ -101,6 +101,8 @@ class YoonaAzzi(Crawler):
                 
                 # 첫아파트라면 초기화
                 try:
+                    if apt in self.data.keys():
+                        print('있음')
                     if apt not in self.data.keys():
                         print('없음')
                         self.data[apt] = {}
@@ -108,15 +110,15 @@ class YoonaAzzi(Crawler):
                     print('에러로인해 없음')
                     self.data[apt] = {}
 
+                print(self.data[apt])
+                exit()
+
                 # 오늘 데이터가 있다면 continue
                 try:
                     if self.today in self.data[apt].keys():
                         continue
                 except:
                     pass
-
-                print(self.data[apt])
-                exit()
 
                 log.logger.info('%s collecting start...' % (apt))
 
