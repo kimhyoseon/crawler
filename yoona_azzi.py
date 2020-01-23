@@ -115,7 +115,7 @@ class YoonaAzzi(Crawler):
                 except:
                     pass
 
-                log.logger.info('%s collecting start...($d/$d)' % (apt, count, len(self.DETAIL_URL)))
+                log.logger.info('%s collecting start...(%d/%d)' % (apt, count, len(self.DETAIL_URL)))
 
                 self.total_prices_complete = 0
                 self.total_jeonses_complete = 0
