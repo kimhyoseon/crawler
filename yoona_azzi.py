@@ -83,7 +83,6 @@ class YoonaAzzi(Crawler):
                 exit()
             log.logger.info(', '.join(self.ips))
 
-            self.notice = ''
             self.log = filewriter.get_log_file(self.name)
             date_now = datetime.now(timezone('Asia/Seoul'))
             self.today = date_now.strftime('%Y-%m-%d')
@@ -152,10 +151,6 @@ class YoonaAzzi(Crawler):
                     pass
 
             # ** 모든 아파트 수집 완료 **
-
-            # 오늘의 결과 메세지 발송
-            if self.notice:
-                telegrambot.send_message(self.notice, 'yoona_azzi')
 
             # 오늘의 데이터 저장
             filewriter.save_log_file('yoonaazzi_data', self.data)
@@ -306,6 +301,7 @@ class YoonaAzzi(Crawler):
             # 매매
             for size, prices in self.prices.items():
                 avg_price = round(sum(prices) / len(prices))
+                notice = ''
 
                 # 전일 데이터가 있다면 비교 후 메세지에 포함
                 if size in self.prices_filter:
@@ -320,7 +316,7 @@ class YoonaAzzi(Crawler):
                         updown = '감소'
 
                     if updown:
-                        self.notice += '%s[%s] %d만원 (%.1f%%) %s \n' % (apt, size, minus, increase, updown)
+                        notice += '%s[%s] %d만원 (%.1f%%) %s \n' % (apt, size, minus, increase, updown)
 
                 self.prices_filter[size] = [min(prices), avg_price, max(prices)]
 
@@ -338,6 +334,10 @@ class YoonaAzzi(Crawler):
                 avg_price = round(sum(prices) / len(prices))
 
                 self.jeonses_filter[size] = [min(prices), avg_price, max(prices)]
+
+            # 증감메세지 발송
+            if notice:
+                telegrambot.send_message(notice, 'yoona_azzi')
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
