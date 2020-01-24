@@ -104,7 +104,7 @@ class SmartstoreTalktalk(Crawler):
                             if item_amount:
                                 item_name = item_name + ' ' + item_amount + '개'
 
-                            talktalklink = li.find_element_by_xpath('.//td[10]/a')
+                            talktalklink = li.find_element_by_xpath('.//td[5]/a')
 
                             # 톡톡하기 클릭
                             talktalklink.click()
