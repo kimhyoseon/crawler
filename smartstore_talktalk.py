@@ -48,25 +48,38 @@ class SmartstoreTalktalk(Crawler):
 
             # 주문 데이터 가져오기 iframe으로 변경
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
-            list = self.driver.find_element_by_xpath('//*[@id="gridbox"]/div[2]/div[2]/table').find_elements_by_xpath('.//tbody/tr')
+
+            list_id = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
+            list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
 
             window_before = self.driver.window_handles[0]
 
-            for li in list:
+            for i, li in enumerate(list):
                 try:
                     if li:
+                        soup_order_info_id = BeautifulSoup(list_id[i].get_attribute('innerHTML'), 'html.parser')
+                        tds_id = soup_order_info_id.find_all('td')
                         soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
                         tds = soup_order_info.find_all('td')
 
                         if tds:
-                            item_order_id = tds[1].getText().strip()
-                            buyer = tds[12].getText().strip()
-                            item_id = tds[17].getText()
-                            item_name = tds[18].getText()
-                            item_kind = tds[19].getText()
-                            item_option = tds[20].getText().strip()
-                            item_amount = tds[22].getText().strip()
-                            destination = tds[44].getText()
+                            item_order_id = tds_id[1].getText().strip()
+                            buyer = tds[8].getText().strip()
+                            item_id = tds[13].getText()
+                            item_name = tds[14].getText()
+                            item_kind = tds[15].getText()
+                            item_option = tds[16].getText().strip()
+                            item_amount = tds[18].getText().strip()
+                            destination = tds[40].getText()
+
+                            # print(item_order_id)
+                            # print(item_id)
+                            # print(item_option)
+                            # print(item_amount)
+                            # print(item_kind)
+                            # print(item_name)
+                            # print(buyer)
+                            # exit()
 
                             # 테스트
                             # if buyer != '서미숙':
@@ -90,13 +103,6 @@ class SmartstoreTalktalk(Crawler):
 
                             if item_amount:
                                 item_name = item_name + ' ' + item_amount + '개'
-
-                            # print(item_option)
-                            # print(item_amount)
-                            # print(item_kind)
-                            # print(item_name)
-                            # print(buyer)
-                            # exit()
 
                             talktalklink = li.find_element_by_xpath('.//td[10]/a')
 
@@ -216,6 +222,8 @@ class SmartstoreTalktalk(Crawler):
     def select_channel(self):
         try:
             sleep(3)
+
+            self.driver.switch_to.default_content()
 
             self.remove_layer()
 
