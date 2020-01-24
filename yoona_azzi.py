@@ -15,6 +15,7 @@ from datetime import datetime, timedelta
 from crawler2 import Crawler
 
 class YoonaAzzi(Crawler):
+    TEST = False
 
     # 네이버 부동산 아파트 id를 입력해주세요.
     DETAIL_URL = {
@@ -73,15 +74,17 @@ class YoonaAzzi(Crawler):
     def start(self):
         try:
             # 프록시
-            proxy = Proxy()
-            self.ips = proxy.get()
-            self.ips_index = 0
             count = 0
 
-            if self.ips == False:
-                log.logger.info('proxy ip empty')
-                exit()
-            log.logger.info(', '.join(self.ips))
+            if self.TEST == False:
+                proxy = Proxy()
+                self.ips = proxy.get()
+                self.ips_index = 0
+
+                if self.ips == False:
+                    log.logger.info('proxy ip empty')
+                    exit()
+                log.logger.info(', '.join(self.ips))
 
             self.log = filewriter.get_log_file(self.name)
             date_now = datetime.now(timezone('Asia/Seoul'))
@@ -185,10 +188,14 @@ class YoonaAzzi(Crawler):
     def collect_price(self, id='', apt=''):
         # url 생성 (아파트번호, 페이지)
         try:
-            log.logger.info('[%s %dpage] proxy:%s' % (apt, self.page, self.ips[self.ips_index]))
             url = self.URL % (id, self.page)
-            proxy = {'http': 'http://' + self.ips[self.ips_index], 'https': 'https://' + self.ips[self.ips_index]}
-            res = requests.get(url, headers=self.REQUEST_HEADER, proxies=proxy, timeout=5)
+
+            if self.TEST == False:
+                log.logger.info('[%s %dpage] proxy:%s' % (apt, self.page, self.ips[self.ips_index]))
+                proxy = {'http': 'http://' + self.ips[self.ips_index], 'https': 'https://' + self.ips[self.ips_index]}
+                res = requests.get(url, headers=self.REQUEST_HEADER, proxies=proxy, timeout=5)
+            else:
+                res = requests.get(url, headers=self.REQUEST_HEADER)
             data = res.json()
         except Exception as e:
             log.logger.info('proxy %s failed.' % (self.ips[self.ips_index]))
@@ -304,8 +311,8 @@ class YoonaAzzi(Crawler):
                 notice = ''
 
                 # 전일 데이터가 있다면 비교 후 메세지에 포함
-                if size in self.prices_filter:
-                    yesterday_price = self.prices_filter[size][1]
+                if str(size) in self.prices_filter:
+                    yesterday_price = self.prices_filter[str(size)][1]
                     minus = avg_price - yesterday_price
                     increase = round((minus) / yesterday_price * 100, 1)
                     updown = ''
