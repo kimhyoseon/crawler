@@ -515,6 +515,8 @@ class SmartstoreReview(Crawler):
             except:
                 pass
 
+            self.driver.save_screenshot('smartstore_review_screenshot.png')
+
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account')
 
@@ -569,7 +571,6 @@ class SmartstoreReview(Crawler):
                 return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
-            self.driver.save_screenshot('smartstore_review_screenshot.png')
             self.destroy()
             exit()
 
