@@ -153,8 +153,8 @@ class SmartstoreReview(Crawler):
             sleep(3)
 
             # 오늘리뷰
-            if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[1]/div/div/ncp-datetime-range-picker2/div[1]/div/div/button[1]') is False:
-                raise Exception('selenium_click_by_xpath fail. 오늘')
+            # if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[1]/div/div/ncp-datetime-range-picker2/div[1]/div/div/button[1]') is False:
+            #     raise Exception('selenium_click_by_xpath fail. 오늘')
 
             # 답글여부
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[2]/div[2]/div') is False:
@@ -211,21 +211,22 @@ class SmartstoreReview(Crawler):
     def review(self):
         try:
             # 리스트 획득
-            list = self.driver.find_elements_by_xpath('//*[@id="center"]/div/div[4]/div[3]/div/div/div')
+            list = self.driver.find_elements_by_xpath('//*[@id="seller-content"]/div/div[2]/div/div[2]/div[2]/div/div/div/div/div[3]/div[2]/div/div/div')
+            # list = self.driver.find_elements_by_xpath('//*[@id="center"]/div/div[4]/div[3]/div/div/div')
 
             for li in list:
                 try:
                     if li:
                         soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
                         tds = soup_order_info.find_all('div', class_='ag-cell')
-
+                        # print(len(tds))
                         if len(tds) > 0:
-                            review_link = li.find_element_by_xpath('.//div[contains(@colid, "reviewContent")]/a')
+                            review_link = li.find_element_by_xpath('.//div[contains(@col-id, "reviewContent")]/span/a')
                             review_text = review_link.text.strip()
-                            review_id = li.find_element_by_xpath('.//div[contains(@colid, "id")]').text.strip()
-                            item_name = li.find_element_by_xpath('.//div[contains(@colid, "productName")]').text.strip()
-                            photo_empty_dash = li.find_element_by_xpath('.//div[contains(@colid, "reviewAttach")]').text.strip()
-                            # score = li.find_element_by_xpath('.//div[contains(@colid, "reviewScore")]').text.strip()
+                            review_id = li.find_element_by_xpath('.//div[contains(@col-id, "id")]').text.strip()
+                            item_name = li.find_element_by_xpath('.//div[contains(@col-id, "productName")]').text.strip()
+                            photo_empty_dash = li.find_element_by_xpath('.//div[contains(@col-id, "reviewAttach")]').text.strip()
+                            # score = li.find_element_by_xpath('.//div[contains(@col-id, "reviewScore")]').text.strip()
 
                             if not review_id or review_id in self.log:
                                 continue
@@ -243,6 +244,7 @@ class SmartstoreReview(Crawler):
                                 message += '실패: %s' % (self.reason)
 
                             # 테스트 로그보기
+                            # print(message)
                             # continue
 
                             self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
@@ -267,6 +269,8 @@ class SmartstoreReview(Crawler):
                                 raise Exception('selenium_input_text_by_xpath fail. chat_write')
 
                             sleep(1)
+
+                            # exit()
 
                             # 답글 전송
                             if self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'progress-button', 'name': 'vm.func.createCommentContent()'}) is False:
