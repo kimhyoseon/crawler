@@ -192,8 +192,8 @@ class SmartstoreReview(Crawler):
                     if self.review() is False:
                         break
 
-                    if self.scroll_bottom(selectorParent='document.getElementsByClassName("ag-body-viewport")[0]', selectorDom='document.getElementsByClassName("ag-body-container")[0]') is False:
-                        break
+                    # if self.scroll_bottom(selectorParent='document.getElementsByClassName("ag-body-viewport")[0]', selectorDom='document.getElementsByClassName("ag-center-cols-container")[0]') is False:
+                    #     break
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
@@ -228,8 +228,8 @@ class SmartstoreReview(Crawler):
                             photo_empty_dash = li.find_element_by_xpath('.//div[contains(@col-id, "reviewAttach")]').text.strip()
                             # score = li.find_element_by_xpath('.//div[contains(@col-id, "reviewScore")]').text.strip()
 
-                            if not review_id or review_id in self.log:
-                                continue
+                            # if not review_id or review_id in self.log:
+                            #     continue
 
                             answer = self.get_review_message(review_text, item_name, photo_empty_dash)
 
@@ -295,6 +295,8 @@ class SmartstoreReview(Crawler):
                     log.logger.error(e, exc_info=True)
                     continue
                     return False
+
+            return False
         except Exception as e:
             log.logger.error(e, exc_info=True)
             return False
