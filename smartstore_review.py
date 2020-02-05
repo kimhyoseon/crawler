@@ -515,8 +515,6 @@ class SmartstoreReview(Crawler):
             except:
                 pass
 
-            self.driver.save_screenshot('smartstore_review_screenshot.png')
-
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account')
 
@@ -524,13 +522,17 @@ class SmartstoreReview(Crawler):
                 self.driver.save_screenshot('smartstore_screenshot.png')
 
                 # 로그인 페이지로 이동
-                if self.selenium_click_by_xpath(
-                        tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                if self.selenium_click_by_xpath(
-                        tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
+                sleep(1)
+
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
+
+                sleep(2)
+
+                self.driver.save_screenshot('smartstore_review_screenshot.png')
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
