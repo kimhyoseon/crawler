@@ -569,6 +569,7 @@ class SmartstoreReview(Crawler):
                 return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
+            self.driver.save_screenshot('smartstore_review_screenshot.png')
             self.destroy()
             exit()
 
