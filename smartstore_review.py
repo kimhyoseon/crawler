@@ -153,8 +153,8 @@ class SmartstoreReview(Crawler):
             sleep(3)
 
             # 오늘리뷰
-            # if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[1]/div/div/ncp-datetime-range-picker2/div[1]/div/div/button[1]') is False:
-            #     raise Exception('selenium_click_by_xpath fail. 오늘')
+            if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[1]/div/div/ncp-datetime-range-picker2/div[1]/div/div/button[1]') is False:
+                raise Exception('selenium_click_by_xpath fail. 오늘')
 
             # 답글여부
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[2]/div[2]/div') is False:
@@ -186,18 +186,22 @@ class SmartstoreReview(Crawler):
 
             sleep(2)
 
+            # self.scroll_bottom(selectorParent='document.getElementsByClassName("ag-body-viewport")[0]', selectorDom='document.getElementsByClassName("ag-center-cols-container")[0]')
+
+            self.review()
+
             # 리뷰수집 > 스크롤 내리기 반복
-            while True:
-                try:
-                    if self.review() is False:
-                        break
-
-                    # if self.scroll_bottom(selectorParent='document.getElementsByClassName("ag-body-viewport")[0]', selectorDom='document.getElementsByClassName("ag-center-cols-container")[0]') is False:
-                    #     break
-
-                except Exception as e:
-                    log.logger.error(e, exc_info=True)
-                    break
+            # while True:
+            #     try:
+            #         if self.review() is False:
+            #             break
+            #
+            #         # if self.scroll_bottom(selectorParent='document.getElementsByClassName("ag-body-viewport")[0]', selectorDom='document.getElementsByClassName("ag-center-cols-container")[0]') is False:
+            #         #     break
+            #
+            #     except Exception as e:
+            #         log.logger.error(e, exc_info=True)
+            #         break
 
             return True
         except Exception as e:
@@ -214,6 +218,13 @@ class SmartstoreReview(Crawler):
             list = self.driver.find_elements_by_xpath('//*[@id="seller-content"]/div/div[2]/div/div[2]/div[2]/div/div/div/div/div[3]/div[2]/div/div/div')
             # list = self.driver.find_elements_by_xpath('//*[@id="center"]/div/div[4]/div[3]/div/div/div')
 
+            is_success = False
+
+            print(len(list))
+
+            if len(list) == 0:
+                return False
+
             for li in list:
                 try:
                     if li:
@@ -226,12 +237,12 @@ class SmartstoreReview(Crawler):
                             review_id = li.find_element_by_xpath('.//div[contains(@col-id, "id")]').text.strip()
                             item_name = li.find_element_by_xpath('.//div[contains(@col-id, "productName")]').text.strip()
                             photo_empty_dash = li.find_element_by_xpath('.//div[contains(@col-id, "reviewAttach")]').text.strip()
-                            # score = li.find_element_by_xpath('.//div[contains(@col-id, "reviewScore")]').text.strip()
+                            score = li.find_element_by_xpath('.//div[contains(@col-id, "reviewScore")]').text.strip()
 
-                            # if not review_id or review_id in self.log:
-                            #     continue
+                            if not review_id or review_id in self.log:
+                                continue
 
-                            answer = self.get_review_message(review_text, item_name, photo_empty_dash)
+                            answer = self.get_review_message(review_text, item_name, photo_empty_dash, score)
 
                             message = ''
                             message += '\n\n'
@@ -291,17 +302,32 @@ class SmartstoreReview(Crawler):
 
                             sleep(1)
 
+                            is_success = True
+
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     continue
                     return False
 
-            return False
+            sleep(1)
+
+            if is_success == True:
+                # 리스트에 전부 달았다면 다시 검색버튼 클릭
+                if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[2]/div/button[1]') is False:
+                    raise Exception('selenium_click_by_xpath fail. 검색')
+
+                sleep(4)
+
+                # 다시 댓글달기
+                self.review()
+
+            return True
+
         except Exception as e:
             log.logger.error(e, exc_info=True)
             return False
 
-    def get_review_message(self, review_text, item_name, photo_empty_dash):
+    def get_review_message(self, review_text, item_name, photo_empty_dash, score):
         try:
             if not review_text or not item_name:
                 return False
@@ -315,8 +341,10 @@ class SmartstoreReview(Crawler):
             log.logger.info('--------------')
             log.logger.info('리뷰: %s' % (' '.join(review_text)))
 
+            print(score)
+
             # 100자가 넘고 사진이 있는 후기 패스 (베스트일 가능성이 있음)
-            if len(review_text) > 100 and photo_empty_dash != '-':
+            if len(review_text) > 100 and photo_empty_dash != '-' and score == '5':
                 self.reason = '베스트후보'
                 return False
 
@@ -465,35 +493,79 @@ class SmartstoreReview(Crawler):
 
         return ''
 
-    # 스크롤 아래로
-    def scroll_bottom(self, selectorParent=None, selectorDom=None, height=500):
+    # 스크롤 가장 아래로
+    def scroll_bottom(self, selectorParent=None, selectorDom=None, limit_page=0):
         try:
             if selectorParent is None or selectorDom is None:
                 return False
 
+            is_success = True
+            limit = 1
+
             # Get scroll height
-            last_height = self.driver.execute_script("return " + selectorParent + ".scrollTop")
-            last_height = int(last_height)
+            last_height = self.driver.execute_script("return " + selectorDom + ".scrollHeight")
 
-            try:
-                # Scroll down to bottom
-                self.driver.execute_script(selectorParent + ".scrollTo(0, " + str(height + last_height) + ");")
+            while True:
+                try:
+                    if limit_page > 0:
+                        if limit > limit_page:
+                            break;
 
-                # Calculate new scroll height and compare with last scroll height
-                new_height = self.driver.execute_script("return " + selectorParent + ".scrollTop")
-                new_height = int(new_height)
-                log.logger.info('scroll. (%s)' % (new_height))
+                    # Scroll down to bottom
+                    self.driver.execute_script(selectorParent + ".scrollTo(0, " + selectorDom + ".scrollHeight);")
 
-                if new_height == last_height:
-                    return False
-                else:
-                    return True
-            except Exception as e:
-                log.logger.error(e, exc_info=True)
-                return False
+                    # Wait to load page
+                    sleep(1)
+
+                    # Calculate new scroll height and compare with last scroll height
+                    new_height = self.driver.execute_script("return " + selectorDom + ".scrollHeight")
+                    limit = limit + 1
+                    if limit % 10 == 0:
+                        log.logger.info('scroll bottom %d steps.' % (limit))
+                    if new_height == last_height:
+                        break
+                    last_height = new_height
+                except Exception as e:
+                    is_success = False
+                    log.logger.error(e, exc_info=True)
+                    break
+
+            return is_success
+
+            # log.logger.info('last_height: %d' % (last_height))
         except Exception as e:
             log.logger.error(e, exc_info=True)
             return False
+
+    # # 스크롤 아래로
+    # def scroll_bottom(self, selectorParent=None, selectorDom=None, height=500):
+    #     try:
+    #         if selectorParent is None or selectorDom is None:
+    #             return False
+    #
+    #         # Get scroll height
+    #         last_height = self.driver.execute_script("return " + selectorParent + ".scrollTop")
+    #         last_height = int(last_height)
+    #
+    #         try:
+    #             # Scroll down to bottom
+    #             self.driver.execute_script(selectorParent + ".scrollTo(0, " + str(height + last_height) + ");")
+    #
+    #             # Calculate new scroll height and compare with last scroll height
+    #             new_height = self.driver.execute_script("return " + selectorParent + ".scrollTop")
+    #             new_height = int(new_height)
+    #             log.logger.info('scroll. (%s)' % (new_height))
+    #
+    #             if new_height == last_height:
+    #                 return False
+    #             else:
+    #                 return True
+    #         except Exception as e:
+    #             log.logger.error(e, exc_info=True)
+    #             return False
+    #     except Exception as e:
+    #         log.logger.error(e, exc_info=True)
+    #         return False
 
     def login(self):
         try:
