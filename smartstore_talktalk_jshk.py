@@ -74,6 +74,10 @@ class SmartstoreTalktalkJshk(Crawler):
             except:
                 pass
 
+            # 문의까지만.
+            self.destroy()
+            exit()
+
             # 신규주문 페이지로 이동
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
                 raise Exception('selenium_click_by_xpath fail. submit')
