@@ -332,7 +332,7 @@ class SmartstoreTalktalk(Crawler):
             week_text = ['월', '화', '수', '목', '금', '토', '일']
 
             # 발송 상세 시간
-            start_hour = '오후 5시'
+            start_hour = '오후 7시'
 
             # 상품별 발송 제한시간 (기본)
             limit_hour = 16
@@ -343,11 +343,11 @@ class SmartstoreTalktalk(Crawler):
             # 짐볼, 요가매트 (오후 2시)
             if item_id in ['4324723046','4529428871']:
                 limit_hour = 13
-                start_hour = '오후 6시'
+                start_hour = '오후 7시'
             # 폼롤러 (오후 3시)
             elif item_id in ['4318623001']:
                 limit_hour = 14
-                start_hour = '오후 6시'
+                start_hour = '오후 7시'
             # 그 외 집배송
             # else:
                 # 오후 배송일 (기사님이 오후에 오시는 날)
