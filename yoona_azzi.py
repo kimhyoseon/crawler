@@ -86,6 +86,9 @@ class YoonaAzzi(Crawler):
                     exit()
                 log.logger.info(', '.join(self.ips))
 
+            # print(self.ips)
+            # exit()
+
             self.log = filewriter.get_log_file(self.name)
             date_now = datetime.now(timezone('Asia/Seoul'))
             self.today = date_now.strftime('%Y-%m-%d')
