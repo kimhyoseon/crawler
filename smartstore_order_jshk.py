@@ -3,6 +3,7 @@
 import os
 import log
 import filewriter
+import telegrambot
 from time import sleep
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
@@ -29,6 +30,25 @@ class SmartstoreOrderJshk(Crawler):
             sleep(5)
 
             self.remove_layer()
+
+
+            # -- 문의체크 --
+            try:
+                ask = self.driver.find_elements_by_xpath('//*[@name="inquery"]/div/div[2]/ul/li')
+
+                if ask:
+                    is_ask = False
+                    for ask_li in ask:
+                        ask_number = ask_li.find_element_by_xpath('.//p[@class="text-number"]').text
+                        ask_number = int(ask_number)
+                        if ask_number > 0:
+                            is_ask = True
+
+                    if is_ask == True:
+                        telegrambot.send_message('정성한끼 고객이 상담을 기다리고 있습니다.', 'jshk')
+            except:
+                pass
+
 
             # -- 신규주문 페이지로 이동 --
 
