@@ -91,7 +91,7 @@ class Proxy(Crawler):
         try:
             if self.connect(site_url='https://proxygather.com/proxylist/country?c=Republic+of+Korea', is_proxy=False,
                             default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
+                raise Exception('surl:https://proxygather.com/proxylist/country?c=Republic+of+Korte connect fail')
 
             soup = BeautifulSoup(self.driver.page_source, 'html.parser')
             trs = soup.findAll('tr')
@@ -102,8 +102,11 @@ class Proxy(Crawler):
         except:
             pass
 
-        self.driver.quit()
-        self.destroy()
+        try:
+            self.driver.quit()
+            self.destroy()
+        except:
+            pass
 
 if __name__ == "__main__":
     proxy = Proxy()
