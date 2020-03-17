@@ -75,11 +75,17 @@ class SmartstoreOrderJshk(Crawler):
                             item_option = tds[16].getText().strip()
                             item_amount = tds[18].getText().strip()
                             item_amount = int(item_amount)
+                            destination = tds[40].getText()
 
                             if item_option not in order_list:
                                 order_list[item_option] = item_amount
                             else:
                                 order_list[item_option] = order_list[item_option] + item_amount
+
+                            # 제주도인 경우 알림
+                            if destination in '제주특별자치도':
+                                telegrambot.send_message('제주도 주문건을 확인해주세요.', 'jshk')
+
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
