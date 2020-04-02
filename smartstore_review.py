@@ -341,10 +341,8 @@ class SmartstoreReview(Crawler):
             log.logger.info('--------------')
             log.logger.info('리뷰: %s' % (' '.join(review_text)))
 
-            print(score)
-
             # 100자가 넘고 사진이 있는 후기 패스 (베스트일 가능성이 있음)
-            if len(review_text) > 100 and photo_empty_dash != '-' and score == '5':
+            if len(review_text) > 200 and photo_empty_dash != '-' and score == '5':
                 self.reason = '베스트후보'
                 return False
 
