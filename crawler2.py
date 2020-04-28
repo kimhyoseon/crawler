@@ -108,6 +108,7 @@ class Crawler:
                 options.add_argument("--no-sandbox");
                 options.add_argument("--disable-gpu");
                 options.add_argument("--window-size=1920,1080");
+                options.add_argument("user-agent=Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko")
 
                 if is_proxy is True:
                     options.add_argument('--proxy-server=' + proxy_ip)

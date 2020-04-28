@@ -213,17 +213,12 @@ class SmartstoreOrderJshk(Crawler):
                 # self.driver.save_screenshot('smartstore_screenshot.png')
 
                 # 로그인 페이지로 이동
-                if self.selenium_click_by_xpath(
-                        tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                sleep(3)
-                elem = self.driver.find_element_by_xpath("//*")
-                source_code = elem.get_attribute("outerHTML")
-                print(source_code)
+                print('click')
 
-                if self.selenium_click_by_xpath(
-                        tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
                 sleep(3)
