@@ -118,7 +118,7 @@ class Crawler:
                 options.add_argument("--disable-dev-shm-usage");
                 options.add_argument("--disable-browser-side-navigation");
                 options.add_argument("--disable-gpu");
-                # options.add_argument("--window-size=1920,1080");
+                # options.add_argument("--window-size=1920,1080");#
 
                 if is_proxy is True:
                     options.add_argument('--proxy-server=' + proxy_ip)
