@@ -218,7 +218,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 print('click')
                 sleep(5)
-                self.driver.save_screenshot('smartstore_screenshot.png')
+                # self.driver.save_screenshot('smartstore_screenshot.png')
 
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
