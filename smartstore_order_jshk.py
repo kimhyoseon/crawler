@@ -16,7 +16,7 @@ class SmartstoreOrderJshk(Crawler):
         try:
             if self.connect(site_url='http://www.ppomppu.co.kr/zboard/zboard.php?id=ppomppu', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
-            self.driver.save_screenshot('smartstore_screenshot.png')
+            # self.driver.save_screenshot('smartstore_screenshot.png')
             self.destroy()
             exit()
 
