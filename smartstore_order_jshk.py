@@ -200,13 +200,6 @@ class SmartstoreOrderJshk(Crawler):
 
             sleep(3)
 
-            # 테스트
-            elem = self.driver.find_element_by_xpath("//*")
-            source_code = elem.get_attribute("outerHTML")
-            print(source_code)
-            self.destroy()
-            exit();
-
             # 로그인 여부 체크
             try:
                 if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
@@ -217,6 +210,14 @@ class SmartstoreOrderJshk(Crawler):
 
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account_jshk')
+
+            # 테스트
+            elem = self.driver.find_element_by_xpath("//*")
+            source_code = elem.get_attribute("outerHTML")
+            print(source_code)
+            print(account_data)
+            self.destroy()
+            exit();
 
             if account_data:
                 # self.driver.save_screenshot('smartstore_screenshot.png')
