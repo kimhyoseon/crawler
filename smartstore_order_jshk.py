@@ -198,6 +198,8 @@ class SmartstoreOrderJshk(Crawler):
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
+            sleep(3)
+
             # 테스트
             elem = self.driver.find_element_by_xpath("//*")
             source_code = elem.get_attribute("outerHTML")
