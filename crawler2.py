@@ -123,7 +123,7 @@ class Crawler:
                 if is_proxy is True:
                     options.add_argument('--proxy-server=' + proxy_ip)
 
-                self.driver = webdriver.Chrome(executable_path=self.PATH_CHROME_DRIVER)
+                self.driver = webdriver.Chrome(executable_path=self.PATH_CHROME_DRIVER, chrome_options=options)
             else:
                 if is_proxy is True:
                     args = ['--proxy=' + proxy_ip]
