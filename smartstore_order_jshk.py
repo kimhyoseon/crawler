@@ -212,12 +212,12 @@ class SmartstoreOrderJshk(Crawler):
             account_data = filewriter.get_log_file('naver_account_jshk')
 
             # 테스트
-            elem = self.driver.find_element_by_xpath("//*")
-            source_code = elem.get_attribute("outerHTML")
-            print(source_code)
-            print(account_data)
-            self.destroy()
-            exit();
+            # elem = self.driver.find_element_by_xpath("//*")
+            # source_code = elem.get_attribute("outerHTML")
+            # print(source_code)
+            # print(account_data)
+            # self.destroy()
+            # exit();
 
             if account_data:
                 # self.driver.save_screenshot('smartstore_screenshot.png')
