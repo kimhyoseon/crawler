@@ -221,8 +221,6 @@ class SmartstoreOrderJshk(Crawler):
                         tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                sleep(2)
-
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath ID input can not founded.')
 
@@ -261,15 +259,15 @@ class SmartstoreOrderJshk(Crawler):
 
                 return True
         except Exception as e:
+            log.logger.error(e, exc_info=True)
+
             # 테스트
             elem = self.driver.find_element_by_xpath("//*")
             source_code = elem.get_attribute("outerHTML")
             print(source_code)
-            print(account_data)
             self.destroy()
             exit();
 
-            log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
 
