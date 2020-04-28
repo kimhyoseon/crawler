@@ -199,12 +199,12 @@ class SmartstoreOrderJshk(Crawler):
                 raise Exception('site connect fail')
 
             # 로그인 여부 체크
-            try:
-                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
-                    log.logger.info('Alreday logined.')
-                    return True
-            except:
-                pass
+            # try:
+            #     if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
+            #         log.logger.info('Alreday logined.')
+            #         return True
+            # except:
+            #     pass
 
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account_jshk')
@@ -217,9 +217,19 @@ class SmartstoreOrderJshk(Crawler):
                         tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
+                sleep(3)
+                elem = self.driver.find_element_by_xpath("//*")
+                source_code = elem.get_attribute("outerHTML")
+                print(source_code)
+
                 if self.selenium_click_by_xpath(
                         tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
+
+                sleep(3)
+                elem = self.driver.find_element_by_xpath("//*")
+                source_code = elem.get_attribute("outerHTML")
+                print(source_code)
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath ID input can not founded.')
