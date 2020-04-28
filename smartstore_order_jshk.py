@@ -132,7 +132,7 @@ class SmartstoreOrderJshk(Crawler):
 
             return True
         except Exception as e:
-            self.driver.save_screenshot('smartstore_screenshot.png')
+            # self.driver.save_screenshot('smartstore_screenshot.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
@@ -210,7 +210,7 @@ class SmartstoreOrderJshk(Crawler):
             account_data = filewriter.get_log_file('naver_account_jshk')
 
             if account_data:
-                self.driver.save_screenshot('smartstore_screenshot.png')
+                # self.driver.save_screenshot('smartstore_screenshot.png')
 
                 # 로그인 페이지로 이동
                 if self.selenium_click_by_xpath(
