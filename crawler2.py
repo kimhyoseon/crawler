@@ -103,7 +103,7 @@ class Crawler:
             if is_chrome is True:
                 options = webdriver.ChromeOptions()
 
-                options.add_argument("--user-data-dir=" + self.PATH_USER_DATA)
+                # options.add_argument("--user-data-dir=" + self.PATH_USER_DATA)
 
                 # options.add_argument("--headless");
                 # options.add_argument("--no-sandbox");
