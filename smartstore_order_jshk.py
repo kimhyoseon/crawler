@@ -14,7 +14,7 @@ class SmartstoreOrderJshk(Crawler):
 
     def start(self):
         try:
-            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            if self.connect(site_url='http://www.ppomppu.co.kr/zboard/zboard.php?id=ppomppu', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
             self.driver.save_screenshot('smartstore_screenshot.png')
             self.destroy()
