@@ -224,6 +224,13 @@ class SmartstoreOrderJshk(Crawler):
                 if self.connect(site_url='https://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                     raise Exception('site connect fail')
 
+                sleep(5)
+                elem = self.driver.find_element_by_xpath("//*")
+                source_code = elem.get_attribute("outerHTML")
+                print(source_code)
+                self.destroy()
+                exit()
+
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath ID input can not founded.')
 
