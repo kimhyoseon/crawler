@@ -220,7 +220,7 @@ class SmartstoreOrderJshk(Crawler):
 
             print(self.driver.current_url)
 
-            # self.destroy()
+            self.destroy()
             exit()
 
             # 로그인 여부 체크
