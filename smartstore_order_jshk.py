@@ -206,6 +206,9 @@ class SmartstoreOrderJshk(Crawler):
             print(self.driver.current_url)
             print(self.driver.page_source)
 
+            if self.selenium_input_text_by_xpath(text='test', tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                raise Exception('selenium_input_text_by_xpath fail. username')
+
             # elem = self.driver.find_element_by_xpath("//*")
             # source_code = elem.get_attribute("outerHTML")
             # print(source_code)
