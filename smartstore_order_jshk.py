@@ -219,7 +219,12 @@ class SmartstoreOrderJshk(Crawler):
                 raise Exception('site connect fail')
 
             print(self.driver.current_url)
-            self.driver.save_screenshot('smartstore_screenshot.png')
+            # self.driver.save_screenshot('smartstore_screenshot.png')
+
+            elem = self.driver.find_element_by_xpath("//*")
+            source_code = elem.get_attribute("outerHTML")
+            print(source_code)
+
             self.destroy()
             exit()
 
