@@ -2,6 +2,7 @@
 
 import log
 import requests
+import filewriter
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
 
@@ -13,7 +14,8 @@ class Proxy(Crawler):
         try:
             self.extract()
 
-            # print(self.ips)
+            print(self.ips)
+            filewriter.save_log_file('proxy', self.ips)
             # exit()
 
         except Exception as e:
@@ -110,4 +112,4 @@ class Proxy(Crawler):
 
 if __name__ == "__main__":
     proxy = Proxy()
-    # proxy.start()
+    proxy.start()
