@@ -190,13 +190,15 @@ class SmartstoreOrderJshk(Crawler):
         try:
             self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver_jshk')
 
-            # if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-            #     raise Exception('site connect fail')
-            #
-            # self.get_cookie()
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            self.get_cookie()
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
+
+            print(self.driver.current_url)
 
             # 로그인 여부 체크
             # try:
@@ -225,6 +227,7 @@ class SmartstoreOrderJshk(Crawler):
                     raise Exception('site connect fail')
 
                 sleep(5)
+                print(self.driver.current_url)
                 elem = self.driver.find_element_by_xpath("//*")
                 source_code = elem.get_attribute("outerHTML")
                 print(source_code)
