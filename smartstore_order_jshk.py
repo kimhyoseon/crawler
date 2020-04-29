@@ -204,6 +204,7 @@ class SmartstoreOrderJshk(Crawler):
                 raise Exception('site connect fail')
 
             print(self.driver.current_url)
+            print(self.driver.page_source)
 
             # elem = self.driver.find_element_by_xpath("//*")
             # source_code = elem.get_attribute("outerHTML")
