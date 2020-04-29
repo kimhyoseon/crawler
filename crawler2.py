@@ -127,6 +127,7 @@ class Crawler:
 
             self.driver.set_page_load_timeout(self.SITE_CONNECT_TIMEOUT)
             self.driver.get(site_url)
+            print(self.driver.page_source)
 
             return True
         except Exception as e:

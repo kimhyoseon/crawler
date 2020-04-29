@@ -205,9 +205,10 @@ class SmartstoreOrderJshk(Crawler):
 
             print(self.driver.current_url)
 
-            elem = self.driver.find_element_by_xpath("//*")
-            source_code = elem.get_attribute("outerHTML")
-            print(source_code)
+            # elem = self.driver.find_element_by_xpath("//*")
+            # source_code = elem.get_attribute("outerHTML")
+            # print(source_code)
+
             self.destroy()
             exit()
 
