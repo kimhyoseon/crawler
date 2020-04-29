@@ -200,6 +200,24 @@ class SmartstoreOrderJshk(Crawler):
 
             print(self.driver.current_url)
 
+            if self.connect(site_url='https://policy.naver.com/rules/service.html', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            print(self.driver.current_url)
+
+            if self.connect(site_url='https://policy.naver.com/rules/disclaimer.html', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            print(self.driver.current_url)
+
+            if self.connect(site_url='https://help.naver.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            print(self.driver.current_url)
+
+            self.destroy()
+            exit()
+
             # 로그인 여부 체크
             # try:
             #     if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
