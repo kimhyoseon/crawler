@@ -215,13 +215,15 @@ class SmartstoreOrderJshk(Crawler):
 
             print(self.driver.current_url)
 
-            if self.connect(site_url='https://nid.naver.com/nidlogin.login', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            if self.connect(site_url='https://nid.naver.com/user2/help/idInquiry.nhn', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
             print(self.driver.current_url)
 
-            if self.connect(site_url='https://nid.naver.com/user2/help/idInquiry.nhn', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            if self.connect(site_url='https://nid.naver.com/nidlogin.login', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
+
+            print(self.driver.current_url)
 
             self.destroy()
             exit()
