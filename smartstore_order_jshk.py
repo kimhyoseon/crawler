@@ -206,10 +206,13 @@ class SmartstoreOrderJshk(Crawler):
                 raise Exception('site connect fail')
 
             print(self.driver.current_url)
-            print(self.driver.page_source)
+            # print(self.driver.page_source)
 
-            if self.selenium_input_text_by_xpath(text='test', tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
-                raise Exception('selenium_input_text_by_xpath fail. username')
+            if self.connect(site_url='https://help.naver.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            # if self.selenium_input_text_by_xpath(text='test', tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+            #     raise Exception('selenium_input_text_by_xpath fail. username')
 
             # elem = self.driver.find_element_by_xpath("//*")
             # source_code = elem.get_attribute("outerHTML")
