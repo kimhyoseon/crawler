@@ -193,6 +193,8 @@ class SmartstoreOrderJshk(Crawler):
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
+            self.get_cookie()
+
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account_jshk')
 
@@ -201,31 +203,25 @@ class SmartstoreOrderJshk(Crawler):
             except IndexError:
                 temp_login = None
 
-            if not temp_login:
-                self.get_cookie()
-
-                if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                    raise Exception('site connect fail')
-
-                # 로그인 여부 체크
-                try:
-                    if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
-                        log.logger.info('Alreday logined.')
-                        return True
-                except:
-                    pass
+            # if not temp_login:
+            #     if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            #         raise Exception('site connect fail')
+            #
+            #     # 로그인 여부 체크
+            #     try:
+            #         if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
+            #             log.logger.info('Alreday logined.')
+            #             return True
+            #     except:
+            #         pass
 
             log.logger.info('Not logined.')
 
             if account_data:
-                self.driver.save_screenshot('smartstore_screenshot.png')
-
                 if not temp_login:
                     # 로그인 페이지로 이동
                     if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                         raise Exception('selenium_click_by_xpath fail. submit')
-
-                    # self.driver.save_screenshot('smartstore_screenshot.png')
 
                     if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                         raise Exception('site connect nidlogin click fail')
@@ -234,6 +230,9 @@ class SmartstoreOrderJshk(Crawler):
                     # elem = self.driver.find_element_by_xpath("//*")
                     # source_code = elem.get_attribute("outerHTML")
                     # print(source_code)
+
+                    sleep(3)
+                    self.driver.save_screenshot('smartstore_screenshot.png')
 
                     if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                         raise Exception('selenium_extract_by_xpath ID input can not founded.')
