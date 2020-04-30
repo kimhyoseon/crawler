@@ -52,8 +52,8 @@ class SmartstoreOrderJshk(Crawler):
 
             # -- 신규주문 페이지로 이동 --
 
-            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
-                raise Exception('selenium_click_by_xpath fail. orddel.wait')
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
+                raise Exception('selenium_click_by_xpath fail. orddel.new')
 
             sleep(10)
 
@@ -94,8 +94,7 @@ class SmartstoreOrderJshk(Crawler):
                     self.destroy()
                     exit()
 
-
-
+            print(self.driver.page_source)
 
             # # 새로고침
             # if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
