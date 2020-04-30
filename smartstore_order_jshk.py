@@ -218,7 +218,7 @@ class SmartstoreOrderJshk(Crawler):
             log.logger.info('Not logined.')
 
             if account_data:
-                # self.driver.save_screenshot('smartstore_screenshot.png')
+                self.driver.save_screenshot('smartstore_screenshot.png')
 
                 if not temp_login:
                     # 로그인 페이지로 이동
