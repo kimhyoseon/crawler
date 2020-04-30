@@ -94,18 +94,21 @@ class SmartstoreOrderJshk(Crawler):
                     self.destroy()
                     exit()
 
+            # 새로고침
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
+
+            sleep(5)
+            self.remove_layer()
+
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
+                raise Exception('selenium_click_by_xpath fail. orddel.wait')
+
+            sleep(5)
+            self.remove_layer()
+
             print(self.driver.page_source)
 
-            # # 새로고침
-            # if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-            #     raise Exception('site connect fail')
-            #
-            # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
-            #     raise Exception('selenium_click_by_xpath fail. orddel.wait')
-            #
-            # sleep(10)
-            #
-            # self.remove_layer()
             #
             # # 주문 데이터 가져오기 iframe으로 변경
             # list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
