@@ -95,7 +95,7 @@ class SmartstoreOrderJshk(Crawler):
                     exit()
 
             # -- 발송대기 주문 페이지로 이동 --
-            if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td/div/ul/li[3]/a') is False:
+            if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
             sleep(5)
