@@ -77,6 +77,8 @@ class SmartstoreOrderJshk(Crawler):
                             item_amount = int(item_amount)
                             destination = tds[40].getText()
 
+                            print(item_option)
+
                             if item_option not in order_list:
                                 order_list[item_option] = item_amount
                             else:
@@ -99,6 +101,7 @@ class SmartstoreOrderJshk(Crawler):
                 raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
             sleep(5)
+            self.remove_layer()
 
             # 주문 데이터 가져오기 iframe으로 변경
             list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[1]/table').find_elements_by_xpath('.//tbody/tr')
@@ -113,6 +116,8 @@ class SmartstoreOrderJshk(Crawler):
                             item_option = tds[16].getText().strip()
                             item_amount = tds[18].getText().strip()
                             item_amount = int(item_amount)
+
+                            print(item_option)
 
                             if item_option not in order_list:
                                 order_list[item_option] = item_amount
