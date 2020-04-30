@@ -243,7 +243,7 @@ class SmartstoreOrderJshk(Crawler):
                     raise Exception('site connect fail')
 
                 # 아이디 입력
-                if self.selenium_input_text_by_xpath(text='23161487', tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
+                if self.selenium_input_text_by_xpath(text=account_data[2], tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. username')
 
                 # 로그인 유지
