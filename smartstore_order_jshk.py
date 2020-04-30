@@ -95,7 +95,8 @@ class SmartstoreOrderJshk(Crawler):
                     exit()
 
             # 새로고침
-            self.driver.refresh()
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
 
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.wait')
