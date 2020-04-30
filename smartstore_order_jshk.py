@@ -100,9 +100,12 @@ class SmartstoreOrderJshk(Crawler):
 
             sleep(5)
 
+            list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table')
+            print(list)
+
             # print(self.driver.page_source)
-            # self.destroy()
-            # exit()
+            self.destroy()
+            exit()
 
             # 주문 데이터 가져오기 iframe으로 변경
             list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
