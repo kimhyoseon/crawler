@@ -196,7 +196,12 @@ class SmartstoreOrderJshk(Crawler):
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account_jshk')
 
-            if not account_data[2]:
+            try:
+                temp_login = account_data[2]
+            except IndexError:
+                temp_login = None
+
+            if not temp_login:
                 self.get_cookie()
 
                 if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
@@ -213,7 +218,7 @@ class SmartstoreOrderJshk(Crawler):
             if account_data:
                 # self.driver.save_screenshot('smartstore_screenshot.png')
 
-                if not account_data[2]:
+                if not temp_login:
                     # 로그인 페이지로 이동
                     if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                         raise Exception('selenium_click_by_xpath fail. submit')
@@ -247,7 +252,7 @@ class SmartstoreOrderJshk(Crawler):
                         raise Exception('selenium_extract_by_xpath ID input can not founded.')
 
                     # 아이디 입력
-                    if self.selenium_input_text_by_xpath(text=account_data[2], tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
+                    if self.selenium_input_text_by_xpath(text=temp_login, tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
                         raise Exception('selenium_input_text_by_xpath fail. username')
 
                 # 로그인 유지
