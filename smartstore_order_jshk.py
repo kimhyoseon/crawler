@@ -98,8 +98,9 @@ class SmartstoreOrderJshk(Crawler):
             if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
-            sleep(5)
-            self.driver.save_screenshot('smartstore_screenshot.png')
+            print(order_list)
+            sleep(10)
+            print(self.driver.page_source)
 
             # 주문 데이터 가져오기 iframe으로 변경
             list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
