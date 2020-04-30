@@ -190,73 +190,21 @@ class SmartstoreOrderJshk(Crawler):
         try:
             self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver_jshk')
 
-            # if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-            #     raise Exception('site connect fail')
-            #
-            # self.get_cookie()
-            #
-            # if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-            #     raise Exception('site connect fail')
-
-            # print(self.driver.current_url)
-
-            if self.connect(site_url='https://nid.naver.com/user2/help/pwInquiry.nhn?menu=pwinquiry', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-            print(self.driver.current_url)
-            # print(self.driver.page_source)
-
-            if self.connect(site_url='https://nid.naver.com/user2/help/idInquiry.nhn?m=viewInputUserInfo&token_help=6PEqbBKWDaWCk2z1', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-            print(self.driver.current_url)
-
-            if self.connect(site_url='https://nid.naver.com/nidlogin.login?mode=number', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-            print(self.driver.current_url)
-
-            if self.connect(site_url='https://help.naver.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-            print(self.driver.current_url)
-
-            # if self.selenium_input_text_by_xpath(text='test', tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
-            #     raise Exception('selenium_input_text_by_xpath fail. username')
-
-            # elem = self.driver.find_element_by_xpath("//*")
-            # source_code = elem.get_attribute("outerHTML")
-            # print(source_code)
-
-            self.destroy()
-            exit()
-
-            if self.connect(site_url='https://help.naver.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
-            print(self.driver.current_url)
+            self.get_cookie()
 
-            if self.connect(site_url='https://logins.daum.net/accounts/signinform.do', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
-
-            print(self.driver.current_url)
-
-            if self.connect(site_url='https://policy.naver.com/rules/disclaimer.html', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-
-            print(self.driver.current_url)
-            # self.driver.save_screenshot('smartstore_screenshot.png')
-
-            # elem = self.driver.find_element_by_xpath("//*")
-            # source_code = elem.get_attribute("outerHTML")
-            # print(source_code)
-
-            self.destroy()
-            exit()
 
             # 로그인 여부 체크
-            # try:
-            #     if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
-            #         log.logger.info('Alreday logined.')
-            #         return True
-            # except:
-            #     pass
+            try:
+                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
+                    log.logger.info('Alreday logined.')
+                    return True
+            except:
+                pass
 
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account_jshk')
@@ -273,27 +221,30 @@ class SmartstoreOrderJshk(Crawler):
                 # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                 #     raise Exception('site connect nidlogin click fail')
 
-                if self.connect(site_url='https://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                # print(self.driver.current_url)
+                # elem = self.driver.find_element_by_xpath("//*")
+                # source_code = elem.get_attribute("outerHTML")
+                # print(source_code)
+
+                # if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                #     raise Exception('selenium_extract_by_xpath ID input can not founded.')
+                #
+                # # 아이디 입력
+                # if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                #     raise Exception('selenium_input_text_by_xpath fail. username')
+                #
+                # # 비번 입력
+                # if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
+                #     raise Exception('selenium_input_text_by_xpath fail. password')
+
+
+                # --- 임시로 일회용로그인으로 ---
+                if self.connect(site_url='https://nid.naver.com/nidlogin.login?mode=number', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                     raise Exception('site connect fail')
 
-                sleep(5)
-                print(self.driver.current_url)
-                elem = self.driver.find_element_by_xpath("//*")
-                source_code = elem.get_attribute("outerHTML")
-                print(source_code)
-                self.destroy()
-                exit()
-
-                if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
-                    raise Exception('selenium_extract_by_xpath ID input can not founded.')
-
                 # 아이디 입력
-                if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                if self.selenium_input_text_by_xpath(text='23161487', tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. username')
-
-                # 비번 입력
-                if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
-                    raise Exception('selenium_input_text_by_xpath fail. password')
 
                 # 로그인 유지
                 if self.selenium_click_by_xpath(xpath='//*[@id="label_login_chk"]') is False:
