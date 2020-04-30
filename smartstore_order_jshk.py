@@ -215,6 +215,8 @@ class SmartstoreOrderJshk(Crawler):
                 except:
                     pass
 
+            log.logger.info('Not logined.')
+
             if account_data:
                 # self.driver.save_screenshot('smartstore_screenshot.png')
 
