@@ -78,7 +78,7 @@ class SmartstoreOrderJshk(Crawler):
                             item_amount = int(item_amount)
                             destination = tds[40].getText()
 
-                            print(item_option)
+                            # print(item_option)
 
                             if item_option not in order_list:
                                 order_list[item_option] = item_amount
@@ -141,7 +141,7 @@ class SmartstoreOrderJshk(Crawler):
                             item_amount = tds[18].getText().strip()
                             item_amount = int(item_amount)
 
-                            print(item_option)
+                            # print(item_option)
 
                             if item_option not in order_list:
                                 order_list[item_option] = item_amount
