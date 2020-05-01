@@ -64,7 +64,7 @@ class SmartstoreOrderJshk(Crawler):
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
             # list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
             #
-            # order_list = {}
+            order_list = {}
             #
             # for i, li in enumerate(list):
             #     try:
