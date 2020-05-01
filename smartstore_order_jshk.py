@@ -101,11 +101,23 @@ class SmartstoreOrderJshk(Crawler):
 
             # self.driver.save_screenshot('jshk_screenshot.png')
 
-            log.logger.info('Move to wait 5 sec.')
+            self.driver.switch_to.default_content()
+
+            # 홍으로
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'home'}) is False:
+                raise Exception('selenium_click_by_xpath fail. go home')
 
             sleep(5)
 
-            self.driver.switch_to.default_content()
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
+                raise Exception('selenium_click_by_xpath fail. orddel.wait')
+
+            log.logger.info('Move to wait 10 sec.')
+
+            sleep(10)
+
+            self.remove_layer()
+
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
 
             # list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
