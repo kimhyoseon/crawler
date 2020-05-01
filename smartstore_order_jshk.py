@@ -60,7 +60,7 @@ class SmartstoreOrderJshk(Crawler):
 
             self.remove_layer()
 
-            self.driver.save_screenshot('jshk_screenshot.png')
+            # self.driver.save_screenshot('jshk_screenshot.png')
 
             # 주문 데이터 가져오기 iframe으로 변경
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
