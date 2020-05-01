@@ -176,9 +176,9 @@ class SmartstoreReview(Crawler):
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[1]/div[2]/div/label[3]') is False:
                 raise Exception('selenium_click_by_xpath fail. 미구매자평점 (2점)')
 
-            # 구매자평점 (3점)
-            if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[1]/div[2]/div/label[6]') is False:
-                raise Exception('selenium_click_by_xpath fail. 미구매자평점 (5점)')
+            # # 구매자평점 (5점)
+            # if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[1]/div[2]/div/label[6]') is False:
+            #     raise Exception('selenium_click_by_xpath fail. 미구매자평점 (5점)')
 
             # 검색
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[2]/div/button[1]') is False:
@@ -300,7 +300,7 @@ class SmartstoreReview(Crawler):
                                     tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.func.closeModal()'}) is False:
                                 raise Exception('selenium_click_by_xpath fail. 답글닫기2')
 
-                            sleep(3)
+                            sleep(1)
 
                             # print('reply done.')
                             # self.driver.save_screenshot('review_screenshot.png')
@@ -309,17 +309,22 @@ class SmartstoreReview(Crawler):
 
                             is_success = True
 
+                            if is_success == True:
+                                # 리스트에 전부 달았다면 다시 검색버튼 클릭
+                                if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[2]/div/button[1]') is False:
+                                    raise Exception('selenium_click_by_xpath fail. 검색')
+
+                                sleep(4)
+
+                                # 다시 댓글달기
+                                self.review()
+
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
                     continue
                     return False
 
             sleep(1)
-
-            print('reply done.')
-            self.driver.save_screenshot('review_screenshot.png')
-            self.destroy()
-            exit()
 
             if is_success == True:
                 # 리스트에 전부 달았다면 다시 검색버튼 클릭
