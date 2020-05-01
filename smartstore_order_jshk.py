@@ -89,7 +89,7 @@ class SmartstoreOrderJshk(Crawler):
 
                             # 제주도인 경우 알림
                             if destination in '제주특별자치도':
-                                telegrambot.send_message('제주도 주문건을 확인해주세요.', 'jshk')
+                                telegrambot.send_message('제주도 주문건을 확인해주세요!.', 'jshk')
 
 
                 except Exception as e:
