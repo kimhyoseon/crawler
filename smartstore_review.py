@@ -20,7 +20,7 @@ class SmartstoreReview(Crawler):
     def start(self):
         try:
             self.log = filewriter.get_log_file(self.name)
-            self.channels = ['스마트스토어정성한끼', '스마트스토어쿠힛마트']
+            self.channels = ['스마트스토어정성한끼', '스마트스토어쿠힛마트', '스마트스토어으아니']
 
             self.login()
 
