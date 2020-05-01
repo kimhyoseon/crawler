@@ -302,7 +302,7 @@ class SmartstoreReview(Crawler):
 
                             sleep(1)
 
-                            # print('reply done.')
+                            # print('reply done!.')
                             # self.driver.save_screenshot('review_screenshot.png')
                             # self.destroy()
                             # exit()
