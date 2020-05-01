@@ -228,11 +228,10 @@ class SmartstoreReview(Crawler):
             for li in list:
                 try:
                     if li:
-                        print(li)
-                        # soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
-                        # tds = soup_order_info.find_all('div', class_='ag-cell')
+                        soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
+                        tds = soup_order_info.find_all('div', class_='ag-cell')
                         # print(len(tds))
-                        if li:
+                        if len(tds) > 0:
                             review_link = li.find_element_by_xpath('.//div[contains(@col-id, "reviewContent")]/span/a')
                             review_text = review_link.text.strip()
                             review_id = li.find_element_by_xpath('.//div[contains(@col-id, "id")]').text.strip()
@@ -301,8 +300,9 @@ class SmartstoreReview(Crawler):
                                     tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.func.closeModal()'}) is False:
                                 raise Exception('selenium_click_by_xpath fail. 답글닫기2')
 
-                            sleep(1)
+                            sleep(3)
 
+                            # print('reply done.')
                             # self.driver.save_screenshot('review_screenshot.png')
                             # self.destroy()
                             # exit()
@@ -315,6 +315,11 @@ class SmartstoreReview(Crawler):
                     return False
 
             sleep(1)
+
+            print('reply done.')
+            self.driver.save_screenshot('review_screenshot.png')
+            self.destroy()
+            exit()
 
             if is_success == True:
                 # 리스트에 전부 달았다면 다시 검색버튼 클릭
