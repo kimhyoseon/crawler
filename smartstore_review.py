@@ -229,10 +229,10 @@ class SmartstoreReview(Crawler):
                 try:
                     if li:
                         print(li)
-                        soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
-                        tds = soup_order_info.find_all('div', class_='ag-cell')
+                        # soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
+                        # tds = soup_order_info.find_all('div', class_='ag-cell')
                         # print(len(tds))
-                        if len(tds) > 0:
+                        if li:
                             review_link = li.find_element_by_xpath('.//div[contains(@col-id, "reviewContent")]/span/a')
                             review_text = review_link.text.strip()
                             review_id = li.find_element_by_xpath('.//div[contains(@col-id, "id")]').text.strip()
@@ -303,10 +303,9 @@ class SmartstoreReview(Crawler):
 
                             sleep(1)
 
-                            print('reply done.')
-                            self.driver.save_screenshot('review_screenshot.png')
-                            self.destroy()
-                            self.exit()
+                            # self.driver.save_screenshot('review_screenshot.png')
+                            # self.destroy()
+                            # exit()
 
                             is_success = True
 
