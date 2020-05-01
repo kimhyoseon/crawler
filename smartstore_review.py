@@ -310,7 +310,7 @@ class SmartstoreReview(Crawler):
                             is_success = True
 
                             # 다시 댓글달기
-                            self.review()
+                            # self.review()
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
