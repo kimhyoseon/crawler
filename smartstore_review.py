@@ -220,7 +220,7 @@ class SmartstoreReview(Crawler):
 
             is_success = False
 
-            print(len(list))
+            # print(len(list))
 
             if len(list) == 0:
                 return False
@@ -228,6 +228,7 @@ class SmartstoreReview(Crawler):
             for li in list:
                 try:
                     if li:
+                        print(li)
                         soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
                         tds = soup_order_info.find_all('div', class_='ag-cell')
                         # print(len(tds))
@@ -301,6 +302,8 @@ class SmartstoreReview(Crawler):
                                 raise Exception('selenium_click_by_xpath fail. 답글닫기2')
 
                             sleep(1)
+
+                            print('reply done.')
 
                             is_success = True
 
