@@ -96,7 +96,7 @@ class SmartstoreOrderJshk(Crawler):
                     exit()
 
             # -- 발송대기 주문 페이지로 이동 --
-            self.driver.switch_to().parent_frame()
+            self.driver.switch_to.default_content()
             if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.wait')
             self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
