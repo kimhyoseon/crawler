@@ -304,6 +304,9 @@ class SmartstoreReview(Crawler):
                             sleep(1)
 
                             print('reply done.')
+                            self.driver.save_screenshot('review_screenshot.png')
+                            self.destroy()
+                            self.exit()
 
                             is_success = True
 
