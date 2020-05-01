@@ -31,7 +31,6 @@ class SmartstoreOrderJshk(Crawler):
 
             self.remove_layer()
 
-
             # -- 문의체크 --
             try:
                 ask = self.driver.find_elements_by_xpath('//*[@name="inquery"]/div/div[2]/ul/li')
@@ -54,6 +53,8 @@ class SmartstoreOrderJshk(Crawler):
 
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.new')
+
+            log.logger.info('Move to new 10 sec.')
 
             sleep(10)
 
@@ -97,6 +98,8 @@ class SmartstoreOrderJshk(Crawler):
             # -- 발송대기 주문 페이지로 이동 --
             if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.wait')
+
+            log.logger.info('Move to wait 5 sec.')
 
             sleep(5)
 
