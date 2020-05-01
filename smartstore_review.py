@@ -309,15 +309,8 @@ class SmartstoreReview(Crawler):
 
                             is_success = True
 
-                            if is_success == True:
-                                # 리스트에 전부 달았다면 다시 검색버튼 클릭
-                                if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[2]/div/button[1]') is False:
-                                    raise Exception('selenium_click_by_xpath fail. 검색')
-
-                                sleep(4)
-
-                                # 다시 댓글달기
-                                self.review()
+                            # 다시 댓글달기
+                            self.review()
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
