@@ -97,10 +97,6 @@ class SmartstoreOrderJshk(Crawler):
                     self.destroy()
                     exit()
 
-            self.driver.save_screenshot('jshk_screenshot.png')
-            self.destroy()
-            exit()
-
             # -- 발송대기 주문 페이지로 이동 --
             # if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
             #     raise Exception('selenium_click_by_xpath fail. orddel.wait')
@@ -119,6 +115,10 @@ class SmartstoreOrderJshk(Crawler):
             log.logger.info('Move to wait 5 sec.')
 
             sleep(5)
+
+            self.driver.save_screenshot('jshk_screenshot.png')
+            self.destroy()
+            exit()
 
             self.remove_layer()
 
