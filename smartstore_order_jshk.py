@@ -56,9 +56,9 @@ class SmartstoreOrderJshk(Crawler):
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.new')
 
-            log.logger.info('Move to new 10 sec.')
+            log.logger.info('Move to new 5 sec.')
 
-            sleep(10)
+            sleep(5)
 
             self.remove_layer()
 
@@ -116,9 +116,9 @@ class SmartstoreOrderJshk(Crawler):
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
                 raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
-            log.logger.info('Move to wait 10 sec.')
+            log.logger.info('Move to wait 5 sec.')
 
-            sleep(10)
+            sleep(5)
 
             self.remove_layer()
 
