@@ -116,9 +116,9 @@ class SmartstoreOrderJshk(Crawler):
 
             sleep(5)
 
-            self.driver.save_screenshot('jshk_screenshot.png')
-            self.destroy()
-            exit()
+            # self.driver.save_screenshot('jshk_screenshot.png')
+            # self.destroy()
+            # exit()
 
             self.remove_layer()
 
