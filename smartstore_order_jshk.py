@@ -75,10 +75,14 @@ class SmartstoreOrderJshk(Crawler):
                         tds = soup_order_info.find_all('td')
 
                         if tds:
-                            item_option = tds[16].getText().strip()
-                            item_amount = tds[18].getText().strip()
+                            item_option = tds[17].getText().strip()
+                            item_amount = tds[19].getText().strip()
                             item_amount = int(item_amount)
-                            destination = tds[40].getText()
+                            # destination = tds[41].getText()
+
+                            # print(item_option)
+                            # print(item_amount)
+                            # exit()
 
                             log.logger.info(item_option)
 
@@ -88,8 +92,8 @@ class SmartstoreOrderJshk(Crawler):
                                 order_list[item_option] = order_list[item_option] + item_amount
 
                             # 제주도인 경우 알림
-                            if destination in '제주특별자치도':
-                                telegrambot.send_message('제주도 주문건을 확인해주세요!.', 'jshk')
+                            # if destination in '제주특별자치도':
+                            #     telegrambot.send_message('제주도 주문건을 확인해주세요!.', 'jshk')
 
 
                 except Exception as e:
