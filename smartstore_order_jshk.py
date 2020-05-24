@@ -145,8 +145,8 @@ class SmartstoreOrderJshk(Crawler):
                         tds = soup_order_info.find_all('td')
 
                         if tds:
-                            item_option = tds[16].getText().strip()
-                            item_amount = tds[18].getText().strip()
+                            item_option = tds[17].getText().strip()
+                            item_amount = tds[19].getText().strip()
                             item_amount = int(item_amount)
 
                             log.logger.info(item_option)
