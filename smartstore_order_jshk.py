@@ -14,9 +14,13 @@ class SmartstoreOrderJshk(Crawler):
 
     def start(self):
         try:
+            self.channels = ['스마트스토어시고르자브종']
+
             self.login()
 
-            self.scan_page()
+            self.select_channel()
+
+            # self.scan_page()
 
             log.logger.info('order_jshk_completed!')
 
@@ -210,8 +214,22 @@ class SmartstoreOrderJshk(Crawler):
 
             # 채널 레이어 닫기
             try:
-                if self.selenium_exist_by_xpath(
-                        tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
+                    sleep(1)
+            except:
+                pass
+
+            # 신규 상점 레이어 닫기
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
+                    self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
+                    sleep(1)
+            except:
+                pass
+
+            try:
+                if self.selenium_exist_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'}) is True:
                     self.selenium_click_by_xpath(tag={'tag': 'button', 'attr': 'ng-click', 'name': 'vm.closeModal()'})
                     sleep(1)
             except:
@@ -316,6 +334,56 @@ class SmartstoreOrderJshk(Crawler):
             exit()
 
         return False
+
+    def select_channel(self):
+        try:
+            sleep(3)
+
+            self.driver.switch_to.default_content()
+
+            self.remove_layer()
+
+            sleep(2)
+
+            # 채널선택버튼 클릭
+            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
+                raise Exception('selenium_click_by_xpath fail. channel-select')
+
+            sleep(1)
+
+            # 현재 상점명 가져오기
+            channel_current = self.driver.find_element_by_xpath('//div[contains(@class,"search-area")]').find_element_by_xpath('.//span[@class="text-title"]').text
+
+            # 현재 상점이 진행 전이라면 진행
+            if channel_current not in self.channels:
+                self.channels.append(channel_current)
+                log.logger.info(channel_current)
+                self.remove_layer()
+                self.scan_page()
+                self.select_channel()
+
+            # 현재 상점이 진행 후라면 채널 변경
+            channel_list = self.driver.find_elements_by_xpath('//li[contains(@ng-repeat,"vm.channelList")]')
+
+            for li in channel_list:
+                try:
+                    if li:
+                        channel_name = li.find_element_by_xpath('.//span[@class="text-title"]').text
+
+                        # 선택할 상점이 진행 전이라면 진행
+                        if channel_name not in self.channels:
+                            self.channels.append(channel_name)
+                            log.logger.info(channel_name)
+                            li.find_element_by_xpath('.//label').click()
+                            self.scan_page()
+                            self.select_channel()
+                            return True
+                except:
+                    pass
+
+        except Exception as e:
+            self.driver.save_screenshot('smartstore_screenshot.png')
+            log.logger.error(e, exc_info=True)
 
 if __name__ == "__main__":
     jshk = SmartstoreOrderJshk()
