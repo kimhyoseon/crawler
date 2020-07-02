@@ -4,7 +4,6 @@ import log
 import pymysql
 import filewriter
 import telegrambot
-from urllib import parse
 from pytz import timezone
 from datetime import datetime, timedelta
 from crawler2 import Crawler
@@ -44,7 +43,7 @@ class SmartstoreNoticeKeywordToday(Crawler):
                     print(row)
                     message += '%s (%.5f)' % (row[0], row[1])
                     message += '\n'
-                    message += self.SHOPPING_URL + parse.quote(row[0])
+                    message += self.SHOPPING_URL + row[0]
                     message += '\n'
 
             log.logger.info('SmartstoreNoticeKeywordToday completed!')
