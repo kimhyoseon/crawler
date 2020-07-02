@@ -40,7 +40,6 @@ class SmartstoreNoticeKeywordToday(Crawler):
 
             if rows:
                 for row in rows:
-                    print(row)
                     message += '%s (%.5f)' % (row[0], row[1])
                     message += '\n'
                     message += '%s%s' % (self.SHOPPING_URL, row[0])
