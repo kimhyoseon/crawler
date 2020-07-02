@@ -43,7 +43,7 @@ class SmartstoreNoticeKeywordToday(Crawler):
                     print(row)
                     message += '%s (%.5f)' % (row[0], row[1])
                     message += '\n'
-                    message += self.SHOPPING_URL + row[0]
+                    message += '%s%s' % (self.SHOPPING_URL, row[0])
                     message += '\n'
 
             log.logger.info('SmartstoreNoticeKeywordToday completed!')
