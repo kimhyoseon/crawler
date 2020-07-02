@@ -40,6 +40,10 @@ BOT_LIST = {
     'yoona_azzi': {
         'token': '1011849541:AAEGm-k-Abp1uiW6w_FG-fI1wB0jFap1koQ',
         'chat_id': '49249214' # 봇 -> 나한테 (아찌알리미)
+    },
+    'keyword': {
+        'token': '902900662:AAEi_jfuxE7aqxxI4xRBHit1XfcU1ImCARE',
+        'chat_id': '49249214' # 봇 -> 나한테 (아찌알리미)
     }
 }
 # 메세지 전송
