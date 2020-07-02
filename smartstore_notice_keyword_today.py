@@ -31,7 +31,7 @@ class SmartstoreNoticeKeywordToday(Crawler):
             curs = conn.cursor()
 
             # SQL문 실행
-            sql = "SELECT * FROM keywords WHERE regDate > '" + today + "' AND raceIndex > 0 AND raceIndex < 0.2 AND hasMainShoppingSearch=1 ORDER BY raceIndex ASC"
+            sql = "SELECT keyword, raceIndex FROM keywords WHERE regDate > '" + today + "' AND raceIndex > 0 AND raceIndex < 0.2 AND hasMainShoppingSearch=1 ORDER BY raceIndex ASC"
             # sql = "SELECT keyword, raceIndex FROM keywords WHERE raceIndex > 0 AND raceIndex < 1 AND hasMainShoppingSearch=1 ORDER BY raceIndex ASC LIMIT 10"
             curs.execute(sql)
 
