@@ -151,6 +151,8 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
         if self.connect(site_url=url, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
             raise Exception('site connect fail')
 
+        self.driver.save_screenshot('smartstore_ranking.png')
+
         # 스크롤 아래로 1회
         self.driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
 
