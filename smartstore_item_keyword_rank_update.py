@@ -24,7 +24,6 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
 
             # 날짜
             today = datetime.now(timezone('Asia/Seoul'))
-            today = today + timedelta(days=-1)
             today = today.strftime('%Y%m%d')
             today = str(today)
             log.logger.info(today)
