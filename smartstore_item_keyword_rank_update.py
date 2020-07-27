@@ -75,6 +75,15 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
                     self.rank = 1
                     keyword_rel_current = keyword[0]
                     keyword_rel_id_current = str(keyword[1])
+
+                    # 기록이 있는지 확인
+                    sql = "SELECT count(*) FROM keywords_ranking WHERE date='" + today + "' AND keywords_id='" + keyword_id_current + "' AND keywords_rel_id='" + keyword_rel_id_current + "';"
+                    curs.execute(sql)
+                    rows = curs.fetchall()
+
+                    if rows[0][0] > 0:
+                        continue
+
                     self.findRank(keyword=keyword_rel_current, page=1)
                     keyword_rel_title = ''
                     keyword_rel_tag = ''
@@ -83,20 +92,11 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
                         keyword_rel_title = title
                         keyword_rel_tag = tag
 
-
-                    # 기록이 있는지 확인
-                    sql = "SELECT count(*) FROM keywords_ranking WHERE date='" + today + "' AND keywords_id='" + keyword_id_current + "' AND keywords_rel_id='" + keyword_rel_id_current + "';"
-                    curs.execute(sql)
-                    rows = curs.fetchall()
-
                     # print(rows[0][0])
                     # conn.close()
                     # exit()
 
-                    if rows[0][0] == 0:
-                        sql = "INSERT INTO keywords_ranking (date, keywords_id, keywords_rel_id, ranking, title, tag) VALUES ('" + today + "', '" + keyword_id_current + "', '" + keyword_rel_id_current + "', '" + str(self.rank) + "', '" + keyword_rel_title + "', '" + keyword_rel_tag + "');"
-                    else:
-                        sql = "UPDATE keywords_ranking SET ranking='" + str(self.rank) + "', title='" + keyword_rel_title + "', tag='" + keyword_rel_tag + "' WHERE date='" + today + "' AND keywords_id='" + keyword_id_current + "' AND keywords_rel_id='" + keyword_rel_id_current + "';"
+                    sql = "INSERT INTO keywords_ranking (date, keywords_id, keywords_rel_id, ranking, title, tag) VALUES ('" + today + "', '" + keyword_id_current + "', '" + keyword_rel_id_current + "', '" + str(self.rank) + "', '" + keyword_rel_title + "', '" + keyword_rel_tag + "');"
 
                     log.logger.info(sql)
                     curs.execute(sql)
