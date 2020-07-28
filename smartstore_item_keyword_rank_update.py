@@ -20,6 +20,8 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
 
             self.main_keywords = [
                 ['리프팅밴드', 'https://smartstore.naver.com/kuhit/products/4269217982']
+                ['페이스롤러', 'https://smartstore.naver.com/kuhit/products/4405984101']
+                ['아이스롤러', 'https://smartstore.naver.com/kuhit/products/4685886900']
             ]
 
             # 날짜
@@ -51,9 +53,6 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
                 # print(keyword_id_current)
                 # conn.close()
                 # exit()
-
-                # 메인키워드에 넣을 상품정보 가져오기
-                title, tag = self.getInfoItem(url=url_current)
                 
                 # 연관키워드 초기화
                 self.keywords = []                
@@ -89,6 +88,8 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
                     keyword_rel_tag = ''
 
                     if keyword_rel_id_current == keyword_id_current:
+                        # 메인키워드에 넣을 상품정보 가져오기
+                        title, tag = self.getInfoItem(url=url_current)
                         keyword_rel_title = title
                         keyword_rel_tag = tag
 
