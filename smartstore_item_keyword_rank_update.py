@@ -148,8 +148,6 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
         is_founded = False
         url = self.SHOPPING_URL % (page, keyword)
 
-        self.driver.save_screenshot('smartstore_ranking.png')
-
         # 사이트 접속
         if self.connect(site_url=url, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
             raise Exception('site connect fail')
