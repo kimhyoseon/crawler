@@ -19,8 +19,8 @@ class SmartstoreItemKeywordRankUpdate(Crawler):
             self.mysql = filewriter.get_log_file('mysql')
 
             self.main_keywords = [
-                ['리프팅밴드', 'https://smartstore.naver.com/kuhit/products/4269217982']
-                ['페이스롤러', 'https://smartstore.naver.com/kuhit/products/4405984101']
+                ['리프팅밴드', 'https://smartstore.naver.com/kuhit/products/4269217982'],
+                ['페이스롤러', 'https://smartstore.naver.com/kuhit/products/4405984101'],
                 ['아이스롤러', 'https://smartstore.naver.com/kuhit/products/4685886900']
             ]
 
