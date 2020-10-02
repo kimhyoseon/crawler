@@ -14,7 +14,7 @@ class SmartstoreOrderJshk(Crawler):
 
     def start(self):
         try:
-            self.channels = ['스마트스토어시고르자브종']
+            self.channels = ['스마트스토어우렁청년']
 
             self.login()
 
