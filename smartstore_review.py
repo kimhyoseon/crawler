@@ -20,7 +20,7 @@ class SmartstoreReview(Crawler):
     def start(self):
         try:
             self.log = filewriter.get_log_file(self.name)
-            self.channels = ['스마트스토어정성한끼', '스마트스토어쿠힛마트', '스마트스토어으아니']
+            self.channels = ['스마트스토어정성한끼', '스마트스토어쿠힛마트', '스마트스토어으아니', '스마트스토어우렁청년']
 
             self.login()
 
@@ -152,9 +152,9 @@ class SmartstoreReview(Crawler):
 
             sleep(3)
 
-            # 오늘리뷰
-            # if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[1]/div/div/ncp-datetime-range-picker2/div[1]/div/div/button[1]') is False:
-            #     raise Exception('selenium_click_by_xpath fail. 오늘')
+            # 리뷰기간
+            if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[1]/div/div/ncp-datetime-range-picker2/div[1]/div/div/button[6]') is False:
+                raise Exception('selenium_click_by_xpath fail. 1년')
 
             # 답글여부
             if self.selenium_click_by_xpath(xpath='//*[@id="seller-content"]/div/div[1]/form/div/div[1]/div/ul/li[6]/div/div[1]/div[2]/div[2]/div') is False:
@@ -258,9 +258,6 @@ class SmartstoreReview(Crawler):
                             # print(message)
                             # continue
 
-                            self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
-                            self.send_messge_and_save(review_id, message, 'kuhit_review')
-
                             if not answer or answer is False:
                                 continue
 
@@ -309,8 +306,11 @@ class SmartstoreReview(Crawler):
 
                             is_success = True
 
+                            self.log = filewriter.slice_json_by_max_len(self.log, max_len=1000)
+                            self.send_messge_and_save(review_id, message, 'kuhit_review')
+
                             # 다시 댓글달기
-                            # self.review()
+                            self.review()
 
                 except Exception as e:
                     log.logger.error(e, exc_info=True)
