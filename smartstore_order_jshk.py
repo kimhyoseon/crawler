@@ -242,69 +242,53 @@ class SmartstoreOrderJshk(Crawler):
 
     def login(self):
         try:
-            self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver_jshk')
+            self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
             self.get_cookie()
 
-            # 계정정보 가져오기
-            account_data = filewriter.get_log_file('naver_account_jshk')
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('site connect fail')
 
+            # 로그인 여부 체크
             try:
-                temp_login = account_data[2]
-            except IndexError:
-                temp_login = None
+                if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
+                    log.logger.info('Alreday logined.')
+                    return True
+            except:
+                pass
 
-            if not temp_login:
-                if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                    raise Exception('site connect fail')
-
-                # 로그인 여부 체크
-                try:
-                    if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
-                        log.logger.info('Alreday logined.')
-                        return True
-                except:
-                    pass
-
-            log.logger.info('Not logined.')
+            # 계정정보 가져오기
+            account_data = filewriter.get_log_file('naver_account')
 
             if account_data:
-                if not temp_login:
-                    # 로그인 페이지로 이동
-                    if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
-                        raise Exception('selenium_click_by_xpath fail. submit')
+                self.driver.save_screenshot('smartstore_screenshot.png')
 
-                    sleep(1)
+                # 로그인 페이지로 이동
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. submit')
 
-                    if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
-                        raise Exception('site connect nidlogin click fail')
+                sleep(1)
 
-                    sleep(3)
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. submit')
 
-                    if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
-                        raise Exception('selenium_extract_by_xpath ID input can not founded.')
+                sleep(2)
 
-                    # 아이디 입력
-                    if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
-                        raise Exception('selenium_input_text_by_xpath fail. username')
+                self.driver.save_screenshot('smartstore_login_screenshot.png')
 
-                    # 비번 입력
-                    if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
-                        raise Exception('selenium_input_text_by_xpath fail. password')
-                else:
-                    # --- 임시로 일회용로그인으로 ---
-                    if self.connect(site_url='https://nid.naver.com/nidlogin.login?mode=number', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                        raise Exception('site connect fail')
+                if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                    raise Exception('selenium_extract_by_xpath fail.')
 
-                    if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
-                        raise Exception('selenium_extract_by_xpath ID input can not founded.')
+                # 아이디 입력
+                if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                    raise Exception('selenium_input_text_by_xpath fail. username')
 
-                    # 아이디 입력
-                    if self.selenium_input_text_by_xpath(text=temp_login, tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
-                        raise Exception('selenium_input_text_by_xpath fail. username')
+                # 비번 입력
+                if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
+                    raise Exception('selenium_input_text_by_xpath fail. password')
 
                 # 로그인 유지
                 if self.selenium_click_by_xpath(xpath='//*[@id="label_login_chk"]') is False:
@@ -329,6 +313,8 @@ class SmartstoreOrderJshk(Crawler):
                 log.logger.info('login success')
                 self.set_cookie()
 
+                sleep(2)
+
                 return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
@@ -336,6 +322,102 @@ class SmartstoreOrderJshk(Crawler):
             exit()
 
         return False
+    # def login(self):
+    #     try:
+    #         self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver_jshk')
+    #
+    #         if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+    #             raise Exception('site connect fail')
+    #
+    #         self.get_cookie()
+    #
+    #         # 계정정보 가져오기
+    #         account_data = filewriter.get_log_file('naver_account_jshk')
+    #
+    #         try:
+    #             temp_login = account_data[2]
+    #         except IndexError:
+    #             temp_login = None
+    #
+    #         if not temp_login:
+    #             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+    #                 raise Exception('site connect fail')
+    #
+    #             # 로그인 여부 체크
+    #             try:
+    #                 if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
+    #                     log.logger.info('Alreday logined.')
+    #                     return True
+    #             except:
+    #                 pass
+    #
+    #         log.logger.info('Not logined.')
+    #
+    #         if account_data:
+    #             if not temp_login:
+    #                 # 로그인 페이지로 이동
+    #                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
+    #                     raise Exception('selenium_click_by_xpath fail. submit')
+    #
+    #                 sleep(1)
+    #
+    #                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
+    #                     raise Exception('site connect nidlogin click fail')
+    #
+    #                 sleep(3)
+    #
+    #                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+    #                     raise Exception('selenium_extract_by_xpath ID input can not founded.')
+    #
+    #                 # 아이디 입력
+    #                 if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+    #                     raise Exception('selenium_input_text_by_xpath fail. username')
+    #
+    #                 # 비번 입력
+    #                 if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
+    #                     raise Exception('selenium_input_text_by_xpath fail. password')
+    #             else:
+    #                 # --- 임시로 일회용로그인으로 ---
+    #                 if self.connect(site_url='https://nid.naver.com/nidlogin.login?mode=number', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+    #                     raise Exception('site connect fail')
+    #
+    #                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
+    #                     raise Exception('selenium_extract_by_xpath ID input can not founded.')
+    #
+    #                 # 아이디 입력
+    #                 if self.selenium_input_text_by_xpath(text=temp_login, tag={'tag': 'input', 'attr': 'name', 'name': 'key'}) is False:
+    #                     raise Exception('selenium_input_text_by_xpath fail. username')
+    #
+    #             # 로그인 유지
+    #             if self.selenium_click_by_xpath(xpath='//*[@id="label_login_chk"]') is False:
+    #                 raise Exception('selenium_click_by_xpath fail. login_chk')
+    #
+    #             # 로그인 버튼 클릭
+    #             if self.selenium_click_by_xpath(tag={'tag': 'input', 'attr': 'type', 'name': 'submit'}) is False:
+    #                 raise Exception('selenium_click_by_xpath fail. submit')
+    #
+    #             try:
+    #                 # 기기등록 함
+    #                 if self.selenium_exist_by_xpath(xpath='//*[@id="frmNIDLogin"]/fieldset/span[1]/a') is True:
+    #                     self.selenium_click_by_xpath(xpath='//*[@id="frmNIDLogin"]/fieldset/span[1]/a')
+    #
+    #                 # 로그인 상태유지
+    #                 if self.selenium_exist_by_xpath(xpath='//*[@id="login_maintain"]/span[1]/a') is True:
+    #                     if self.selenium_click_by_xpath(xpath='//*[@id="login_maintain"]/span[1]/a') is False:
+    #                         raise Exception('selenium_click_by_xpath fail. submit')
+    #             except:
+    #                 pass
+    #
+    #             log.logger.info('login success')
+    #             self.set_cookie()
+    #
+    #             return True
+    #     except Exception as e:
+    #         log.logger.error(e, exc_info=True)
+    #         self.destroy()
+    #         exit()
+    #
+    #     return False
 
     def select_channel(self):
         try:
