@@ -277,10 +277,11 @@ class SmartstoreOrderJshk(Crawler):
                     if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                         raise Exception('selenium_click_by_xpath fail. submit')
 
+                    sleep(1)
+
                     if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                         raise Exception('site connect nidlogin click fail')
 
-                    self.driver.save_screenshot('smartstore_screenshot.png')
                     sleep(3)
 
                     if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
