@@ -261,7 +261,7 @@ class SmartstoreOrderJshk(Crawler):
                 pass
 
             # 계정정보 가져오기
-            account_data = filewriter.get_log_file('naver_account')
+            account_data = filewriter.get_log_file('naver_account_jshk')
 
             if account_data:
                 self.driver.save_screenshot('smartstore_screenshot.png')
