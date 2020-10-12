@@ -437,6 +437,7 @@ class SmartstoreOrderJshk(Crawler):
 
             # 현재 상점명 가져오기
             channel_current = self.driver.find_element_by_xpath('//div[contains(@class,"search-area")]').find_element_by_xpath('.//span[@class="text-title"]').text
+            channel_current = channel_current.strip()
 
             # 현재 상점이 진행 전이라면 진행
             if channel_current not in self.channels:
