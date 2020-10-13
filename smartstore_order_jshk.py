@@ -52,35 +52,34 @@ class SmartstoreOrderJshk(Crawler):
 
             self.remove_layer()
 
-            # -- 문의체크 --
-            try:
-                ask = self.driver.find_elements_by_xpath('//*[@name="inquery"]/div/div[2]/ul/li')
-
-                if ask:
-                    is_ask = False
-                    for ask_li in ask:
-                        ask_number = ask_li.find_element_by_xpath('.//p[@class="text-number"]').text
-                        ask_number = int(ask_number)
-                        if ask_number > 0:
-                            is_ask = True
-
-                    if is_ask == True:
-                        telegrambot.send_message('정성한끼 고객이 상담을 기다리고 있습니다.', 'jshk')
-            except:
-                pass
-
-
             # -- 신규주문 페이지로 이동 --
 
             order_list = {}
 
             if self.type == 'new':
+                # -- 문의체크 --
+                try:
+                    ask = self.driver.find_elements_by_xpath('//*[@name="inquery"]/div/div[2]/ul/li')
+
+                    if ask:
+                        is_ask = False
+                        for ask_li in ask:
+                            ask_number = ask_li.find_element_by_xpath('.//p[@class="text-number"]').text
+                            ask_number = int(ask_number)
+                            if ask_number > 0:
+                                is_ask = True
+
+                        if is_ask == True:
+                            telegrambot.send_message('정성한끼 고객이 상담을 기다리고 있습니다.', 'jshk')
+                except:
+                    pass
+
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
                     raise Exception('selenium_click_by_xpath fail. orddel.new')
 
                 log.logger.info('Move to new 5 sec.')
 
-                sleep(5)
+                sleep(10)
 
                 self.remove_layer()
 
@@ -139,9 +138,11 @@ class SmartstoreOrderJshk(Crawler):
 
                 log.logger.info('Move to wait 5 sec.')
 
-                sleep(5)
+                sleep(10)
 
                 self.remove_layer()
+
+                log.logger.info('----')
 
                 # 주문 데이터 가져오기 iframe으로 변경
                 self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
