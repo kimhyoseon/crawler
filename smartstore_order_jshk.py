@@ -143,8 +143,8 @@ class SmartstoreOrderJshk(Crawler):
                 # self.remove_layer()
 
                 log.logger.info('----')
-                self.destroy()
-                exit()
+                # self.destroy()
+                # exit()
 
                 # 주문 데이터 가져오기 iframe으로 변경
                 self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
