@@ -4,6 +4,7 @@ import os
 import log
 import filewriter
 import telegrambot
+import argparse
 from time import sleep
 from crawler2 import Crawler
 from bs4 import BeautifulSoup
@@ -14,6 +15,20 @@ class SmartstoreOrderJshk(Crawler):
 
     def start(self):
         try:
+            # 신규, 대기 중 어떤 것을 수집할지 선택
+            parser = argparse.ArgumentParser()
+
+            parser.add_argument(
+                '--type',
+                type=str,
+                default='old',
+                choices=['new', 'old'],
+                help='new or old',
+            )
+
+            args = parser.parse_args()
+            self.type = args.type
+
             self.channels = ['스마트스토어쿠힛', '스마트스토어쿠힛마트', '스마트스토어으아니', '스마트스토어우렁청년']
 
             self.login()
@@ -57,118 +72,109 @@ class SmartstoreOrderJshk(Crawler):
 
             # -- 신규주문 페이지로 이동 --
 
-            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
-                raise Exception('selenium_click_by_xpath fail. orddel.new')
-
-            log.logger.info('Move to new 5 sec.')
-
-            sleep(5)
-
-            self.remove_layer()
-
-            # 주문 데이터 가져오기 iframe으로 변경
-            self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
-            list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
-
             order_list = {}
 
-            for i, li in enumerate(list):
-                try:
-                    if li:
-                        soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
-                        tds = soup_order_info.find_all('td')
+            if self.type == 'new':
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. orddel.new')
 
-                        if tds:
-                            item_option = tds[17].getText().strip()
-                            item_amount = tds[19].getText().strip()
-                            item_amount = int(item_amount)
-                            # destination = tds[41].getText()
+                log.logger.info('Move to new 5 sec.')
 
-                            # print(item_option)
-                            # print(item_amount)
-                            # exit()
+                sleep(5)
 
-                            log.logger.info(item_option)
+                self.remove_layer()
 
-                            if item_option not in order_list:
-                                order_list[item_option] = item_amount
-                            else:
-                                order_list[item_option] = order_list[item_option] + item_amount
+                # 주문 데이터 가져오기 iframe으로 변경
+                self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
+                list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
 
-                            # 제주도인 경우 알림
-                            # if destination in '제주특별자치도':
-                            #     telegrambot.send_message('제주도 주문건을 확인해주세요!.', 'jshk')
+                for i, li in enumerate(list):
+                    try:
+                        if li:
+                            soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
+                            tds = soup_order_info.find_all('td')
+
+                            if tds:
+                                item_option = tds[17].getText().strip()
+                                item_amount = tds[19].getText().strip()
+                                item_amount = int(item_amount)
+                                # destination = tds[41].getText()
+
+                                # print(item_option)
+                                # print(item_amount)
+                                # exit()
+
+                                log.logger.info(item_option)
+
+                                if item_option not in order_list:
+                                    order_list[item_option] = item_amount
+                                else:
+                                    order_list[item_option] = order_list[item_option] + item_amount
+
+                                # 제주도인 경우 알림
+                                # if destination in '제주특별자치도':
+                                #     telegrambot.send_message('제주도 주문건을 확인해주세요!.', 'jshk')
 
 
-                except Exception as e:
-                    log.logger.error(e, exc_info=True)
-                    self.destroy()
-                    exit()
+                    except Exception as e:
+                        log.logger.error(e, exc_info=True)
+                        self.destroy()
+                        exit()
 
-            # -- 발송대기 주문 페이지로 이동 --
-            # if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
-            #     raise Exception('selenium_click_by_xpath fail. orddel.wait')
+            elif self.type == 'old':
+                # -- 발송대기 주문 페이지로 이동 --
+                # if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
+                #     raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
-            self.driver.switch_to.default_content()
+                # self.driver.switch_to.default_content()
+                #
+                # # 홍으로
+                # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'home'}) is False:
+                #     raise Exception('selenium_click_by_xpath fail. go home')
+                #
+                # sleep(5)
 
-            # 홍으로
-            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'home'}) is False:
-                raise Exception('selenium_click_by_xpath fail. go home')
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
-            sleep(5)
+                log.logger.info('Move to wait 5 sec.')
 
-            if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
-                raise Exception('selenium_click_by_xpath fail. orddel.wait')
+                sleep(5)
 
-            log.logger.info('Move to wait 5 sec.')
+                self.remove_layer()
 
-            sleep(5)
+                # 주문 데이터 가져오기 iframe으로 변경
+                self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
+                list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
 
-            # self.driver.save_screenshot('jshk_screenshot.png')
-            # self.destroy()
-            # exit()
+                for i, li in enumerate(list):
+                    try:
+                        if li:
+                            soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
+                            tds = soup_order_info.find_all('td')
 
-            self.remove_layer()
+                            if tds:
+                                item_option = tds[17].getText().strip()
+                                item_amount = tds[19].getText().strip()
+                                item_amount = int(item_amount)
 
-            self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
+                                log.logger.info(item_option)
 
-            # list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
-            # print(list)
-            #
-            # # print(self.driver.page_source)
-            # self.destroy()
-            # exit()
+                                if item_option not in order_list:
+                                    order_list[item_option] = item_amount
+                                else:
+                                    order_list[item_option] = order_list[item_option] + item_amount
 
-            # 주문 데이터 가져오기 iframe으로 변경
-            list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
-
-            for i, li in enumerate(list):
-                try:
-                    if li:
-                        soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
-                        tds = soup_order_info.find_all('td')
-
-                        if tds:
-                            item_option = tds[17].getText().strip()
-                            item_amount = tds[19].getText().strip()
-                            item_amount = int(item_amount)
-
-                            log.logger.info(item_option)
-
-                            if item_option not in order_list:
-                                order_list[item_option] = item_amount
-                            else:
-                                order_list[item_option] = order_list[item_option] + item_amount
-
-                except Exception as e:
-                    log.logger.error(e, exc_info=True)
-                    self.destroy()
-                    exit()
+                    except Exception as e:
+                        log.logger.error(e, exc_info=True)
+                        self.destroy()
+                        exit()
 
 
             # -- 데이터 저장 --
             if dict:
-                filewriter.save_log_file('jshk_order_data', order_list)
+                filename = 'jshk_order_data_' + self.type
+                filewriter.save_log_file(filename, order_list)
                 print(order_list)
 
             return True
