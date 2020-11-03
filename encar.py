@@ -58,7 +58,7 @@ class Encar(Crawler):
                         # print(id)
                         # exit()
 
-                        text = cls + ' ' + dtl + '\n' + year + ' ' + km + '\n' + link + '\n' + link
+                        text = cls + ' ' + dtl + '\n' + year + ' ' + km + '\n' + link
 
                         self.send_messge_and_save(id, text, 'encar')
 
@@ -67,47 +67,6 @@ class Encar(Crawler):
 
         except Exception as e:
             log.logger.error(e, exc_info=True)
-
-    def get_item_link(self, url=None):
-        try:
-            if self.connect(site_url=url, is_proxy=False, default_driver='selenium',
-                        is_chrome=False) is False:
-                raise Exception('site connect fail')
-
-            if self.selenium_extract_by_xpath(tag={'tag': 'div', 'attr': 'class', 'name': 'wordfix'}) is False:
-                raise Exception('selenium_extract_by_xpath fail.')
-
-            soup = BeautifulSoup(self.driver.page_source, 'html.parser')
-            element = soup.find('div', class_='wordfix')
-
-            # 핫딜리스트
-            if element:
-                try:
-                    if not element.find('a', recursive=False):
-                        raise Exception('link is not founded!.')
-
-                    link = element.find('a', recursive=False).getText()
-
-                    if link is None:
-                        raise Exception('link is not founded.')
-
-                    encarLinkGenerator = encarLinkGenerator()
-                    apiliateLink = encarLinkGenerator.genLink(url=link)
-
-                    if apiliateLink is None:
-                        raise Exception('apiliateLink is not generated.')
-
-                    return apiliateLink
-
-                except Exception as e:
-                    log.logger.error(e, exc_info=True)
-                    return False
-            else:
-                return False
-
-        except Exception as e:
-            log.logger.error(e, exc_info=True)
-            return False
 
 if __name__ == "__main__":
     encar = Encar()
