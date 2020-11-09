@@ -143,18 +143,18 @@ class SmartstoreOrderJshk(Crawler):
                 self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
                 log.logger.info('switch to frame completed')
 
-                # sleep(2)
-                # log.logger.info('click select list')
-                #
-                # # 200개씩보기
-                # if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[3]/div[1]/div/div[2]') is False:
-                #     raise Exception('selenium_click_by_xpath fail. select list')
-                # sleep(2)
-                # if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': '500'}) is False:
-                #     raise Exception('selenium_click_by_xpath fail. option 500')
-                #
-                # log.logger.info('Wait list 5 sec.')
-                # sleep(5)
+                sleep(2)
+                log.logger.info('click select list')
+
+                # 200개씩보기
+                if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[3]/div[1]/div/div[2]') is False:
+                    raise Exception('selenium_click_by_xpath fail. select list')
+                sleep(2)
+                if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': '500'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. option 500')
+
+                log.logger.info('Wait list 5 sec.')
+                sleep(5)
 
                 log.logger.info('list loaded')
 
