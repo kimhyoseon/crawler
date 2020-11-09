@@ -1,6 +1,9 @@
 #-*- coding: utf-8 -*-
 
 import os
+
+import pymysql
+
 import log
 import filewriter
 import telegrambot
@@ -120,24 +123,27 @@ class SmartstoreOrderJshk(Crawler):
                         self.destroy()
                         exit()
 
-            elif self.type == 'old':
-                # -- 발송대기 주문 페이지로 이동 --
-                # if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[1]/div/div[2]/ul/li[4]/div/a[1]') is False:
-                #     raise Exception('selenium_click_by_xpath fail. orddel.wait')
+                # -- 데이터 저장 --
+                if dict:
+                    filename = 'jshk_order_data_' + self.type
+                    filewriter.save_log_file(filename, order_list)
+                    print(order_list)
 
-                # self.driver.switch_to.default_content()
-                #
-                # # 홍으로
-                # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'home'}) is False:
-                #     raise Exception('selenium_click_by_xpath fail. go home')
-                #
-                # sleep(5)
+            elif self.type == 'old':
+                # mysql
+                self.mysql = filewriter.get_log_file('mysql')
+
+                # MySQL Connection 연결
+                conn = pymysql.connect(host=self.mysql[0], port=3306, db=self.mysql[1], user=self.mysql[2], password=self.mysql[3], charset='utf8')
+
+                # Connection 으로부터 Cursor 생성
+                curs = conn.cursor()
 
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
                     raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
-                log.logger.info('Move to wait 10 sec.')
-                sleep(10)
+                log.logger.info('Move to wait 5 sec.')
+                sleep(5)
 
                 # 주문 데이터 가져오기 iframe으로 변경
                 self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
@@ -146,7 +152,7 @@ class SmartstoreOrderJshk(Crawler):
                 sleep(2)
                 log.logger.info('click select list')
 
-                # 200개씩보기
+                # 500개씩보기
                 if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[3]/div[1]/div/div[2]') is False:
                     raise Exception('selenium_click_by_xpath fail. select list')
                 sleep(2)
@@ -189,12 +195,21 @@ class SmartstoreOrderJshk(Crawler):
                         self.destroy()
                         exit()
 
+                # -- 데이터 저장 (mysql) --
+                if len(order_list) > 0:
+                    # DB 데이터 모두 삭제
+                    sql = "DELETE FROM smartstore_order_hanki_wait;"
+                    curs.execute(sql)
+                    conn.commit()
 
-            # -- 데이터 저장 --
-            if dict:
-                filename = 'jshk_order_data_' + self.type
-                filewriter.save_log_file(filename, order_list)
-                print(order_list)
+                    # loop
+                    for key, value in order_list.items():
+                        sql = "INSERT INTO smartstore_order_hanki_wait (opt, amount) VALUES ('%s', '%s')" % (key, value)
+                        # print(sql)
+                        curs.execute(sql)
+                        conn.commit()
+
+                conn.close()
 
             return True
         except Exception as e:
