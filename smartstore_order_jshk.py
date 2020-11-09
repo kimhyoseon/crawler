@@ -138,11 +138,11 @@ class SmartstoreOrderJshk(Crawler):
 
                 log.logger.info('Move to wait 5 sec.')
 
-                sleep(10)
+                sleep(60)
 
                 # self.remove_layer()
 
-                log.logger.info('----')
+                # log.logger.info('----')
                 # self.destroy()
                 # exit()
 
