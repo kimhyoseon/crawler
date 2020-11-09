@@ -136,8 +136,8 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
                     raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
-                log.logger.info('Move to wait 20 sec.')
-                sleep(20)
+                log.logger.info('Move to wait 60 sec.')
+                sleep(60)
 
                 # 주문 데이터 가져오기 iframe으로 변경
                 self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
