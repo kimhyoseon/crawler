@@ -77,7 +77,7 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is False:
                     raise Exception('selenium_click_by_xpath fail. orddel.new')
 
-                log.logger.info('Move to new 5 sec.')
+                log.logger.info('Move to new 10 sec.')
 
                 sleep(10)
 
@@ -136,25 +136,25 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
                     raise Exception('selenium_click_by_xpath fail. orddel.wait')
 
-                log.logger.info('Move to wait 5 sec.')
-                sleep(5)
+                log.logger.info('Move to wait 10 sec.')
+                sleep(10)
 
                 # 주문 데이터 가져오기 iframe으로 변경
                 self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
                 log.logger.info('switch to frame completed')
 
-                sleep(2)
-                log.logger.info('click select list')
-
-                # 200개씩보기
-                if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[3]/div[1]/div/div[2]') is False:
-                    raise Exception('selenium_click_by_xpath fail. select list')
-                sleep(2)
-                if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': '500'}) is False:
-                    raise Exception('selenium_click_by_xpath fail. option 500')
-
-                log.logger.info('Wait list 5 sec.')
-                sleep(5)
+                # sleep(2)
+                # log.logger.info('click select list')
+                #
+                # # 200개씩보기
+                # if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[3]/div[1]/div/div[2]') is False:
+                #     raise Exception('selenium_click_by_xpath fail. select list')
+                # sleep(2)
+                # if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': '500'}) is False:
+                #     raise Exception('selenium_click_by_xpath fail. option 500')
+                #
+                # log.logger.info('Wait list 5 sec.')
+                # sleep(5)
 
                 log.logger.info('list loaded')
 
