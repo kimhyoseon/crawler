@@ -24,7 +24,7 @@ class SmartstoreOrderJshk(Crawler):
             parser.add_argument(
                 '--type',
                 type=str,
-                default='old',
+                default='new',
                 choices=['new', 'old'],
                 help='new or old',
             )
@@ -58,6 +58,15 @@ class SmartstoreOrderJshk(Crawler):
             # -- 신규주문 페이지로 이동 --
 
             order_list = {}
+
+            # mysql
+            self.mysql = filewriter.get_log_file('mysql')
+
+            # MySQL Connection 연결
+            conn = pymysql.connect(host=self.mysql[0], port=3306, db=self.mysql[1], user=self.mysql[2], password=self.mysql[3], charset='utf8')
+
+            # Connection 으로부터 Cursor 생성
+            curs = conn.cursor()
 
             if self.type == 'new':
                 # -- 문의체크 --
@@ -129,15 +138,62 @@ class SmartstoreOrderJshk(Crawler):
                     filewriter.save_log_file(filename, order_list)
                     print(order_list)
 
+                # 100개 넘는지 체크
+
+                # 기존 주문
+                sql = "SELECT * FROM smartstore_order_hanki_wait"
+                curs.execute(sql)
+
+                # 데이타 Fetch
+                rows = curs.fetchall()
+                old_dict = {}
+
+                jshk_notice = filewriter.get_log_file('jshk_notice')
+
+                if len(rows) > 0:
+                    for row in rows:
+                        options = row[0].split(' / ')
+                        date = options[0]
+                        amount = int(options[1].split('개')[0][-1]) * int(row[1])
+
+                        # print('기존주문')
+                        # print(date)
+                        # print(amount)
+
+                        if date in old_dict:
+                            old_dict[date] = old_dict[date] + amount
+                        else:
+                            old_dict[date] = amount
+
+                #  새 주문
+                if len(order_list) > 0:
+                    for key, value in order_list.items():
+                        options = key.split(' / ')
+                        date = options[0]
+                        amount = int(options[1].split('개')[0][-1]) * int(value)
+
+                        # print('새주문')
+                        # print(date)
+                        # print(amount)
+
+                        if date in old_dict:
+                            old_dict[date] = old_dict[date] + amount
+                        else:
+                            old_dict[date] = amount
+
+                if len(old_dict) > 0:
+                    for key, value in old_dict.items():
+                        if value > 100:
+                            if key not in jshk_notice:
+                                jshk_notice.append(key)
+                                telegrambot.send_message('[%s] %d개 (주문제한필요)' % (key, value), 'jshk')
+                                filewriter.save_log_file('jshk_notice', jshk_notice)
+
+                # print(old_dict)
+                # conn.close()
+                # exit()
+
             elif self.type == 'old':
-                # mysql
-                self.mysql = filewriter.get_log_file('mysql')
-
-                # MySQL Connection 연결
-                conn = pymysql.connect(host=self.mysql[0], port=3306, db=self.mysql[1], user=self.mysql[2], password=self.mysql[3], charset='utf8')
-
-                # Connection 으로부터 Cursor 생성
-                curs = conn.cursor()
 
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.wait'}) is False:
                     raise Exception('selenium_click_by_xpath fail. orddel.wait')
@@ -209,7 +265,7 @@ class SmartstoreOrderJshk(Crawler):
                         curs.execute(sql)
                         conn.commit()
 
-                conn.close()
+            conn.close()
 
             return True
         except Exception as e:
