@@ -24,7 +24,7 @@ class SmartstoreOrderJshk(Crawler):
             parser.add_argument(
                 '--type',
                 type=str,
-                default='new',
+                default='old',
                 choices=['new', 'old'],
                 help='new or old',
             )
@@ -183,7 +183,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 if len(old_dict) > 0:
                     for key, value in old_dict.items():
-                        if value > 100:
+                        if value > 110:
                             if key not in jshk_notice:
                                 jshk_notice.append(key)
                                 telegrambot.send_message('[%s] %d개 (주문제한필요)' % (key, value), 'jshk')
