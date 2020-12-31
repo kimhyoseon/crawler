@@ -339,13 +339,14 @@ class SmartstoreOrderJshk(Crawler):
 
     def login(self):
         try:
-            self.driver.set_page_load_timeout(360)
             # 테스트입니다
             # if self.connect(site_url='https://www.google.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
             #     raise Exception('site connect fail')
 
             if self.connect(site_url='https://nid.naver.com/nidlogin.login?svctype=262144', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('login page connect fail')
+
+            self.driver.set_page_load_timeout(360)
 
             log.logger.info('11')
 
