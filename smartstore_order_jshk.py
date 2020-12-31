@@ -344,11 +344,6 @@ class SmartstoreOrderJshk(Crawler):
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
-            # 테스트 base64
-            log.logger.info(self.driver.get_screenshot_as_base64())
-            self.destroy()
-            exit()
-
             self.get_cookie()
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
@@ -429,6 +424,9 @@ class SmartstoreOrderJshk(Crawler):
 
                 return True
         except Exception as e:
+            # 스크린샷 base64
+            log.logger.info('smartstore_login_screenshot')
+            self.save_screenshot_jpg(filename='smartstore_login_screenshot')
             # self.driver.save_screenshot('smartstore_login_screenshot.png')
             log.logger.error(e, exc_info=True)
             self.destroy()

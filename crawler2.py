@@ -3,6 +3,7 @@
 import os
 import log
 import pickle
+import base64
 import requests
 import filewriter
 from time import sleep
@@ -395,5 +396,14 @@ class Crawler:
             cookies = pickle.load(open(self.name + "_cookies.pkl", "rb"))
             for cookie in cookies:
                 self.driver.add_cookie(cookie)
+        except:
+            return False
+
+    def save_screenshot_jpg(self, filename='screenshot'):
+        try:
+            bs64 = self.driver.get_screenshot_as_base64()
+            imgdata = base64.b64decode(bs64)
+            with open(filename + '.jpg', 'wb') as f:
+                f.write(imgdata)
         except:
             return False
