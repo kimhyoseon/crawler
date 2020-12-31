@@ -42,8 +42,9 @@ class SmartstoreOrderJshk(Crawler):
 
             log.logger.info('order_jshk_completed!')
 
-            self.destroy()
-            exit()
+            if self.type != 'old':
+                self.destroy()
+                exit()
 
         except Exception as e:
             self.destroy()
@@ -338,12 +339,12 @@ class SmartstoreOrderJshk(Crawler):
 
     def login(self):
         try:
-            self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
-
-            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
-
-            self.get_cookie()
+            # self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
+            #
+            # if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            #     raise Exception('site connect fail')
+            #
+            # self.get_cookie()
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
@@ -366,12 +367,12 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                sleep(1)
+                sleep(3)
 
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                sleep(2)
+                sleep(3)
 
                 self.driver.save_screenshot('smartstore_login_screenshot.png')
 
