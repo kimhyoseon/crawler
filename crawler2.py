@@ -23,7 +23,7 @@ class Crawler:
     PATH_USER_DATA = os.path.join(PATH_NAME, 'driver/userdata')
     PATH_CHROME_DRIVER = os.path.join(PATH_NAME, 'driver/chromedriver')
     PATH_PHANTOMJS_DRIVER = os.path.join(PATH_NAME, 'driver/phantomjs')
-    SITE_CONNECT_TIMEOUT = 120
+    SITE_CONNECT_TIMEOUT = 30
 
     def __init__(self):
         # 자식 클래스명
@@ -401,10 +401,14 @@ class Crawler:
 
     def save_screenshot_jpg(self, filename='screenshot'):
         try:
+            self.driver.set_page_load_timeout(600)
+
             bs64 = self.driver.get_screenshot_as_base64()
             imgdata = base64.b64decode(bs64)
             with open(filename + '.jpg', 'wb') as f:
                 f.write(imgdata)
+
+            self.driver.set_page_load_timeout(self.SITE_CONNECT_TIMEOUT)
 
             return bs64
         except Exception as e:
