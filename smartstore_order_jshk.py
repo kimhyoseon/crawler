@@ -344,6 +344,11 @@ class SmartstoreOrderJshk(Crawler):
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
+            # 테스트 base64
+            log.logger.info(self.driver.get_screenshot_as_base64())
+            self.destroy()
+            exit()
+
             self.get_cookie()
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
@@ -381,9 +386,10 @@ class SmartstoreOrderJshk(Crawler):
                 # if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 #     raise Exception('login page connect fail')
 
-                sleep(10)
+                sleep(3)
 
                 # self.driver.save_screenshot('smartstore_login_screenshot.png')
+
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
