@@ -349,7 +349,7 @@ class SmartstoreOrderJshk(Crawler):
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
-            print(self.driver.execute_script("return navigator.userAgent;"))
+            log.logger.info(self.driver.execute_script("return navigator.userAgent;"))
 
             # 로그인 여부 체크
             try:
