@@ -341,8 +341,6 @@ class SmartstoreOrderJshk(Crawler):
         try:
             self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
 
-            self.SITE_CONNECT_TIMEOUT = 360
-
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 

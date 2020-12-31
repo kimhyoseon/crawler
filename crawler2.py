@@ -23,7 +23,8 @@ class Crawler:
     PATH_USER_DATA = os.path.join(PATH_NAME, 'driver/userdata')
     PATH_CHROME_DRIVER = os.path.join(PATH_NAME, 'driver/chromedriver')
     PATH_PHANTOMJS_DRIVER = os.path.join(PATH_NAME, 'driver/phantomjs')
-    SITE_CONNECT_TIMEOUT = 60
+    SITE_CONNECT_TIMEOUT = 360
+    WAIT_TIMEOUT = 30
 
     def __init__(self):
         # 자식 클래스명
@@ -111,7 +112,6 @@ class Crawler:
                 options.add_argument("--start-maximized")
                 options.add_argument("--window-size=1920,1080");
                 options.add_argument("--lang=ko_KR")
-                options.add_argument("lang=ko_KR")
                 options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36")
                 options.add_argument("--disable-gpu");
                 # 부하 올라감, 위험한 옵션
@@ -210,7 +210,7 @@ class Crawler:
                 if etc is not None:
                     xpath = xpath + etc
             element_present = EC.visibility_of_element_located((By.XPATH, xpath))
-            WebDriverWait(self.driver, self.SITE_CONNECT_TIMEOUT).until(element_present)
+            WebDriverWait(self.driver, self.WAIT_TIMEOUT).until(element_present)
             return True
         except Exception as e:
             log.logger.error(e, exc_info=True)
