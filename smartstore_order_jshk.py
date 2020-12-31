@@ -404,6 +404,8 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. password')
 
+                log.logger.info('step 4')
+
                 # 로그인 유지
                 if self.selenium_click_by_xpath(xpath='//*[@id="label_login_chk"]') is False:
                     raise Exception('selenium_click_by_xpath fail. login_chk')
@@ -411,6 +413,8 @@ class SmartstoreOrderJshk(Crawler):
                 # 로그인 버튼 클릭
                 if self.selenium_click_by_xpath(tag={'tag': 'input', 'attr': 'type', 'name': 'submit'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
+
+                log.logger.info('step 5')
 
                 try:
                     # 기기등록 함
