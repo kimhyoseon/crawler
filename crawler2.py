@@ -23,7 +23,7 @@ class Crawler:
     PATH_USER_DATA = os.path.join(PATH_NAME, 'driver/userdata')
     PATH_CHROME_DRIVER = os.path.join(PATH_NAME, 'driver/chromedriver')
     PATH_PHANTOMJS_DRIVER = os.path.join(PATH_NAME, 'driver/phantomjs')
-    SITE_CONNECT_TIMEOUT = 60
+    SITE_CONNECT_TIMEOUT = 360
 
     def __init__(self):
         # 자식 클래스명
