@@ -348,9 +348,9 @@ class SmartstoreOrderJshk(Crawler):
 
             log.logger.info('11')
 
-            sleep(20)
+            sleep(10)
 
-            if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+            if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'id', 'name': 'id'}) is False:
                 raise Exception('selenium_extract_by_xpath fail.')
 
             log.logger.info('22')
