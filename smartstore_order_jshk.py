@@ -339,6 +339,7 @@ class SmartstoreOrderJshk(Crawler):
 
     def login(self):
         try:
+            self.driver.set_page_load_timeout(360)
             # 테스트입니다
             # if self.connect(site_url='https://www.google.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
             #     raise Exception('site connect fail')
@@ -353,15 +354,17 @@ class SmartstoreOrderJshk(Crawler):
             html = self.driver.page_source
             log.logger.info(html)
 
-            # if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
-            #     raise Exception('selenium_extract_by_xpath fail.')
+            if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                raise Exception('selenium_extract_by_xpath fail.')
 
-            log.logger.info('22')
+            log.logger.info('succes!')
 
-            sleep(5)
+            # sleep(5)
 
-            bs64 = self.save_screenshot_jpg(filename='smartstore_login_screenshot')
-            log.logger.info(bs64)
+            # bs64 = self.save_screenshot_jpg(filename='smartstore_login_screenshot')
+            # log.logger.info(bs64)
+
+            self.driver.set_page_load_timeout(30)
 
             self.destroy()
             exit()
