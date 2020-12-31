@@ -340,8 +340,20 @@ class SmartstoreOrderJshk(Crawler):
     def login(self):
         try:
             # 테스트입니다
-            if self.connect(site_url='https://www.google.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                raise Exception('site connect fail')
+            # if self.connect(site_url='https://www.google.com/', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            #     raise Exception('site connect fail')
+
+            if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                raise Exception('login page connect fail')
+
+            log.logger.info('11')
+
+            sleep(20)
+
+            if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                raise Exception('selenium_extract_by_xpath fail.')
+
+            log.logger.info('22')
 
             sleep(5)
 
