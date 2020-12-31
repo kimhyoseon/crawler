@@ -387,12 +387,12 @@ class SmartstoreOrderJshk(Crawler):
                 # if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 #     raise Exception('login page connect fail')
 
-                sleep(30)
+                sleep(10)
 
                 # self.driver.save_screenshot('smartstore_login_screenshot.png')
 
-                if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
-                    raise Exception('selenium_extract_by_xpath fail.')
+                # if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                #     raise Exception('selenium_extract_by_xpath fail.')
 
                 log.logger.info('step 3')
 
