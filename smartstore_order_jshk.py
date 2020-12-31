@@ -339,17 +339,12 @@ class SmartstoreOrderJshk(Crawler):
 
     def login(self):
         try:
-            # self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
-            #
-            # if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-            #     raise Exception('site connect fail')
-            #
-            # self.get_cookie()
+            self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
-            self.driver.delete_all_cookies()
+            self.get_cookie()
 
             if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
@@ -366,7 +361,7 @@ class SmartstoreOrderJshk(Crawler):
             account_data = filewriter.get_log_file('naver_account_jshk')
 
             if account_data:
-                # self.driver.save_screenshot('smartstore_screenshot.png')
+                self.driver.save_screenshot('smartstore_screenshot.png')
 
                 # 로그인 페이지로 이동
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
@@ -379,7 +374,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 sleep(3)
 
-                # self.driver.save_screenshot('smartstore_login_screenshot.png')
+                self.driver.save_screenshot('smartstore_login_screenshot.png')
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
