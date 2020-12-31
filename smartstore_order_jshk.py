@@ -361,7 +361,7 @@ class SmartstoreOrderJshk(Crawler):
             account_data = filewriter.get_log_file('naver_account_jshk')
 
             if account_data:
-                self.driver.save_screenshot('smartstore_screenshot.png')
+                # self.driver.save_screenshot('smartstore_screenshot.png')
 
                 # 로그인 페이지로 이동
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
@@ -374,7 +374,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 sleep(3)
 
-                self.driver.save_screenshot('smartstore_login_screenshot.png')
+                # self.driver.save_screenshot('smartstore_login_screenshot.png')
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
