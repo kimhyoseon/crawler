@@ -341,13 +341,15 @@ class SmartstoreOrderJshk(Crawler):
         try:
             self.PATH_USER_DATA = os.path.join(self.PATH_NAME, 'driver/userdata_naver')
 
-            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=True, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
 
             self.get_cookie()
 
-            if self.connect(site_url=self.DETAIL_URL, is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+            if self.connect(site_url=self.DETAIL_URL, is_proxy=True, default_driver='selenium', is_chrome=True) is False:
                 raise Exception('site connect fail')
+
+            print(self.driver.execute_script("return navigator.userAgent;"))
 
             # 로그인 여부 체크
             try:
@@ -366,21 +368,20 @@ class SmartstoreOrderJshk(Crawler):
                 # self.driver.save_screenshot('smartstore_screenshot.png')
 
                 # 로그인 페이지로 이동
-                # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
-                #     raise Exception('selenium_click_by_xpath fail. submit')
-                #
-                # sleep(3)
-                #
-                # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
-                #     raise Exception('selenium_click_by_xpath fail. submit')
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. submit')
 
-                if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                    raise Exception('login page connect fail')
+                sleep(3)
 
-                sleep(5)
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. submit')
+
+                # if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                #     raise Exception('login page connect fail')
+
+                sleep(3)
 
                 # self.driver.save_screenshot('smartstore_login_screenshot.png')
-                self.driver.get_screenshot_as_file('smartstore_login_screenshot.png')
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
@@ -420,6 +421,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 return True
         except Exception as e:
+            # self.driver.save_screenshot('smartstore_login_screenshot.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
