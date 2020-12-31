@@ -355,6 +355,7 @@ class SmartstoreOrderJshk(Crawler):
                     log.logger.info('Alreday logined.')
                     return True
             except:
+                log.logger.info('Not logined.')
                 pass
 
             # 계정정보 가져오기
