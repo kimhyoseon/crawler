@@ -388,6 +388,8 @@ class SmartstoreOrderJshk(Crawler):
                 # 스크린샷 base64
                 bs64 = self.save_screenshot_jpg(filename='smartstore_login_screenshot')
                 log.logger.info(bs64)
+                self.destroy()
+                exit()
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')

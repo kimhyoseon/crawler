@@ -407,5 +407,5 @@ class Crawler:
                 f.write(imgdata)
 
             return bs64
-        except:
-            return False
+        except Exception as e:
+            log.logger.error(e, exc_info=True)
