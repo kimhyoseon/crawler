@@ -361,6 +361,8 @@ class SmartstoreOrderJshk(Crawler):
             except:
                 pass
 
+            # aws에서 네이버 로그인 안되는 이슈 있음...
+
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account_jshk')
 
