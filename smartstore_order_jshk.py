@@ -354,8 +354,9 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_extract_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'orddel.new'}) is True:
                     log.logger.info('Alreday logined.')
                     return True
+                else:
+                    log.logger.info('Not logined.')
             except:
-                log.logger.info('Not logined.')
                 pass
 
             # 계정정보 가져오기
@@ -376,9 +377,9 @@ class SmartstoreOrderJshk(Crawler):
                 if self.connect(site_url='https://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                     raise Exception('login page connect fail')
 
-                sleep(5)
+                sleep(10)
 
-                # self.driver.save_screenshot('smartstore_login_screenshot.png')
+                self.driver.save_screenshot('smartstore_login_screenshot.png')
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
