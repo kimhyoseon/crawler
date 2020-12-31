@@ -405,5 +405,7 @@ class Crawler:
             imgdata = base64.b64decode(bs64)
             with open(filename + '.jpg', 'wb') as f:
                 f.write(imgdata)
+
+            return bs64
         except:
             return False

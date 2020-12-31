@@ -425,8 +425,8 @@ class SmartstoreOrderJshk(Crawler):
                 return True
         except Exception as e:
             # 스크린샷 base64
-            log.logger.info('smartstore_login_screenshot')
-            self.save_screenshot_jpg(filename='smartstore_login_screenshot')
+            bs64 = self.save_screenshot_jpg(filename='smartstore_login_screenshot')
+            log.logger.info(bs64)
             # self.driver.save_screenshot('smartstore_login_screenshot.png')
             log.logger.error(e, exc_info=True)
             self.destroy()
