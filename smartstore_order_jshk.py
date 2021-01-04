@@ -25,6 +25,7 @@ class SmartstoreOrderJshk(Crawler):
                 '--type',
                 type=str,
                 default='old',
+                # default='new',
                 choices=['new', 'old'],
                 help='new or old',
             )
@@ -372,22 +373,32 @@ class SmartstoreOrderJshk(Crawler):
                 sleep(5)
 
                 # # 로그인 페이지로 이동
-                # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
-                #     raise Exception('selenium_click_by_xpath fail. submit')
-                #
-                # log.logger.info('step 1')
-                #
-                # sleep(5)
-                #
-                # if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
-                #     raise Exception('selenium_click_by_xpath fail. submit')
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. submit')
+
+                log.logger.info('step 1')
+
+                sleep(5)
+
+                if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. submit')
 
                 log.logger.info('step 2')
 
-                if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
-                    raise Exception('login page connect fail')
+                # if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
+                #     raise Exception('login page connect fail')
 
                 sleep(10)
+
+                if self.selenium_click_by_xpath(tag={'tag': 'select', 'attr': 'id', 'name': 'locale_switch'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. select language')
+
+                if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': 'ko_KR'}) is False:
+                    raise Exception('selenium_click_by_xpath fail. select ko_KR')
+
+                log.logger.info('change languaged')
+
+                sleep(5)
 
                 # self.driver.save_screenshot('smartstore_login_screenshot.png')
 
@@ -397,11 +408,11 @@ class SmartstoreOrderJshk(Crawler):
                 log.logger.info('step 3')
 
                 # 아이디 입력
-                if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'id', 'name': 'id'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. username')
 
                 # 비번 입력
-                if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'name', 'name': 'pw'}) is False:
+                if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'id', 'name': 'pw'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. password')
 
                 log.logger.info('step 4')
@@ -436,8 +447,8 @@ class SmartstoreOrderJshk(Crawler):
                 return True
         except Exception as e:
             # 스크린샷 base64
-            # bs64 = self.save_screenshot_jpg(filename='smartstore_login_screenshot')
-            # log.logger.info(bs64)
+            bs64 = self.save_screenshot_jpg(filename='smartstore_login_screenshot')
+            log.logger.info(bs64)
             log.logger.error(e, exc_info=True)
             self.destroy()
             exit()
