@@ -376,14 +376,10 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                log.logger.info('step 1')
-
                 sleep(5)
 
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
-
-                log.logger.info('step 2')
 
                 # if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 #     raise Exception('login page connect fail')
@@ -403,8 +399,6 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'id', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
 
-                log.logger.info('step 3')
-
                 # 아이디 입력
                 if self.selenium_input_text_by_xpath(text=account_data[0], tag={'tag': 'input', 'attr': 'id', 'name': 'id'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. username')
@@ -413,8 +407,6 @@ class SmartstoreOrderJshk(Crawler):
                 if self.selenium_input_text_by_xpath(text=account_data[1], tag={'tag': 'input', 'attr': 'id', 'name': 'pw'}) is False:
                     raise Exception('selenium_input_text_by_xpath fail. password')
 
-                log.logger.info('step 4')
-
                 # 로그인 유지
                 if self.selenium_click_by_xpath(xpath='//*[@id="label_login_chk"]') is False:
                     raise Exception('selenium_click_by_xpath fail. login_chk')
@@ -422,8 +414,6 @@ class SmartstoreOrderJshk(Crawler):
                 # 로그인 버튼 클릭
                 if self.selenium_click_by_xpath(tag={'tag': 'input', 'attr': 'type', 'name': 'submit'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
-
-                log.logger.info('step 5')
 
                 try:
                     # 기기등록 함
@@ -436,6 +426,8 @@ class SmartstoreOrderJshk(Crawler):
                             raise Exception('selenium_click_by_xpath fail. submit')
                 except:
                     pass
+
+                sleep(5)
 
                 log.logger.info('login success')
                 self.set_cookie()
@@ -558,8 +550,6 @@ class SmartstoreOrderJshk(Crawler):
             self.remove_layer()
 
             sleep(2)
-
-            self.driver.save_screenshot('smartstore_screenshot.png')
 
             # 채널선택버튼 클릭
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
