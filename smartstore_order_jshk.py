@@ -397,14 +397,8 @@ class SmartstoreOrderJshk(Crawler):
                     raise Exception('selenium_click_by_xpath fail. select ko_KR')
 
                 log.logger.info('change languaged')
-                self.set_cookie()
 
                 sleep(5)
-
-                self.driver.save_screenshot('smartstore_login_screenshot.png')
-
-                # self.destroy()
-                # exit()
 
                 if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'id', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
