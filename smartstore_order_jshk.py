@@ -403,10 +403,10 @@ class SmartstoreOrderJshk(Crawler):
 
                 self.driver.save_screenshot('smartstore_login_screenshot.png')
 
-                self.destroy()
-                exit()
+                # self.destroy()
+                # exit()
 
-                if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'name', 'name': 'id'}) is False:
+                if self.selenium_extract_by_xpath(tag={'tag': 'input', 'attr': 'id', 'name': 'id'}) is False:
                     raise Exception('selenium_extract_by_xpath fail.')
 
                 log.logger.info('step 3')
