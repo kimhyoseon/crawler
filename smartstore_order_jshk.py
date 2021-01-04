@@ -362,7 +362,7 @@ class SmartstoreOrderJshk(Crawler):
             except:
                 pass
 
-            # aws에서 네이버 로그인 안되는 이슈 있음...
+            # aws에서 네이버 로그인 안되는 이슈 있음... (언어 > 한국어로 처리가능)
 
             # 계정정보 가져오기
             account_data = filewriter.get_log_file('naver_account_jshk')
@@ -564,6 +564,8 @@ class SmartstoreOrderJshk(Crawler):
             self.remove_layer()
 
             sleep(2)
+
+            self.driver.save_screenshot('smartstore_screenshot.png')
 
             # 채널선택버튼 클릭
             if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'ui-sref', 'name': 'work.channel-select'}) is False:
