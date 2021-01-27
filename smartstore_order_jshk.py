@@ -229,6 +229,7 @@ class SmartstoreOrderJshk(Crawler):
                 # exit()
 
                 list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
+                list_order_no = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
 
                 for i, li in enumerate(list):
                     try:
@@ -236,17 +237,31 @@ class SmartstoreOrderJshk(Crawler):
                             soup_order_info = BeautifulSoup(li.get_attribute('innerHTML'), 'html.parser')
                             tds = soup_order_info.find_all('td')
 
+                            soup_order_info_order_no = BeautifulSoup(list_order_no[i].get_attribute('innerHTML'), 'html.parser')
+                            tds_order_no = soup_order_info_order_no.find_all('td')
+
                             if tds:
+                                item_order_no = tds_order_no[1].getText().strip()
                                 item_option = tds[17].getText().strip()
                                 item_amount = tds[19].getText().strip()
                                 item_amount = int(item_amount)
 
                                 log.logger.info(item_option)
 
-                                if item_option not in order_list:
-                                    order_list[item_option] = item_amount
+                                # DB에 같은 주문번호가 존재한다면 주문에 포함하지 않는다 (DB정보 우선)
+                                sql = "SELECT * FROM smartstore_order_jshk WHERE item_order_no='%s'" % (item_order_no)
+                                curs.execute(sql)
+
+                                # 데이타 Fetch
+                                rows = curs.fetchall()
+
+                                if len(rows) > 0:
+                                    print('상품주문번호(%s) - DB 선등록되어 포함 X')
                                 else:
-                                    order_list[item_option] = order_list[item_option] + item_amount
+                                    if item_option not in order_list:
+                                        order_list[item_option] = item_amount
+                                    else:
+                                        order_list[item_option] = order_list[item_option] + item_amount
 
                     except Exception as e:
                         log.logger.error(e, exc_info=True)
