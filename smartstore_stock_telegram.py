@@ -39,7 +39,7 @@ class SmartstoreStockTelegram():
                     if row[7] and row[7] < 15:
                         # print(row)
                         if row[3]:
-                            notice = notice + '%s[%s] %d일\n' % (row[2], row[3], int(row[7]))
+                            notice = notice + '%s' % (row[2])
                         else:
                             notice = notice + '%s %d일\n' % (row[2], int(row[7]))
 
