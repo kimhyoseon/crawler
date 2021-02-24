@@ -33,6 +33,7 @@ class SmartstoreStockTelegram():
             rows = curs.fetchall()
 
             notice = '[쿠힛 재고 알림]\n\n'
+            notice = notice.encode('utf-8')
 
             if rows:
                 for row in rows:
