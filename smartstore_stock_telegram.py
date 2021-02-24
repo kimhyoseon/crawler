@@ -6,9 +6,8 @@ import filewriter
 import telegrambot
 from pytz import timezone
 from datetime import datetime, timedelta
-from crawler2 import Crawler
 
-class SmartstoreStockTelegram(Crawler):
+class SmartstoreStockTelegram():
 
     def start(self):
         try:
@@ -40,9 +39,9 @@ class SmartstoreStockTelegram(Crawler):
                     if row[7] and row[7] < 15:
                         # print(row)
                         if row[3]:
-                            notice += '%s[%s] %d일\n' % (row[2], row[3], int(row[7]))
+                            notice += '%s[%s] %d days\n' % (row[2], row[3], int(row[7]))
                         else:
-                            notice += '%s %d일\n' % (row[2], int(row[7]))
+                            notice += '%s %d days\n' % (row[2], int(row[7]))
 
             # print(notice)
             telegrambot.send_message(notice, 'kuhit')
