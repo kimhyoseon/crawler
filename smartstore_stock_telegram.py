@@ -37,11 +37,11 @@ class SmartstoreStockTelegram():
             if rows:
                 for row in rows:
                     if row[7] and row[7] < 15:
-                        print(row)
-                        # if row[3]:
-                        #     notice += '%s[%s] %d일\n' % (row[2], row[3], int(row[7]))
-                        # else:
-                        #     notice += '%s %d일\n' % (row[2], int(row[7]))
+                        # print(row)
+                        if row[3]:
+                            notice += '%s(%s) %d일\n' % (row[2], row[3], int(row[7]))
+                        else:
+                            notice += '%s %d일\n' % (row[2], int(row[7]))
 
             # print(notice)
             telegrambot.send_message(notice, 'kuhit')
