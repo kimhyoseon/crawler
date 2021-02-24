@@ -20,7 +20,7 @@ class SmartstoreStockTelegram():
             self.mysql = filewriter.get_log_file('mysql')
 
             # MySQL Connection 연결
-            conn = pymysql.connect(host=self.mysql[0], port=3306, db=self.mysql[1], user=self.mysql[2], password=self.mysql[3], charset='utf8')
+            conn = pymysql.connect(host=self.mysql[0], port=3306, db=self.mysql[1], user=self.mysql[2], password=self.mysql[3])
 
             # Connection 으로부터 Cursor 생성
             curs = conn.cursor()
