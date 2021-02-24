@@ -39,9 +39,9 @@ class SmartstoreStockTelegram():
                     if row[7] and row[7] < 15:
                         # print(row)
                         if row[3]:
-                            notice += '%s[%s] %d days\n' % (row[2], row[3], int(row[7]))
+                            notice += row[2] + '[' + row[3] + '] ' + row[7] + '일\n'
                         else:
-                            notice += '%s %d days\n' % (row[2], int(row[7]))
+                            notice += row[2] + ' ' + row[7] + '일\n'
 
             # print(notice)
             telegrambot.send_message(notice, 'kuhit')
