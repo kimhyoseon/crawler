@@ -1,5 +1,3 @@
-#-*- coding: utf-8 -*-
-
 import log
 import pymysql
 import filewriter
@@ -32,7 +30,7 @@ class SmartstoreStockTelegram():
             # 데이타 Fetch
             rows = curs.fetchall()
 
-            notice = '[쿠힛 재고 알림]'
+            notice = '[쿠힛 재고 알림]\n\n'
 
             if rows:
                 for row in rows:
