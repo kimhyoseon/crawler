@@ -32,17 +32,19 @@ class SmartstoreStockTelegram():
             # 데이타 Fetch
             rows = curs.fetchall()
 
-            notice = '[쿠힛 재고 알림]\\n\\n'
+            notice = '[쿠힛 재고 알림]\n\n'
 
             if rows:
                 for row in rows:
                     if row[7] and row[7] < 15:
                         # print(row)
                         if row[3]:
-                            add = '%s[%s] %d일\\n' % (str(row[2]), str(row[3]), int(row[7]))
+                            add = str(row[2])
+                            # add = '%s[%s] %d일\n' % (str(row[2]), str(row[3]), int(row[7]))
                             notice = notice + add
                         else:
-                            add = '%s %d일\\n' % (str(row[2]), int(row[7]))
+                            add = str(row[2])
+                            # add = '%s %d일\n' % (str(row[2]), int(row[7]))
                             notice = notice + add
 
             # print(notice)
