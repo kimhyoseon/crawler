@@ -32,7 +32,7 @@ class SmartstoreStockTelegram():
             # 데이타 Fetch
             rows = curs.fetchall()
 
-            print(rows)
+            # print(rows)
 
             notice = '[쿠힛 재고 알림]\n\n'
 
