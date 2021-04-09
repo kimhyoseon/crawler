@@ -401,15 +401,15 @@ class SmartstoreOrderJshk(Crawler):
 
                 log.logger.info('i am in login page')
 
-                sleep(10)
-
-                if self.selenium_click_by_xpath(tag={'tag': 'select', 'attr': 'id', 'name': 'locale_switch'}) is False:
-                    raise Exception('selenium_click_by_xpath fail. select language')
-
-                if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': 'ko_KR'}) is False:
-                    raise Exception('selenium_click_by_xpath fail. cR')
-
-                log.logger.info('change languaged')
+                # sleep(10)
+                #
+                # if self.selenium_click_by_xpath(tag={'tag': 'select', 'attr': 'id', 'name': 'locale_switch'}) is False:
+                #     raise Exception('selenium_click_by_xpath fail. select language')
+                #
+                # if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': 'ko_KR'}) is False:
+                #     raise Exception('selenium_click_by_xpath fail. cR')
+                #
+                # log.logger.info('change languaged')
 
                 sleep(5)
 
