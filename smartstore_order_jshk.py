@@ -403,7 +403,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 sleep(30)
 
-                self.save_screenshot_jpg(filename='smartstore_login_screenshot')
+                # self.save_screenshot_jpg(filename='smartstore_login_screenshot')
 
                 if self.selenium_click_by_xpath(tag={'tag': 'select', 'attr': 'id', 'name': 'locale_switch'}) is False:
                     raise Exception('selenium_click_by_xpath fail. select language')
