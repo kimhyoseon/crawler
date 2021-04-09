@@ -99,7 +99,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 # 주문 데이터 가져오기 iframe으로 변경
                 self.driver.switch_to.frame(frame_reference=self.driver.find_element_by_xpath('//iframe[@id="__naverpay"]'))
-                list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
+                list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[4]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
 
                 for i, li in enumerate(list):
                     try:
@@ -211,7 +211,7 @@ class SmartstoreOrderJshk(Crawler):
                 log.logger.info('click select list')
 
                 # 500개씩보기
-                if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[3]/div[1]/div/div[2]') is False:
+                if self.selenium_click_by_xpath(xpath='//*[@id="__app_root__"]/div/div[2]/div[4]/div[1]/div/div[2]') is False:
                     raise Exception('selenium_click_by_xpath fail. select list')
                 sleep(2)
                 if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': '500'}) is False:
@@ -228,8 +228,8 @@ class SmartstoreOrderJshk(Crawler):
                 # self.destroy()
                 # exit()
 
-                list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
-                list_order_no = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[3]/div[4]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
+                list = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[4]/div[4]/div[1]/div[2]/div[1]/div[2]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
+                list_order_no = self.driver.find_element_by_xpath('//*[@id="__app_root__"]/div/div[2]/div[4]/div[4]/div[1]/div[2]/div[1]/div[1]/div[2]/div/div[1]/table').find_elements_by_xpath('.//tbody/tr')
 
                 for i, li in enumerate(list):
                     try:
