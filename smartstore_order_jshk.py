@@ -385,13 +385,13 @@ class SmartstoreOrderJshk(Crawler):
             if account_data:
                 # self.driver.save_screenshot('smartstore_screenshot.png')
 
-                sleep(5)
+                sleep(20)
 
                 # # 로그인 페이지로 이동
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'main.sellerlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
 
-                sleep(5)
+                sleep(20)
 
                 if self.selenium_click_by_xpath(tag={'tag': 'a', 'attr': 'data-nclicks-code', 'name': 'login.nidlogin'}) is False:
                     raise Exception('selenium_click_by_xpath fail. submit')
@@ -401,7 +401,7 @@ class SmartstoreOrderJshk(Crawler):
 
                 log.logger.info('i am in login page')
 
-                sleep(10)
+                sleep(30)
 
                 self.save_screenshot_jpg(filename='smartstore_login_screenshot')
 
