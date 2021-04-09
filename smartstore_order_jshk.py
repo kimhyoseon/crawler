@@ -399,13 +399,15 @@ class SmartstoreOrderJshk(Crawler):
                 # if self.connect(site_url='http://nid.naver.com/nidlogin.login?url=https%3A%2F%2Fsell.smartstore.naver.com%2F%23%2FnaverLoginCallback%3Furl%3Dhttps%253A%252F%252Fsell.smartstore.naver.com%252F%2523', is_proxy=False, default_driver='selenium', is_chrome=True) is False:
                 #     raise Exception('login page connect fail')
 
+                log.logger.info('i am in login page')
+
                 sleep(10)
 
                 if self.selenium_click_by_xpath(tag={'tag': 'select', 'attr': 'id', 'name': 'locale_switch'}) is False:
                     raise Exception('selenium_click_by_xpath fail. select language')
 
                 if self.selenium_click_by_xpath(tag={'tag': 'option', 'attr': 'value', 'name': 'ko_KR'}) is False:
-                    raise Exception('selenium_click_by_xpath fail. select ko_KR')
+                    raise Exception('selenium_click_by_xpath fail. cR')
 
                 log.logger.info('change languaged')
 
