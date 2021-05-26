@@ -58,16 +58,17 @@ class Ppomppu(Crawler):
                         tdelta = datetime.strptime(s1, '%H:%M:%S') - datetime.strptime(s2, '%H:%M:%S')
                         hours, remainder = divmod(tdelta.seconds, 3600)
                         minutes, seconds = divmod(remainder, 60)
+                        link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
+                        id = link.split('&no=')[1]
 
                         # 수집 성공로그
                         self.record_success_log()
 
-                        if regdate and regdate not in self.log and good and good >= self.BASE_GOOD:
+                        if id and id not in self.log and good and good >= self.BASE_GOOD:
                             if good < self.MAX_GOOD:
                                 if hours > 0 or minutes > 10:
                                     continue
 
-                            link = self.DETAIL_URL + tds[3].find('a')['href'].strip()
                             status = '★☆☆☆☆'
 
                             try:
@@ -115,7 +116,7 @@ class Ppomppu(Crawler):
 
                             self.log = filewriter.slice_json_by_max_len(self.log, max_len=100)
 
-                            self.send_messge_and_save(regdate, text, 'hotdeal')
+                            self.send_messge_and_save(id, text, 'hotdeal')
                     except Exception as e:
                         continue
 
